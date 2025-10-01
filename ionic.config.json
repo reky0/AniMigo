@@ -1,0 +1,7 @@
+{
+  "name": "AniMigo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
