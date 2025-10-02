@@ -3,34 +3,44 @@ import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
   {
-    path: 'tabs',
+    path: '',
     component: TabsPage,
     children: [
       {
-        path: 'tab1',
+        path: 'home',
         loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          import('../components/organisms/home-tab/home-tab.page').then((m) => m.HomeTabPage),
       },
       {
-        path: 'tab2',
+        path: 'anime',
         loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          import('../components/organisms/anime-tab/anime-tab.page').then((m) => m.AnimeTabPage),
       },
       {
-        path: 'tab3',
+        path: 'manga',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('../components/organisms/manga-tab/manga-tab.page').then((m) => m.MangaTabPage),
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('../components/organisms/profile-tab/profile-tab.page').then((m) => m.ProfileTabPage),
+      },
+      {
+        path: 'explore',
+        loadComponent: () =>
+          import('../components/organisms/explore-tab/explore-tab.page').then((m) => m.ExploreTabPage),
       },
       {
         path: '',
-        redirectTo: '/tabs/tab1',
+        redirectTo: '/home',
         pathMatch: 'full',
       },
     ],
   },
   {
     path: '',
-    redirectTo: '/tabs/tab1',
+    redirectTo: '/home',
     pathMatch: 'full',
   },
 ];
