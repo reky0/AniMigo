@@ -2,7 +2,7 @@
   <ion-img [src]="image"></ion-img>
   <ion-label>{{ title }}</ion-label>
 
-  @if (rating != '') {
+  @if (rating != undefined) {
     <ion-row>
       <ion-icon name="star"></ion-icon>
       <ion-text>  {{ rating }}%</ion-text>

@@ -12,12 +12,11 @@ import { star } from 'ionicons/icons';
 export class CatalogItemComponent  implements OnInit {
   @Input() image: string = '';
   @Input() title: string = '';
-  @Input() rating: string = '';
+  @Input() rating: number | undefined;
 
   constructor() { }
 
   ngOnInit() {
     addIcons({star});
   }
-
 }

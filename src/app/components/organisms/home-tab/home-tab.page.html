@@ -9,19 +9,49 @@
 <ion-content>
   <!-- <ion-text>Home Tab Works</ion-text> -->
 
-  <app-section-header title="Next Season" [loading]="false"></app-section-header>
+  <ion-col>
+    <app-section-header title="Trending now" [loading]="false"></app-section-header>
 
-  <ion-list class="horizontal-scroll-container">
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-    <app-catalog-item title="Naruto" image="https://cdn.myanimelist.net/images/anime/13/17405.jpg" rating="20"></app-catalog-item>
-  </ion-list>
+    <ion-list class="horizontal-scroll-container">
+      @for (trendingAnime of trendingAnimes; track trendingAnime._id) {
+        <app-catalog-item [title]="trendingAnime.title" [image]="trendingAnime.image" [rating]="trendingAnime.rating"></app-catalog-item>
+      }
+    </ion-list>
+  </ion-col>
+  <ion-col>
+    <app-section-header title="Next season" [loading]="false"></app-section-header>
+
+    <ion-list class="horizontal-scroll-container">
+      @for (nextSeasonAnime of nextSeasonAnimes; track nextSeasonAnime._id) {
+        <app-catalog-item [title]="nextSeasonAnime.title" [image]="nextSeasonAnime.image"></app-catalog-item>
+      }
+    </ion-list>
+  </ion-col>
+  <ion-col>
+    <app-section-header title="Trending manga" [loading]="false"></app-section-header>
+
+    <ion-list class="horizontal-scroll-container">
+      @for (trendingManga of trendingMangas; track trendingManga._id) {
+        <app-catalog-item [title]="trendingManga.title" [image]="trendingManga.image" [rating]="trendingManga.rating"></app-catalog-item>
+      }
+    </ion-list>
+  </ion-col>
+  <ion-col>
+    <app-section-header title="Newly added anime" [loading]="false"></app-section-header>
+
+    <ion-list class="horizontal-scroll-container">
+      @for (newlyAddedAnime of newlyAddedAnimes; track newlyAddedAnime._id) {
+        <app-catalog-item [title]="newlyAddedAnime.title" [image]="newlyAddedAnime.image"></app-catalog-item>
+      }
+    </ion-list>
+  </ion-col>
+  <ion-col>
+    <app-section-header title="Newly added manga" [loading]="false"></app-section-header>
+
+    <ion-list class="horizontal-scroll-container">
+      @for (newlyAddedManga of newlyAddedMangas; track newlyAddedManga._id) {
+        <app-catalog-item [title]="newlyAddedManga.title" [image]="newlyAddedManga.image"></app-catalog-item>
+      }
+    </ion-list>
+  </ion-col>
 </ion-content>
