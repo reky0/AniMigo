@@ -1,0 +1,101 @@
+@if (platformService.isHybrid()) {
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Home</ion-title>
+    </ion-toolbar>
+  </ion-header>
+}
+
+<ion-content>
+  <!-- <ion-text>Home Tab Works</ion-text> -->
+
+  <ion-col>
+    <app-section-header title="Trending now" [loading]="false"></app-section-header>
+
+    @if (trendingAnimesLoading) {
+      <ion-list class="horizontal-scroll-container">
+        @for (i of range; track i) {
+          <app-catalog-item [loading]="true"></app-catalog-item>
+        }
+      </ion-list>
+    } @else {
+      <ion-list class="horizontal-scroll-container">
+        @for (media of trendingAnimes; track media.id) {
+          <app-catalog-item [title]="media.title.english ?? media.title.romaji" [image]="media.coverImage?.large ?? media.coverImage?.medium" [rating]="media.averageScore"></app-catalog-item>
+        }
+      </ion-list>
+    }
+  </ion-col>
+
+  <ion-col>
+    <app-section-header title="Next season" [loading]="false"></app-section-header>
+
+    @if (nextSeasonAnimesLoading) {
+      <ion-list class="horizontal-scroll-container">
+        @for (i of range; track i) {
+          <app-catalog-item [loading]="true"></app-catalog-item>
+        }
+      </ion-list>
+    } @else {
+      <ion-list class="horizontal-scroll-container">
+        @for (media of nextSeasonAnimes; track media.id) {
+          <app-catalog-item [title]="media.title.english ?? media.title.romaji" [image]="media.coverImage?.large ?? media.coverImage?.medium" [rating]="media.averageScore"></app-catalog-item>
+        }
+      </ion-list>
+    }
+  </ion-col>
+
+  <ion-col>
+    <app-section-header title="Trending manga" [loading]="false"></app-section-header>
+
+    @if (trendingMangasLoading) {
+      <ion-list class="horizontal-scroll-container">
+        @for (i of range; track i) {
+          <app-catalog-item [loading]="true"></app-catalog-item>
+        }
+      </ion-list>
+    } @else {
+      <ion-list class="horizontal-scroll-container">
+        @for (media of trendingMangas; track media.id) {
+          <app-catalog-item [title]="media.title.english ?? media.title.romaji" [image]="media.coverImage?.large ?? media.coverImage?.medium" [rating]="media.averageScore"></app-catalog-item>
+        }
+      </ion-list>
+    }
+  </ion-col>
+
+  <ion-col>
+    <app-section-header title="Newly added anime" [loading]="false"></app-section-header>
+
+    @if (newlyAddedAnimesLoading) {
+      <ion-list class="horizontal-scroll-container">
+        @for (i of range; track i) {
+          <app-catalog-item [loading]="true"></app-catalog-item>
+        }
+      </ion-list>
+    } @else {
+      <ion-list class="horizontal-scroll-container">
+        @for (media of newlyAddedAnimes; track media.id) {
+          <app-catalog-item [title]="media.title.english ?? media.title.romaji" [image]="media.coverImage?.large ?? media.coverImage?.medium" [rating]="media.averageScore"></app-catalog-item>
+        }
+      </ion-list>
+    }
+  </ion-col>
+
+  <ion-col>
+    <app-section-header title="Newly added manga" [loading]="false"></app-section-header>
+
+    @if (newlyAddedMangasLoading) {
+      <ion-list class="horizontal-scroll-container">
+        @for (i of range; track i) {
+          <app-catalog-item [loading]="true"></app-catalog-item>
+        }
+      </ion-list>
+    } @else {
+      <ion-list class="horizontal-scroll-container">
+        @for (media of newlyAddedMangas; track media.id) {
+          <app-catalog-item [title]="media.title.english ?? media.title.romaji" [image]="media.coverImage?.large ?? media.coverImage?.medium" [rating]="media.averageScore"></app-catalog-item>
+        }
+      </ion-list>
+    }
+  </ion-col>
+</ion-content>

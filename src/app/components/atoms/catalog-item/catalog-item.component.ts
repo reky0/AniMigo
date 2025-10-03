@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IonImg, IonText, IonItem, IonCard, IonLabel, IonRow, IonIcon } from "@ionic/angular/standalone";
+import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
+import { IonImg, IonText, IonRow, IonIcon, IonSkeletonText, IonCol, IonGrid } from "@ionic/angular/standalone";
 import { addIcons } from 'ionicons';
 import { star } from 'ionicons/icons';
 
@@ -7,14 +8,16 @@ import { star } from 'ionicons/icons';
   selector: 'app-catalog-item',
   templateUrl: './catalog-item.component.html',
   styleUrls: ['./catalog-item.component.scss'],
-  imports: [IonIcon, IonRow, IonLabel, IonImg, IonText, IonCard],
+  imports: [IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid],
 })
-export class CatalogItemComponent  implements OnInit {
-  @Input() image: string = '';
-  @Input() title: string = '';
-  @Input() rating: number | undefined;
+export class CatalogItemComponent extends LoadingStateComponent implements OnInit {
+  @Input() image: string | null | undefined = '';
+  @Input() title: string | null | undefined = '';
+  @Input() rating: number | null | undefined = undefined;
 
-  constructor() { }
+  constructor() {
+    super();
+  }
 
   ngOnInit() {
     addIcons({star});

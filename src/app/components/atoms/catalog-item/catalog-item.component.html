@@ -1,11 +1,31 @@
-<ion-card>
-  <ion-img [src]="image"></ion-img>
-  <ion-label>{{ title }}</ion-label>
-
-  @if (rating != undefined) {
-    <ion-row>
-      <ion-icon name="star"></ion-icon>
-      <ion-text>  {{ rating }}%</ion-text>
-    </ion-row>
-  }
-</ion-card>
+<ion-grid>
+  <ion-col>
+    @if (loading) {
+      <ion-row style="height: 70%; justify-content: center;">
+        <ion-col>
+          <ion-skeleton-text animated class="img-loading"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+      <ion-row style="height: 15%;">
+        <ion-col>
+          <ion-skeleton-text animated class="label-loading"></ion-skeleton-text>
+        </ion-col>
+      </ion-row>
+    } @else {
+      <ion-row style="height: 70%; justify-content: center;">
+        <ion-img [src]="image" class="img"></ion-img>
+      </ion-row>
+      <ion-row>
+          <ion-text class="label">{{ title }}</ion-text>
+      </ion-row>
+      @if (rating != undefined) {
+        <ion-row class="rating">
+          <ion-col>
+            <ion-icon name="star" mode="icon-only"></ion-icon>
+            <ion-text>{{ rating }}%</ion-text>
+          </ion-col>
+        </ion-row>
+      }
+    }
+  </ion-col>
+</ion-grid>

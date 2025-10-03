@@ -1,0 +1,275 @@
+import { gql } from "apollo-angular";
+
+export const GET_TRENDING_ANIMES = gql`
+          query TrendingAnime($page: Int = 1, $perPage: Int = 10, $isAdult: Boolean = false) {
+            Page(page: $page, perPage: $perPage) {
+              pageInfo {
+                currentPage
+                hasNextPage
+                total
+                perPage
+              }
+              media(
+                type: ANIME,
+                sort: TRENDING_DESC,
+                isAdult: $isAdult
+              ) {
+                id
+                title {
+                  romaji
+                  english
+                  native
+                }
+                coverImage {
+                  medium
+                  large
+                }
+                trending
+                description(asHtml: false)
+                episodes
+                averageScore
+                genres
+                season
+                seasonYear
+              }
+            }
+          }
+        `;
+
+export const GET_NEXT_SEASON_ANIMES = gql`
+          query NextSeasonAnime($page: Int = 1, $perPage: Int = 20, $season: MediaSeason, $seasonYear: Int, $isAdult: Boolean = false) {
+            Page(page: $page, perPage: $perPage) {
+              pageInfo {
+                currentPage
+                hasNextPage
+                total
+                perPage
+              }
+              media(
+                type: ANIME,
+                season: $season,
+                seasonYear: $seasonYear,
+                sort: POPULARITY_DESC,
+                isAdult: $isAdult
+              ) {
+                id
+                title {
+                  romaji
+                  english
+                  native
+                }
+                coverImage {
+                  medium
+                  large
+                }
+                description(asHtml: false)
+                episodes
+                averageScore
+                genres
+                season
+                seasonYear
+              }
+            }
+          }
+        `;
+
+export const GET_TRENDING_MANGAS = gql`
+          query TrendingManga($page: Int = 1, $perPage: Int = 20, $isAdult: Boolean = false) {
+            Page(page: $page, perPage: $perPage) {
+              pageInfo {
+                currentPage
+                hasNextPage
+                total
+                perPage
+              }
+              media(
+                type: MANGA,
+                sort: TRENDING_DESC,
+                isAdult: $isAdult
+              ) {
+                id
+                title {
+                  romaji
+                  english
+                  native
+                }
+                coverImage {
+                  medium
+                  large
+                }
+                trending
+                description(asHtml: false)
+                chapters
+                volumes
+                averageScore
+                genres
+                status
+              }
+            }
+          }
+        `;
+
+export const GET_NEWLY_ADDED_ANIMES = gql`
+          query NewlyAddedAnime($page: Int = 1, $perPage: Int = 20, $sort: [MediaSort] = [ID_DESC], $isAdult: Boolean = false) {
+            Page(page: $page, perPage: $perPage) {
+              pageInfo {
+                currentPage
+                hasNextPage
+                total
+                perPage
+              }
+              media(
+                type: ANIME,
+                sort: $sort,
+                isAdult: $isAdult
+              ) {
+                id
+                title {
+                  romaji
+                  english
+                  native
+                }
+                coverImage {
+                  medium
+                  large
+                }
+                description(asHtml: false)
+                episodes
+                averageScore
+                genres
+                startDate {
+                  year
+                  month
+                  day
+                }
+                status
+              }
+            }
+          }
+        `;
+
+export const GET_NEWLY_ADDED_MANGAS = gql`
+          query NewlyAddedManga($page: Int = 1, $perPage: Int = 20, $sort: [MediaSort] = [ID_DESC], $isAdult: Boolean = false) {
+            Page(page: $page, perPage: $perPage) {
+              pageInfo {
+                currentPage
+                hasNextPage
+                total
+                perPage
+              }
+              media(
+                type: MANGA,
+                sort: $sort,
+                isAdult: $isAdult
+              ) {
+                id
+                title {
+                  romaji
+                  english
+                  native
+                }
+                coverImage {
+                  medium
+                  large
+                }
+                description(asHtml: false)
+                chapters
+                volumes
+                averageScore
+                genres
+                startDate {
+                  year
+                  month
+                  day
+                }
+                status
+              }
+            }
+          }
+        `;
+
+export const GET_MEDIA_BY_ID = gql`
+          query MediaDetails($id: Int!, $type: MediaType!) {
+            Media(id: $id, type: $type) {
+              id
+              title {
+                romaji
+                english
+                native
+              }
+              coverImage {
+                large
+                medium
+              }
+              bannerImage
+              description(asHtml: false)
+              averageScore
+              meanScore
+              episodes
+              chapters
+              volumes
+              status
+              season
+              seasonYear
+              genres
+              source
+              format
+              duration
+              isAdult
+              siteUrl
+              studios {
+                edges {
+                  node {
+                    id
+                    name
+                  }
+                }
+              }
+              staff {
+                edges {
+                  role
+                  node {
+                    id
+                    name {
+                      full
+                      native
+                    }
+                    image {
+                      medium
+                    }
+                  }
+                }
+              }
+              relations {
+                edges {
+                  relationType
+                  node {
+                    id
+                    title {
+                      romaji
+                      english
+                    }
+                    type
+                    format
+                    status
+                  }
+                }
+              }
+              recommendations(sort: RATING_DESC) {
+                nodes {
+                  mediaRecommendation {
+                    id
+                    title {
+                      romaji
+                      english
+                    }
+                    coverImage {
+                      medium
+                    }
+                    siteUrl
+                  }
+                }
+              }
+            }
+          }
+        `;

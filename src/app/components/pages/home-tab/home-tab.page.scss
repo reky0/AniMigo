@@ -1,15 +1,22 @@
+.section-loading {
+  width: 90vw;
+  height: 300px;
+  border-radius: 8px;
+  margin: 0 2em;
+}
+
 .horizontal-scroll-container {
   display: flex;
   overflow-x: auto;
   flex-direction: row;
-  gap: 10px;
-  padding: 10px;
   scroll-snap-type: x mandatory;
   background-color: transparent;
+  height: 300px;
 }
 
 app-catalog-item{
   flex: 0 0 auto;
   width: 170px;
+  height: 100%;
   scroll-snap-align: start;
 }
