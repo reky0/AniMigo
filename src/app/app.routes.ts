@@ -26,11 +26,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/pages/explore-tab/explore-tab.page').then( m => m.ExploreTabPage)
   },
   {
-    path: 'anime-details',
+    path: 'anime/:animeID',
     loadComponent: () => import('./components/pages/anime-details/anime-details.page').then( m => m.AnimeDetailsPage)
   },
   {
-    path: 'manga-details',
+    path: 'manga/:mangaID',
     loadComponent: () => import('./components/pages/manga-details/manga-details.page').then( m => m.MangaDetailsPage)
   },
   {
@@ -40,9 +40,5 @@ export const routes: Routes = [
   {
     path: 'anime',
     loadComponent: () => import('./components/pages/anime/anime.page').then( m => m.AnimePage)
-  },
-  {
-    path: 'profile',
-    loadComponent: () => import('./components/pages/profile/profile.page').then( m => m.ProfilePage)
-  },
+  }
 ];
