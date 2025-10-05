@@ -171,7 +171,5 @@ export interface DetailedMedia {
 }
 
 export interface DetailedMediaResponse {
-  Page: {
-    media: DetailedMedia;
-  };
+  Media: DetailedMedia
 }

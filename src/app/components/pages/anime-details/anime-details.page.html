@@ -1,13 +1,40 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>AnimeDetails</ion-title>
+    <ion-title>{{ data?.title?.english ?? data?.title?.romaji }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">AnimeDetails</ion-title>
+      <ion-title size="large">{{ data?.title?.romaji }}</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-grid>
+    @if (loading) {
+      <ion-skeleton-text animated style="width: 200px; height: 200px;"></ion-skeleton-text>
+    } @else {
+      @if (data) {
+        <ion-row class="banner">
+          <ion-img [src]="data.bannerImage" class="banner-image"></ion-img>
+        </ion-row>
+        
+        <ion-row>
+          <!-- Cover Image (overlapping banner) -->
+          <div class="cover-container">
+            <ion-img [src]="data.coverImage?.large" alt="Cover" class="cover-image" />
+          </div>
+    
+          <!-- Details Section -->
+          <ion-col class="details-content">
+            <ion-title>{{ data.title.english ?? data.title.romaji }}</ion-title>
+            <ion-text>{{ data.description }}</ion-text>
+          </ion-col>
+        </ion-row>
+      }
+    }
+  </ion-grid>
+
 </ion-content>
+

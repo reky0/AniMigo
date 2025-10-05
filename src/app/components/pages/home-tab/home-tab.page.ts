@@ -10,6 +10,7 @@ import { Apollo, gql } from 'apollo-angular';
 import { BasicMedia, BasicMediaResponse } from 'src/app/models/aniList/responseInterfaces';
 import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
 import { ApiService } from '@components/core/services/api-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-tab',
@@ -42,7 +43,7 @@ export class HomeTabPage implements OnInit {
   error: any;
 
 
-  constructor(private apiService: ApiService) { }
+  constructor(private apiService: ApiService, private router: Router) { }
 
   ngOnInit() {
     let trendingAnimesVariables = {
@@ -151,5 +152,9 @@ export class HomeTabPage implements OnInit {
         this.newlyAddedMangasLoading = false;
       }
     });
+  }
+
+  goToDetails(id: number, type: 'ANIME' | 'MANGA') {
+    this.router.navigate([type.toLowerCase(), id])
   }
 }
