@@ -18,7 +18,6 @@ export interface BasicMediaResponse {
   };
 }
 
-
 export interface Title {
   romaji: string;
   english?: string | null;
@@ -48,7 +47,6 @@ export interface Studio {
 export interface GenreConnection {
   genres: string[];
 }
-
 export interface CharacterConnection {
   edges: Array<{
     id: number;
@@ -89,6 +87,12 @@ export interface Trailer {
   thumbnail?: string | null;
 }
 
+export interface NextAiringEpisode {
+  episode: number | null;
+  timeUntilAiring: number | null;
+  airingAt: number | null;
+}
+
 export interface DetailedMedia {
   id: number;
   idMal?: number | null;                        // MyAnimeList ID
@@ -115,8 +119,14 @@ export interface DetailedMedia {
   isAdult?: boolean | null;
 
   averageScore?: number | null;                 // Average score in percentage
+  meanScore?: number | null;                 // Average score in percentage
   popularity?: number | null;                    // Popularity count
   favourites?: number | null;
+
+  siteUrl: string | null;
+  nextAiringEpisode?: NextAiringEpisode | null;
+
+  synonyms: string[] | null;
 
   studios?: {
     edges: Array<{
@@ -160,6 +170,11 @@ export interface DetailedMedia {
     site: string;
     type?: string | null;
     language?: string | null;
+    color?: string | null;
+    icon?: string | null;
+    isDisabled?: boolean | null;
+    notes?: string | null;
+    siteId?: string | null;
   }> | null;
 
   streamingEpisodes?: Array<{
@@ -172,4 +187,76 @@ export interface DetailedMedia {
 
 export interface DetailedMediaResponse {
   Media: DetailedMedia
+}
+
+export interface AnimeThemesResponse {
+  anime: Anime[];
+}
+
+export interface Anime {
+  id: number;
+  name: string;
+  slug: string;
+  year?: number;
+  season?: string;
+  animethemes?: AnimeTheme[];
+  resources?: Resource[];
+}
+
+export interface AnimeTheme {
+  id: number;
+  type: 'OP' | 'ED';
+  sequence: number;
+  slug: string;
+  group?: string;
+  song?: Song;
+  animethemeentries?: ThemeEntry[];
+}
+
+export interface Song {
+  id: number;
+  title: string;
+  artists?: Artist[];
+}
+
+export interface Artist {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export interface ThemeEntry {
+  id: number;
+  version?: number;
+  videos?: Video[];
+}
+
+export interface Video {
+  id: number;
+  basename: string;
+  filename: string;
+  path: string;
+  size: number;
+  link: string;
+}
+
+export interface Resource {
+  id: number;
+  link: string;
+  external_id: number;
+  site: string; // 'AniList', 'MyAnimeList', etc.
+}
+
+export interface ResourceWithAnime extends Resource {
+  anime?: Anime;
+}
+
+// Simplified DTO for your app
+export interface ThemeData {
+  type: 'OP' | 'ED';
+  sequence: number;
+  fullName: string; // e.g., "OP1", "ED2"
+  songTitle: string;
+  artists: string[];
+  videoLink?: string;
 }

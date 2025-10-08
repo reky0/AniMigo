@@ -1,0 +1,16 @@
+
+ion-chip {
+  display: flex;
+  // flex-direction: column;
+  margin: 0;
+  align-items: center;
+  text-align: center;
+
+  .icon {
+    width: 100%;
+  }
+}
+
+ion-chip * {
+  cursor: inherit;
+}

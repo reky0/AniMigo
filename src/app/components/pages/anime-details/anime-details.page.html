@@ -1,40 +1,172 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>{{ data?.title?.english ?? data?.title?.romaji }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="../"></ion-back-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button>
+        <ion-icon slot="icon-only" name="heart"></ion-icon>
+      </ion-button>
+
+      <ion-button>
+        <ion-icon slot="icon-only" name="share-social"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">{{ data?.title?.romaji }}</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="../"></ion-back-button>
+      </ion-buttons>
+
+      <ion-buttons slot="end">
+        <ion-button>
+          <ion-icon slot="icon-only" name="heart"></ion-icon>
+        </ion-button>
+
+        <ion-button>
+          <ion-icon slot="icon-only" name="share-social"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
 
-  <ion-grid>
-    @if (loading) {
-      <ion-skeleton-text animated style="width: 200px; height: 200px;"></ion-skeleton-text>
-    } @else {
-      @if (data) {
-        <ion-row class="banner">
-          <ion-img [src]="data.bannerImage" class="banner-image"></ion-img>
-        </ion-row>
-        
-        <ion-row>
-          <!-- Cover Image (overlapping banner) -->
-          <div class="cover-container">
-            <ion-img [src]="data.coverImage?.large" alt="Cover" class="cover-image" />
-          </div>
-    
-          <!-- Details Section -->
-          <ion-col class="details-content">
-            <ion-title>{{ data.title.english ?? data.title.romaji }}</ion-title>
-            <ion-text>{{ data.description }}</ion-text>
+  <ion-grid class="container">
+    @if (data?.bannerImage || data?.coverImage?.color) {
+      <ion-row class="bannerContainer">
+        <ion-backdrop class="backdrop" [visible]="true"></ion-backdrop>
+        <ion-img class="bannerImage" [src]="data?.bannerImage ?? data?.coverImage?.color"></ion-img>
+      </ion-row>
+    }
+
+    <ion-row>
+      <ion-col class="ion-padding" size="12" sizeMd="6">
+        <ion-row class="basicInfoContainer">
+          <ion-col class="coverImageContainer" size="6" sizeMd="4">
+            @if (loading) {
+              <ion-skeleton-text animated class="coverImage"></ion-skeleton-text>
+            } @else {
+              @if (data?.bannerImage || data?.coverImage?.color) {
+                <ion-img class="coverImageFloat" [src]="data?.coverImage?.large ?? data?.coverImage?.medium"></ion-img>
+              } @else {
+                <ion-img class="coverImage" [src]="data?.coverImage?.extraLarge ?? data?.coverImage?.large ?? data?.coverImage?.medium"></ion-img>
+              }
+            }
+          </ion-col>
+          <ion-col class="titleContainer" size="6" sizeMd="8">
+            <ion-row>
+              <ion-card-title class="title">{{ data?.title?.english ?? data?.title?.romaji }}</ion-card-title>
+            </ion-row>
+
+            <ion-row>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-icon class="icon" name="tv-outline"></ion-icon>
+                  <ion-text>{{ data?.format }}</ion-text>
+                </ion-item>
+                <ion-item>
+                  <ion-icon class="icon" name="time"></ion-icon>
+                  <ion-text>{{ data?.episodes ? data?.episodes+' episodes' : 'Unknown' }}</ion-text>
+                </ion-item>
+                <ion-item>
+                  <ion-icon class="icon" name="radio"></ion-icon>
+                  <ion-text>{{ toSentenceCase(data?.status, " ") }}</ion-text>
+                </ion-item>
+              </ion-list>
+            </ion-row>
           </ion-col>
         </ion-row>
-      }
-    }
+
+        <ion-row class="ratingsContainer ion-margin-top ion-margin-bottom">
+          @if (data?.nextAiringEpisode && data?.nextAiringEpisode?.timeUntilAiring && data?.nextAiringEpisode?.episode) {
+            <ion-col>
+              <app-info-chip class="rating" [info]="'Ep ' + data?.nextAiringEpisode?.episode + ' in ' + secondsToDays(data?.nextAiringEpisode?.timeUntilAiring) + ' days'"
+                              note="Airing"></app-info-chip>
+            </ion-col>
+          }
+
+          <ion-col>
+            <app-info-chip class="rating" [info]="data?.meanScore ? data?.meanScore+'%' : '-'" note="Mean score"></app-info-chip>
+          </ion-col>
+
+          <ion-col>
+            <app-info-chip class="rating" [info]="data?.averageScore ? data?.averageScore+'%' : '-'" note="Average score"></app-info-chip>
+          </ion-col>
+
+          <ion-col>
+            <app-info-chip class="rating" [info]="data?.popularity ? data?.popularity+'%' : '-'" note="Popularity"></app-info-chip>
+          </ion-col>
+
+          <ion-col>
+            <app-info-chip class="rating" [info]="data?.favourites ? data?.favourites+'%' : '-'" note="Favourites"></app-info-chip>
+          </ion-col>
+        </ion-row>
+
+        <app-collapsible [thresholdHeight]="100">
+          <ion-row class="descriptionContainer">
+
+            <ion-col size="12">
+              <ion-card-title class="ion-margin-top ion-margin-bottom">Sinopsis</ion-card-title>
+              <ion-text [innerHTML]="data?.description ?? 'No description available.'"></ion-text>
+            </ion-col>
+          </ion-row>
+        </app-collapsible>
+
+        <ion-row class="genresContainer ion-margin-top ion-margin-bottom" >
+          @for (genre of data?.genres ?? []; track genre) {
+            <app-info-chip class="genre" [info]="genre" type="text" [border]="true"></app-info-chip>
+          }
+        </ion-row>
+      </ion-col>
+
+      <ion-col class="ion-padding" size="12" sizeMd="6">
+        <ion-row class="tabNavigationContainer">
+          <ion-segment
+            [value]="selectedTab"
+            (ionChange)="onSegmentChange($event)"
+            mode="md"
+            class="tab-segment">
+
+            <ion-segment-button value="info" layout="icon-top">
+              <ion-icon name="information-circle"></ion-icon>
+            </ion-segment-button>
+
+            <ion-segment-button value="characters" layout="icon-top">
+              <ion-icon name="people"></ion-icon>
+            </ion-segment-button>
+
+            <ion-segment-button value="relations" layout="icon-top">
+              <ion-icon name="shuffle"></ion-icon>
+            </ion-segment-button>
+
+            <ion-segment-button value="stats" layout="icon-top">
+              <ion-icon name="stats-chart"></ion-icon>
+            </ion-segment-button>
+          </ion-segment>
+        </ion-row>
+
+        <ion-row class="tabsContainer">
+          @switch (selectedTab) {
+            @case ('info') {
+              <app-info-tab [data]="data"></app-info-tab>
+            }
+            @case ('characters') {
+              <app-characters-tab [data]="data"></app-characters-tab>
+            }
+            @case ('relations') {
+              <app-relations-tab [data]="data"></app-relations-tab>
+            }
+            @case ('stats') {
+              <app-stats-tab [data]="data"></app-stats-tab>
+            }
+          }
+        </ion-row>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 
 </ion-content>
-

@@ -1,0 +1,47 @@
+<ion-chip outline="{{border}}"
+  [style.cursor]="cursor"
+  [style.pointer-events]="pointerEvents"
+  [style.flex-direction]="direction"
+  >
+  <ion-grid>
+    <ion-row>
+      @if (icon) {
+        <ion-col
+          [size]="(info || note) ? 4 : 12"
+          [sizeMd]="(info || note) ? 2 : 12"
+          >
+          <ion-img class="icon" [src]="icon"></ion-img>
+        </ion-col>
+      }
+
+      @if (info) {
+        <ion-col
+          [size]="icon ? 8 : ((note && direction=='row' ? 7 : 12))"
+          [sizeMd]="icon ? 10 : ((note && direction=='row' ? 7 : 12))"
+          >
+          @switch (type) {
+            @case ("text") {
+              <ion-text>{{ info }}</ion-text>
+            }
+            @default {
+              <ion-title>{{ info }}</ion-title>
+            }
+
+          }
+        </ion-col>
+      }
+
+      @if (note) {
+        <ion-col
+          [size]="icon ? (info ? 12 : 8) : ((info && direction=='row') ? 5 : 12)"
+          [sizeMd]="icon ? (info ? 12 : 10) : ((info && direction=='row') ? 5 : 12)"
+          >
+          <ion-note
+            [style.align-self]="direction=='row' ? 'end' : ''"
+            >{{ note }}</ion-note>
+        </ion-col>
+      }
+    </ion-row>
+
+  </ion-grid>
+</ion-chip>

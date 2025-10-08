@@ -1,0 +1,30 @@
+<div class="collapsible-container">
+  <div
+    #contentWrapper
+    class="content-wrapper"
+    [class.collapsed]="isCollapsed() && shouldCollapse()"
+    [style.max-height]="getMaxHeight()">
+    <div #content class="content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  @if (shouldCollapse()) {
+    <div class="gradient-overlay" [class.visible]="isCollapsed()"></div>
+
+    <div class="toggle-button-container">
+      <ion-button
+        fill="clear"
+        size="small"
+        (click)="toggleCollapse()">
+        @if (isCollapsed()) {
+          <span>Show More</span>
+          <ion-icon slot="end" name="chevron-down"></ion-icon>
+        } @else {
+          <span>Show Less</span>
+          <ion-icon slot="end" name="chevron-up"></ion-icon>
+        }
+      </ion-button>
+    </div>
+  }
+</div>

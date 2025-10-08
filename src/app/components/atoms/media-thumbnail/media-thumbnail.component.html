@@ -1,0 +1,7 @@
+<ion-row>
+  <ion-col class="trailerContainer" [size]="size" [sizeMd]="sizeMd" (click)="openUrl(mediaUrl)">
+    <ion-backdrop tappable="false" stopPropagation="false" class="mediaBackdrop" [visible]="true"></ion-backdrop>
+    <ion-icon class="playIcon" name="play-circle-outline"></ion-icon>
+    <ion-img class="media" [src]="thumbnail"></ion-img>
+  </ion-col>
+</ion-row>

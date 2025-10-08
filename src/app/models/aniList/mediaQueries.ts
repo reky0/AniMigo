@@ -217,13 +217,29 @@ export const GET_MEDIA_BY_ID = gql`
               duration
               isAdult
               siteUrl
+              nextAiringEpisode {
+                episode
+                timeUntilAiring
+                airingAt
+              }
               studios {
                 edges {
+                  isMain
                   node {
                     id
                     name
                   }
                 }
+              }
+              tags {
+                id
+                name
+                description
+                category
+                isAdult
+                isGeneralSpoiler
+                isMediaSpoiler
+                rank
               }
               staff {
                 edges {
@@ -269,6 +285,30 @@ export const GET_MEDIA_BY_ID = gql`
                     siteUrl
                   }
                 }
+              }
+              synonyms
+              trailer {
+                id
+                site
+                thumbnail
+              }
+              streamingEpisodes {
+                title
+                url
+                thumbnail
+                site
+              }
+              externalLinks {
+                color
+                icon
+                id
+                isDisabled
+                language
+                notes
+                site
+                siteId
+                type
+                url
               }
             }
           }

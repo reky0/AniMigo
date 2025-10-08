@@ -1,0 +1,47 @@
+.collapsible-container {
+      position: relative;
+    }
+
+    .content-wrapper {
+      overflow: hidden;
+      transition: max-height 0.3s ease-in-out;
+    }
+
+    .content-wrapper.collapsed {
+      position: relative;
+    }
+
+    .content {
+      padding-bottom: 8px;
+    }
+
+    .gradient-overlay {
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: linear-gradient(to bottom, transparent, var(--ion-background-color, #ffffff));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .gradient-overlay.visible {
+      opacity: 1;
+    }
+
+    .toggle-button-container {
+      display: flex;
+      justify-content: center;
+      padding-top: 8px;
+    }
+
+    ion-button {
+      --color: var(--ion-color-primary);
+      font-weight: 500;
+    }
+
+    ion-icon {
+      margin-left: 4px;
+    }

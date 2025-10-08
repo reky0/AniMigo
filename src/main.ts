@@ -9,7 +9,7 @@ import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { provideHttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { InMemoryCache } from '@apollo/client/core';
+import { ApolloLink, InMemoryCache, split } from '@apollo/client/core';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -20,8 +20,22 @@ bootstrapApplication(AppComponent, {
     provideApollo(() => {
       const httpLink = inject(HttpLink);
 
+      const anilistLink = httpLink.create({
+        uri: 'https://graphql.anilist.co' }
+      );
+      const animeThemesLink = httpLink.create({
+        uri: 'https://graphql.animethemes.moe',
+      });
+
+      // Route based on operation name
+      const link = split(
+        ({ operationName }) => operationName.startsWith('AnimeThemes'),
+        animeThemesLink, // if name starts with 'Theme'
+        anilistLink       // otherwise use AniList
+      );
+
       return {
-        link: httpLink.create({ uri: 'https://graphql.anilist.co' }),
+        link: ApolloLink.from([link]),
         cache: new InMemoryCache(),
       }
     })

@@ -1,0 +1,207 @@
+<ion-grid class="main ion-padding">
+  @if (data) {
+    <ion-card-title class="ion-margin-top ion-margin-bottom">Information</ion-card-title>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Duration</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.duration ? data.duration+' min' : 'Unknown'}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Start date</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ formatDate(data.startDate) }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>End date</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ formatDate(data.endDate)}}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Season</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ toSentenceCase(data.season) }} {{ data.seasonYear }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Source</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ toSentenceCase(data.source) }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Romaji</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.title.romaji }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>English</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.title.english ?? '-' }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Native</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.title.native ?? '-' }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    @if (data.synonyms && data.synonyms.length > 0) {
+      <ion-row>
+        <ion-col size="4">
+          <ion-note>Synonyms</ion-note>
+        </ion-col>
+        <ion-col size="8">
+          <app-collapsible [thresholdHeight]="100">
+            <ion-row>
+              @for (synonym of data.synonyms; track synonym){
+                <ion-col size="12">
+                  <ion-text>{{ synonym }}</ion-text>
+                </ion-col>
+              }
+            </ion-row>
+          </app-collapsible>
+        </ion-col>
+      </ion-row>
+    }
+
+    @if (mainStudios && mainStudios.length > 0) {
+      <ion-row>
+        <ion-col>
+          <ion-note>Studios</ion-note>
+        </ion-col>
+        <ion-col size="12">
+          <ion-row>
+            @for (studio of mainStudios; track studio) {
+              <ion-col size="4" sizeMd="3">
+                <app-info-chip type="text" [border]="true" [info]=" studio.node.name"></app-info-chip>
+              </ion-col>
+            }
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    }
+
+    @if (otherStudios && otherStudios.length > 0) {
+      <ion-row>
+        <ion-col>
+          <ion-note>Producers</ion-note>
+        </ion-col>
+        <ion-col size="12">
+          <ion-row>
+            @for (studio of otherStudios; track studio) {
+              <ion-col size="4" sizeMd="3">
+                <app-info-chip type="text" [border]="true" [info]=" studio.node.name"></app-info-chip>
+              </ion-col>
+            }
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    }
+
+    @if (data.tags && data.tags.length > 0) {
+      <ion-card-title class="ion-margin-top ion-margin-bottom">Tags</ion-card-title>
+
+      <app-collapsible [thresholdHeight]="100">
+        <ion-row>
+          @for (tag of data.tags; track tag) {
+            <ion-col size="4" sizeMd="3">
+              <app-info-chip type="text" [border]="false" [info]="tag.rank + '%'" [note]="tag.name"></app-info-chip>
+            </ion-col>
+          }
+        </ion-row>
+      </app-collapsible>
+    }
+
+    @if (data.trailer && trailerURL) {
+      <ion-card-title class="ion-margin-top ion-margin-bottom">Trailer</ion-card-title>
+
+      <app-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeMd]="5"></app-media-thumbnail>
+    }
+
+    @if (data.streamingEpisodes && data.streamingEpisodes.length > 0) {
+      <ion-card-title class="ion-margin-top ion-margin-bottom">Episodes</ion-card-title>
+
+      <app-collapsible [thresholdHeight]="100">
+        <ion-row>
+          @for (episode of data.streamingEpisodes; track episode) {
+            <ion-col size="4" sizeMd="3">
+              <app-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeMd]="12"></app-media-thumbnail>
+              <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
+            </ion-col>
+          }
+        </ion-row>
+      </app-collapsible>
+    }
+
+    @if (streamingSites && streamingSites.length > 0) {
+      <ion-card-title class="ion-margin-top ion-margin-bottom">Streaming sites</ion-card-title>
+
+      <ion-row>
+        @for (site of streamingSites; track site) {
+          <ion-col size="6" sizeMd="4">
+            <app-info-chip
+              [icon]="site?.icon"
+              [note]="site.site"
+              [border]="true"
+              direction="row"
+              [clickable]="true"
+              (click)="openUrl(site.url)"
+              ></app-info-chip>
+          </ion-col>
+        }
+      </ion-row>
+    }
+
+    @if (externalLinks && externalLinks.length > 0) {
+      <ion-card-title class="ion-margin-top ion-margin-bottom">External links</ion-card-title>
+
+      <app-collapsible [thresholdHeight]="150">
+        <ion-row>
+          @for (link of externalLinks; track link) {
+            <ion-col size="6" sizeMd="4">
+              <app-info-chip type="text"
+                [icon]="link?.icon"
+                [info]="link.site"
+                [note]="getLangCode(link.language)"
+                direction="row"
+                [border]="true" [clickable]="true"
+                (click)="openUrl(link.url)"></app-info-chip>
+            </ion-col>
+          }
+        </ion-row>
+      </app-collapsible>
+    }
+  } @else {
+    <ion-title>NO INFO AVAILABLE</ion-title>
+  }
+
+</ion-grid>

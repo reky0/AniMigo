@@ -1,0 +1,30 @@
+.trailerContainer {
+  padding: 0;
+  border-radius: 20px;
+  overflow: hidden;
+
+  .mediaBackdrop {
+    opacity: 0.3;
+  }
+
+  .playIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    font-size: 50px; // Adjust size as needed
+    color: white;
+    pointer-events: none; // Allows click to pass through to container
+  }
+
+  .media {
+    width: 100%;
+    height: auto;
+  }
+
+  .media::part(image) {
+    border-radius: 20px;
+    object-fit: cover;
+  }
+}
