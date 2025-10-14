@@ -1,0 +1,18 @@
+<ion-grid (click)="openModal()">
+<!-- <ion-grid (click)="presentPopover($event)"> -->
+<!-- <ion-grid (click)="openModal()"> -->
+  <ion-row>
+    <ion-col>
+      <app-person-item
+        [image]="image"
+        [name]="name"
+        [note]="note"
+        [loading]="loading"/>
+    </ion-col>
+    @if (voiceActors && voiceActors.length > 0) {
+      <ion-col size="1">
+        <ion-icon name="mic"></ion-icon>
+      </ion-col>
+    }
+  </ion-row>
+</ion-grid>

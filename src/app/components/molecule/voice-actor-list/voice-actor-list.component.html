@@ -1,0 +1,17 @@
+<ion-grid class="ion-padding">
+  <ion-row>
+    <ion-col>
+      <ion-title>Voice Actors</ion-title>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    @for (voiceActor of data; track voiceActor.id) {
+        <ion-col size="4">
+          <app-person-item
+            [image]="voiceActor.image.large ?? voiceActor.image.medium"
+            [name]="voiceActor.name.full"
+            [note]="voiceActor.language"/>
+        </ion-col>
+    }
+  </ion-row>
+</ion-grid>

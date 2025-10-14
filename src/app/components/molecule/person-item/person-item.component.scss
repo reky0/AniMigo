@@ -1,0 +1,19 @@
+.img-loading {
+  border-radius: 100%;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.img::part(image) {
+  border-radius: 100%;
+}
+
+.note-loading {
+  width: 50%;
+}
