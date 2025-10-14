@@ -35,3 +35,29 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+
+.va-modal {
+  --border-radius: 24px;
+  --background: var(--ion-color-light);
+  --backdrop-opacity: 0;
+  overflow-y: scroll;
+
+  --height: auto;
+
+  &::part(content) {
+    transform: translateZ(0);
+  }
+}
+
+.va-popover {
+  --background: var(--ion-color-light);
+  --backdrop-opacity: .6;
+
+  --height: auto;
+  --width: 400px;
+}
+
+ion-skeleton-text {
+  border-radius: 20px;
+}

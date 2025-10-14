@@ -31,6 +31,7 @@ export const GET_TRENDING_ANIMES = gql`
                 genres
                 season
                 seasonYear
+                type
               }
             }
           }
@@ -68,6 +69,7 @@ export const GET_NEXT_SEASON_ANIMES = gql`
                 genres
                 season
                 seasonYear
+                type
               }
             }
           }
@@ -104,6 +106,7 @@ export const GET_TRENDING_MANGAS = gql`
                 averageScore
                 genres
                 status
+                type
               }
             }
           }
@@ -143,6 +146,7 @@ export const GET_NEWLY_ADDED_ANIMES = gql`
                   day
                 }
                 status
+                type
               }
             }
           }
@@ -183,6 +187,7 @@ export const GET_NEWLY_ADDED_MANGAS = gql`
                   day
                 }
                 status
+                type
               }
             }
           }
@@ -241,7 +246,7 @@ export const GET_MEDIA_BY_ID = gql`
                 isMediaSpoiler
                 rank
               }
-              staff {
+              staff(sort: [RELEVANCE, ID]) {
                 edges {
                   role
                   node {
@@ -265,6 +270,10 @@ export const GET_MEDIA_BY_ID = gql`
                       romaji
                       english
                     }
+                    coverImage {
+                      medium
+                      large
+                    }
                     type
                     format
                     status
@@ -281,9 +290,12 @@ export const GET_MEDIA_BY_ID = gql`
                     }
                     coverImage {
                       medium
+                      large
                     }
                     siteUrl
+                    type
                   }
+                  rating
                 }
               }
               synonyms
@@ -309,6 +321,34 @@ export const GET_MEDIA_BY_ID = gql`
                 siteId
                 type
                 url
+              }
+              characters(sort: [ROLE, RELEVANCE, ID]) {
+                edges {
+                  role
+                  node {
+                    id
+                    name {
+                      full
+                      native
+                    }
+                    image {
+                      large
+                      medium
+                    }
+                  }
+                  voiceActors {
+                    id
+                    name {
+                      full
+                      native
+                    }
+                    language
+                    image {
+                      large
+                      medium
+                    }
+                  }
+                }
               }
             }
           }

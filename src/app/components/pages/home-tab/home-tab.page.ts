@@ -8,7 +8,7 @@ import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-ite
 
 import { Apollo, gql } from 'apollo-angular';
 import { BasicMedia, BasicMediaResponse } from 'src/app/models/aniList/responseInterfaces';
-import { GET_ANIME_THEMES, GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
+import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
 import { ApiService } from '@components/core/services/api-service';
 import { Router } from '@angular/router';
 
@@ -155,6 +155,6 @@ export class HomeTabPage implements OnInit {
   }
 
   goToDetails(id: number, type: 'ANIME' | 'MANGA') {
-    this.router.navigate([type.toLowerCase(), id])
+    this.router.navigate(['media', type.toLowerCase(), id])
   }
 }

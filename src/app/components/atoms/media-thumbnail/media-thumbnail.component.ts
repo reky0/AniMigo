@@ -10,7 +10,7 @@ import { openUrl } from 'src/app/helpers/utils';
 })
 export class MediaThumbnailComponent  implements OnInit {
   @Input() size: number = 7;
-  @Input() sizeMd: number = 4;
+  @Input() sizeLg: number = 4;
   @Input() thumbnail: string | undefined | null = "";
   @Input() mediaUrl: string | undefined = "";
 

@@ -1,0 +1,18 @@
+ion-title {
+  padding: 0;
+
+  line-clamp: 2;
+  -webkit-line-clamp: 2;  /* Limit to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2em; /* Adjust line height as needed */
+  max-height: 2.4em;  /* line-height * number of lines */
+  text-align: left;
+
+}
+
+ion-skeleton-text {
+  width: 150px;
+  height: 32px;
+}

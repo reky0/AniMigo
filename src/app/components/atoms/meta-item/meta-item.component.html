@@ -1,0 +1,8 @@
+@if (loading) {
+  <ion-skeleton-text animated/>
+} @else {
+  <ion-item>
+    <ion-icon [name]="icon"></ion-icon>
+    <ion-text>{{ text }}</ion-text>
+  </ion-item>
+}

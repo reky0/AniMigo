@@ -1,52 +1,80 @@
-ion-grid {
-  border-radius: 10px;
-  height: 90%;
-  padding: 10px;
-}
-
-ion-row {
-  width: 100%;
-}
-
-.img {
+.main {
   height: 100%;
-}
+  cursor: pointer;
 
-.img-loading {
-  height: 100%;
-  border-radius: 8px;
-  justify-content: center;
-}
+  ion-row, ion-col {
+    padding: 0;
+  }
 
-.img::part(image) {
-  border-radius: 8px;
-}
+  .img-container {
+    height: 75%;
+    justify-content: center;
+  }
 
-.label, .label-loading {
-  margin-top: 5px;
-}
+  .img-container ion-col {
+    height: 100%;
 
-.label {
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;  /* Limit to 2 lines */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.2em; /* Adjust line height as needed */
-  max-height: 2.4em;  /* line-height * number of lines */
-}
+    .img {
+      height: 100%;
+      object-fit: cover;
+    }
+  }
 
-.label-loading {
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-}
+  .img-loading {
+    height: 100%;
+    justify-content: center;
+  }
 
-.rating {
-  display: block;
-  align-items: center;
-  font-size: 11px;
-  color: #ffcc00;
-  margin-top: 5px;
+  .img-loading,
+  .img::part(image) {
+    border-radius: 8px;
+  }
+
+  .label-loading-container {
+    height: 15%;
+
+    .label-loading {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      margin-top: 5px;
+    }
+  }
+
+  .label-container {
+    height: 15%;
+
+    .label {
+      margin-top: 5px;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2; /* Limit to 2 lines */
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2em; /* Adjust line height as needed */
+      max-height: 2.4em; /* line-height * number of lines */
+    }
+  }
+
+  .rating {
+    display: block;
+    align-items: center;
+    font-size: 11px;
+    color: #ffcc00;
+  }
+
+  :host([recommendation]) .rating {
+    color: rgb(197, 197, 197);
+  }
+
+  .rating,
+  .note {
+    height: 5%;
+    padding-top: 5px;
+  }
+
+  ion-icon {
+    margin-right: 5px;
+  }
 }

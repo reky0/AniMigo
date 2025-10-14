@@ -10,6 +10,7 @@ export interface BasicMedia {
     medium: string;
     large?: string | null;
   } | null;
+  type: 'ANIME' | 'MANGA',
 }
 
 export interface BasicMediaResponse {
@@ -47,6 +48,20 @@ export interface Studio {
 export interface GenreConnection {
   genres: string[];
 }
+
+export interface VoiceActor {
+  id: number;
+  name: {
+    full: string;
+    native?: string | null;
+  }
+  language: string;
+  image: {
+    medium: string
+    large?: string | null;
+  }
+}
+
 export interface CharacterConnection {
   edges: Array<{
     id: number;
@@ -58,9 +73,11 @@ export interface CharacterConnection {
         native?: string | null;
       };
       image: {
+      medium: string
         large?: string | null;
       };
     };
+    voiceActors: Array<VoiceActor>;
   }>;
 }
 
@@ -75,6 +92,7 @@ export interface StaffConnection {
         native?: string | null;
       };
       image: {
+        medium?: string | null;
         large?: string | null;
       };
     };
@@ -144,16 +162,14 @@ export interface DetailedMedia {
     rank: number;
   }> | null;
 
-  characterConnection?: CharacterConnection | null;
+  characters?: CharacterConnection | null;
   staff?: StaffConnection | null;
 
   recommendations?: {
-    edges: Array<{
-      node: {
-        id: number;
-        rating: number;
-        mediaRecommendation: DetailedMedia;
-      };
+    nodes: Array<{
+      id: number;
+      rating: number;
+      mediaRecommendation: DetailedMedia;
     }>;
   } | null;
 
@@ -187,76 +203,4 @@ export interface DetailedMedia {
 
 export interface DetailedMediaResponse {
   Media: DetailedMedia
-}
-
-export interface AnimeThemesResponse {
-  anime: Anime[];
-}
-
-export interface Anime {
-  id: number;
-  name: string;
-  slug: string;
-  year?: number;
-  season?: string;
-  animethemes?: AnimeTheme[];
-  resources?: Resource[];
-}
-
-export interface AnimeTheme {
-  id: number;
-  type: 'OP' | 'ED';
-  sequence: number;
-  slug: string;
-  group?: string;
-  song?: Song;
-  animethemeentries?: ThemeEntry[];
-}
-
-export interface Song {
-  id: number;
-  title: string;
-  artists?: Artist[];
-}
-
-export interface Artist {
-  id: number;
-  name: string;
-  slug: string;
-}
-
-export interface ThemeEntry {
-  id: number;
-  version?: number;
-  videos?: Video[];
-}
-
-export interface Video {
-  id: number;
-  basename: string;
-  filename: string;
-  path: string;
-  size: number;
-  link: string;
-}
-
-export interface Resource {
-  id: number;
-  link: string;
-  external_id: number;
-  site: string; // 'AniList', 'MyAnimeList', etc.
-}
-
-export interface ResourceWithAnime extends Resource {
-  anime?: Anime;
-}
-
-// Simplified DTO for your app
-export interface ThemeData {
-  type: 'OP' | 'ED';
-  sequence: number;
-  fullName: string; // e.g., "OP1", "ED2"
-  songTitle: string;
-  artists: string[];
-  videoLink?: string;
 }

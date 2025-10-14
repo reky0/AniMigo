@@ -1,16 +1,55 @@
+:host {
+  ion-skeleton-text {
+    height: 50px;
+  }
 
-ion-chip {
-  display: flex;
-  // flex-direction: column;
-  margin: 0;
-  align-items: center;
-  text-align: center;
+  ion-chip {
+    height: 100%;
+    display: flex;
+    margin: 0;
+    text-align: center;
 
-  .icon {
-    width: 100%;
+    cursor: default;
+    pointer-events: none;
+
+    * {
+      cursor: inherit;
+      pointer-events: inherit;
+    }
+
+    ion-row {
+      ion-title,
+      ion-text,
+      ion-note {
+        display: flex;
+        justify-content: center; /* vertical centering */
+        align-items: center; /* horizontal centering */
+        height: 100%;
+      }
+
+      .icon {
+        width: 100%;
+      }
+    }
   }
 }
 
-ion-chip * {
-  cursor: inherit;
+:host([outline]) ion-chip {
+  --background: transparent;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #595959;
+}
+
+:host([clickable]) ion-chip {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+:host([vertical]) ion-chip {
+  flex-direction: column;
+}
+
+:host([horizontal]) {
+  flex-direction: row;
 }

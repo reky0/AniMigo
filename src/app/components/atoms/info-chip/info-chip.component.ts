@@ -1,31 +1,28 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
 
-import { IonChip, IonTitle, IonNote, IonText, IonLabel, IonCard, IonCardTitle, IonGrid, IonRow, IonCol, IonImg } from "@ionic/angular/standalone";
+import { IonChip, IonCol, IonGrid, IonImg, IonNote, IonRow, IonSkeletonText, IonText, IonTitle } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-info-chip',
   templateUrl: './info-chip.component.html',
   styleUrls: ['./info-chip.component.scss'],
-  imports: [IonImg, IonCol, IonRow, IonText, IonNote, IonChip, IonTitle, IonGrid]
+  imports: [IonSkeletonText, IonImg, IonCol, IonRow, IonText, IonNote, IonChip, IonTitle, IonGrid]
 })
-export class InfoChipComponent  implements OnInit {
+export class InfoChipComponent extends LoadingStateComponent implements OnInit {
   @Input() icon: string | null | undefined = '';
   @Input() info: string | number = '';
   @Input() note: string | null |undefined = null;
   @Input() type: string | null = null;
-  @Input() border: boolean = false;
-  @Input() clickable: boolean = false;
-  @Input() direction: string = 'column'
+  @Input() outline: any;
+  @Input() clickable: any;
+  @Input() vertical: any;
+  @Input() horizontal: any;
 
-  cursor: string = '';
-  pointerEvents: string = '';
-
-  constructor() { }
-
-  ngOnInit() {
-    this.cursor = this.clickable ? 'pointer' : 'default';
-    this.pointerEvents = this.clickable ? 'auto' : 'none';
-
+  constructor() {
+    super();
   }
 
+  ngOnInit() {
+  }
 }

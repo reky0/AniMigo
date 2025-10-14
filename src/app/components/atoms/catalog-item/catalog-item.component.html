@@ -1,31 +1,39 @@
-<ion-grid style="cursor: pointer;">
-  <ion-col>
-    @if (loading) {
-      <ion-row style="height: 70%; justify-content: center;">
-        <ion-col>
-          <ion-skeleton-text animated class="img-loading"></ion-skeleton-text>
-        </ion-col>
-      </ion-row>
-      <ion-row style="height: 15%;">
-        <ion-col>
-          <ion-skeleton-text animated class="label-loading"></ion-skeleton-text>
-        </ion-col>
-      </ion-row>
-    } @else {
-      <ion-row style="height: 70%; justify-content: center;">
+<ion-grid class="main">
+  @if (loading) {
+    <ion-row class="img-container">
+      <ion-col>
+        <ion-skeleton-text animated class="img-loading"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="label-loading-container">
+      <ion-col>
+        <ion-skeleton-text animated class="label-loading"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+  } @else {
+    <ion-row class="img-container">
+      <ion-col>
         <ion-img [src]="image" class="img"></ion-img>
+      </ion-col>
+    </ion-row>
+    <ion-row class="label-container">
+      <ion-col>
+        <ion-text class="label">{{ title }}</ion-text>
+      </ion-col>
+    </ion-row>
+    @if (rating) {
+      <ion-row class="rating">
+        <ion-col>
+          <ion-icon [name]="recommendation ? 'thumbs-up-sharp' : 'star'" mode="icon-only"></ion-icon>
+          <ion-text>{{ rating + (recommendation ? '' : '%')}}</ion-text>
+        </ion-col>
       </ion-row>
-      <ion-row>
-          <ion-text class="label">{{ title }}</ion-text>
+    } @else if (note) {
+      <ion-row class="note">
+        <ion-col>
+          <ion-note>{{ note }}</ion-note>
+        </ion-col>
       </ion-row>
-      @if (rating != undefined) {
-        <ion-row class="rating">
-          <ion-col>
-            <ion-icon name="star" mode="icon-only"></ion-icon>
-            <ion-text>{{ rating }}%</ion-text>
-          </ion-col>
-        </ion-row>
-      }
     }
-  </ion-col>
+  }
 </ion-grid>

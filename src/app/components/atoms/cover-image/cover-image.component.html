@@ -1,0 +1,6 @@
+@if (loading){
+  <ion-skeleton-text animated></ion-skeleton-text>
+} @else {
+  <ion-img [style.margin-top.vh]="float ? -5 : 0"
+    [src]="src"></ion-img>
+}

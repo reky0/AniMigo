@@ -6,11 +6,7 @@ export const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
-    path: 'anime/:id',
-    loadComponent: () => import('./components/pages/anime-details/anime-details.page').then( m => m.AnimeDetailsPage)
+    path: 'media/:type/:id',
+    loadComponent: () => import('../app/components/pages/media-details-page/media-details-page.component').then( m => m.MediaDetailsPageComponent)
   },
-  {
-    path: 'manga/:id',
-    loadComponent: () => import('./components/pages/manga-details/manga-details.page').then( m => m.MangaDetailsPage)
-  }
 ];

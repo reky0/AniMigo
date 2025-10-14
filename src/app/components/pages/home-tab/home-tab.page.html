@@ -13,16 +13,16 @@
     <app-section-header title="Trending now" [loading]="false"></app-section-header>
 
     @if (trendingAnimesLoading) {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (i of range; track i) {
           <app-catalog-item [loading]="true"></app-catalog-item>
         }
       </ion-list>
     } @else {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (media of trendingAnimes; track media.id) {
-          <app-catalog-item (click)="goToDetails(media.id, 'ANIME')" [title]="media.title.english ?? media.title.romaji" 
-            [image]="media.coverImage?.large ?? media.coverImage?.medium" 
+          <app-catalog-item (click)="goToDetails(media.id, media.type)" [title]="media.title.english ?? media.title.romaji"
+            [image]="media.coverImage?.large ?? media.coverImage?.medium"
             [rating]="media.averageScore"></app-catalog-item>
         }
       </ion-list>
@@ -33,16 +33,16 @@
     <app-section-header title="Next season" [loading]="false"></app-section-header>
 
     @if (nextSeasonAnimesLoading) {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (i of range; track i) {
           <app-catalog-item [loading]="true"></app-catalog-item>
         }
       </ion-list>
     } @else {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (media of nextSeasonAnimes; track media.id) {
-          <app-catalog-item (click)="goToDetails(media.id, 'ANIME')" [title]="media.title.english ?? media.title.romaji" 
-            [image]="media.coverImage?.large ?? media.coverImage?.medium" 
+          <app-catalog-item (click)="goToDetails(media.id, media.type)" [title]="media.title.english ?? media.title.romaji"
+            [image]="media.coverImage?.large ?? media.coverImage?.medium"
             ></app-catalog-item>
         }
       </ion-list>
@@ -53,16 +53,16 @@
     <app-section-header title="Trending manga" [loading]="false"></app-section-header>
 
     @if (trendingMangasLoading) {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (i of range; track i) {
           <app-catalog-item [loading]="true"></app-catalog-item>
         }
       </ion-list>
     } @else {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (media of trendingMangas; track media.id) {
-          <app-catalog-item (click)="goToDetails(media.id, 'MANGA')" [title]="media.title.english ?? media.title.romaji" 
-            [image]="media.coverImage?.large ?? media.coverImage?.medium" 
+          <app-catalog-item (click)="goToDetails(media.id, media.type)" [title]="media.title.english ?? media.title.romaji"
+            [image]="media.coverImage?.large ?? media.coverImage?.medium"
             [rating]="media.averageScore"></app-catalog-item>
         }
       </ion-list>
@@ -73,16 +73,16 @@
     <app-section-header title="Newly added anime" [loading]="false"></app-section-header>
 
     @if (newlyAddedAnimesLoading) {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (i of range; track i) {
           <app-catalog-item [loading]="true"></app-catalog-item>
         }
       </ion-list>
     } @else {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (media of newlyAddedAnimes; track media.id) {
-          <app-catalog-item (click)="goToDetails(media.id, 'ANIME')" [title]="media.title.english ?? media.title.romaji" 
-            [image]="media.coverImage?.large ?? media.coverImage?.medium" 
+          <app-catalog-item (click)="goToDetails(media.id, media.type)" [title]="media.title.english ?? media.title.romaji"
+            [image]="media.coverImage?.large ?? media.coverImage?.medium"
             [rating]="media.averageScore"></app-catalog-item>
         }
       </ion-list>
@@ -93,16 +93,16 @@
     <app-section-header title="Newly added manga" [loading]="false"></app-section-header>
 
     @if (newlyAddedMangasLoading) {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (i of range; track i) {
           <app-catalog-item [loading]="true"></app-catalog-item>
         }
       </ion-list>
     } @else {
-      <ion-list class="horizontal-scroll-container">
+      <ion-list class="horizontal-scroll-container ion-margin">
         @for (media of newlyAddedMangas; track media.id) {
-          <app-catalog-item (click)="goToDetails(media.id, 'MANGA')" [title]="media.title.english ?? media.title.romaji" 
-            [image]="media.coverImage?.large ?? media.coverImage?.medium" 
+          <app-catalog-item (click)="goToDetails(media.id, media.type)" [title]="media.title.english ?? media.title.romaji"
+            [image]="media.coverImage?.large ?? media.coverImage?.medium"
             [rating]="media.averageScore"></app-catalog-item>
         }
       </ion-list>
