@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { MediaDetailsPageComponent } from './media-details-page.component';
+import { MediaDetailsPageComponent } from './media-details.page';
 
 describe('MediaDetailsPageComponent', () => {
   let component: MediaDetailsPageComponent;

@@ -1,3 +1,75 @@
-<p>
-  relations-tab works!
-</p>
+<ion-grid class="main ion-padding">
+  @if (data) {
+    @if (data.relations && data.relations.edges && data.relations.edges.length > 0) {
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <app-section-title title="Related" />
+            </ion-col>
+          </ion-row>
+          @if (data) {
+            <app-collapsible [thresholdHeight]="300">
+              <ion-row>
+                @for (related of data.relations.edges; track related.node.id) {
+                  <ion-col size="4" sizeLg="2">
+                    <app-catalog-item
+                      [image]="related.node.coverImage?.large ?? related.node.coverImage?.medium"
+                      [title]="related.node.title.english ?? related.node.title.romaji"
+                      [note]="toSentenceCase(related.relationType)"
+                      (click)="goToDetails(related.node.id, related.node.type)"
+                      />
+                  </ion-col>
+                }
+              </ion-row>
+            </app-collapsible>
+          } @else {
+            <ion-row>
+              @for (i of 7 | range; track i) {
+                <ion-col size="4" sizeLg="2">
+                  <!--  -->
+                </ion-col>
+              }
+            </ion-row>
+          }
+        </ion-col>
+      </ion-row>
+    }
+    @if (data.recommendations && data.recommendations.nodes && data.recommendations.nodes.length > 0) {
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <app-section-title title="Recommendations" />
+            </ion-col>
+          </ion-row>
+          @if (data) {
+            <app-collapsible [thresholdHeight]="300">
+              <ion-row>
+                @for (recommendation of data.recommendations.nodes; track recommendation.mediaRecommendation.id) {
+                  <ion-col size="4" sizeLg="2">
+                    <app-catalog-item
+                      [image]="recommendation.mediaRecommendation.coverImage?.large ?? recommendation.mediaRecommendation.coverImage?.medium"
+                      [title]="recommendation.mediaRecommendation.title.english ?? recommendation.mediaRecommendation.title.romaji"
+                      [rating]="recommendation.rating"
+                      recommendation="true"
+                      (click)="goToDetails(recommendation.mediaRecommendation.id, recommendation.mediaRecommendation.type)"
+                      />
+                  </ion-col>
+                }
+              </ion-row>
+            </app-collapsible>
+          } @else {
+            <ion-row>
+              @for (i of 7 | range; track i) {
+                <ion-col size="4" sizeLg="2">
+                  <!--  -->
+                </ion-col>
+              }
+            </ion-row>
+          }
+        </ion-col>
+      </ion-row>
+    }
+  }
+</ion-grid>

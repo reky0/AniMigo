@@ -1,4 +1,4 @@
-<ion-grid (click)="openModal()">
+<ion-grid>
 <!-- <ion-grid (click)="presentPopover($event)"> -->
 <!-- <ion-grid (click)="openModal()"> -->
   <ion-row>
@@ -10,7 +10,7 @@
         [loading]="loading"/>
     </ion-col>
     @if (voiceActors && voiceActors.length > 0) {
-      <ion-col size="1">
+      <ion-col size="1" (click)="openModal()">
         <ion-icon name="mic"></ion-icon>
       </ion-col>
     }

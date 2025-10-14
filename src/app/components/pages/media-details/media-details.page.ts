@@ -23,10 +23,10 @@ import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
   selector: 'app-profile-tab',
-  templateUrl: './media-details-page.component.html',
-  styleUrls: ['./media-details-page.component.scss'],
+  templateUrl: './media-details.page.html',
+  styleUrls: ['./media-details.page.scss'],
   standalone: true,
-  imports: [IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
+  imports: [IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
 })
 export class MediaDetailsPageComponent implements OnInit {
 

@@ -8,6 +8,7 @@ import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 })
 export class StatsTabComponent  implements OnInit {
   @Input() data: DetailedMedia | null | undefined = undefined;
+  @Input() loading: boolean = true;
 
   constructor() { }
 

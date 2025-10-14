@@ -1,71 +1,77 @@
 <ion-grid class="main ion-padding">
-  <ion-row>
-    <ion-col>
+  @if (data) {
+    @if ((data.staff && data.staff.edges && data.staff.edges.length > 0) || loading) {
       <ion-row>
         <ion-col>
-          <app-section-title title="Staff" />
+          <ion-row>
+            <ion-col>
+              <app-section-title title="Staff" />
+            </ion-col>
+          </ion-row>
+          @if (!loading) {
+            <app-collapsible [thresholdHeight]="250">
+              <ion-row>
+                @for (person of data.staff?.edges; track person.id) {
+                  <ion-col size="4" sizeLg="2">
+                    <app-person-item
+                      [image]="person.node.image.medium"
+                      [name]="person.node.name.full"
+                      [note]="person.role"
+                      />
+                  </ion-col>
+                }
+              </ion-row>
+            </app-collapsible>
+          } @else {
+            <ion-row>
+              @for (i of 7 | range; track i) {
+                <ion-col size="4" sizeLg="2">
+                  <app-person-item
+                    [loading]="true"
+                    />
+                </ion-col>
+              }
+            </ion-row>
+          }
         </ion-col>
       </ion-row>
-      @if (data && !loading) {
-        <app-collapsible>
+    }
+    @if ((data.characters && data.characters.edges && data.characters.edges.length > 0) || loading) {
+      <ion-row>
+        <ion-col>
           <ion-row>
-            @for (person of data.staff?.edges; track person.id) {
-              <ion-col size="4" sizeLg="2">
-                <app-person-item
-                  [image]="person.node.image.medium"
-                  [name]="person.node.name.full"
-                  [note]="person.role"
+            <ion-col>
+              <app-section-title title="Characters" />
+            </ion-col>
+          </ion-row>
+          @if (!loading) {
+            <app-collapsible [thresholdHeight]="230">
+              <ion-row>
+                @for (character of data.characters?.edges; track character.id) {
+                  <ion-col size="4" sizeLg="2">
+                    <app-character-item
+                      [image]="character.node.image.large"
+                      [name]="character.node.name.full"
+                      [note]="character.role"
+                      [voiceActors]="character.voiceActors"
+                    />
+                  </ion-col>
+                }
+              </ion-row>
+            </app-collapsible>
+          } @else {
+            <ion-row>
+              @for (i of 7 | range; track i) {
+                <ion-col size="4" sizeLg="2">
+                  <app-character-item
+                    [loading]="true"
                   />
-              </ion-col>
-            }
-          </ion-row>
-        </app-collapsible>
-      } @else {
-        <ion-row>
-          @for (i of 7 | range; track i) {
-            <ion-col size="4" sizeLg="2">
-              <app-person-item
-                [loading]="true"
-                />
-            </ion-col>
+                </ion-col>
+              }
+            </ion-row>
           }
-        </ion-row>
-      }
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <ion-row>
-        <ion-col>
-          <app-section-title title="Characters" />
         </ion-col>
       </ion-row>
-      @if (data && !loading) {
-        <app-collapsible>
-          <ion-row>
-            @for (character of data.characters?.edges; track character.id) {
-              <ion-col size="4" sizeLg="2">
-                <app-character-item
-                  [image]="character.node.image.large"
-                  [name]="character.node.name.full"
-                  [note]="character.role"
-                  [voiceActors]="character.voiceActors"
-                />
-              </ion-col>
-            }
-          </ion-row>
-        </app-collapsible>
-      } @else {
-        <ion-row>
-          @for (i of 7 | range; track i) {
-            <ion-col size="4" sizeLg="2">
-              <app-character-item
-                [loading]="true"
-              />
-            </ion-col>
-          }
-        </ion-row>
-      }
-    </ion-col>
-  </ion-row>
+    }
+  }
 </ion-grid>

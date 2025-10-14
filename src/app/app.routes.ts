@@ -7,6 +7,6 @@ export const routes: Routes = [
   },
   {
     path: 'media/:type/:id',
-    loadComponent: () => import('../app/components/pages/media-details-page/media-details-page.component').then( m => m.MediaDetailsPageComponent)
+    loadComponent: () => import('./components/pages/media-details/media-details.page').then( m => m.MediaDetailsPageComponent)
   },
 ];
