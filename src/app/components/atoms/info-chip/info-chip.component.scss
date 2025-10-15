@@ -12,6 +12,8 @@
     cursor: default;
     pointer-events: none;
 
+
+
     * {
       cursor: inherit;
       pointer-events: inherit;
@@ -27,8 +29,21 @@
         height: 100%;
       }
 
-      .icon {
+      .img, .icon {
         width: 100%;
+        height: 100%;
+      }
+
+      ion-col .icon {
+        height: 20px;
+      }
+
+      .icon[name=star-outline] {
+        color: gold;
+      }
+
+      .icon[name=heart-outline] {
+        color: crimson;
       }
     }
   }

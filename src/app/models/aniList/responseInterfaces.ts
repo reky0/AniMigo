@@ -111,6 +111,36 @@ export interface NextAiringEpisode {
   airingAt: number | null;
 }
 
+export interface Ranking {
+  allTime: boolean;
+  context: string;
+  format: string;
+  id: number;
+  rank: number;
+  season: string | null;
+  type: string;
+  year: number | null;
+}
+
+export interface StatusStat {
+  amount: number;
+  status: string;
+  color?: string;
+  textColor?: string;
+}
+
+export interface ScoreStat {
+  amount: number;
+  score: number;
+  color?: string;
+  textColor?: string;
+}
+
+export interface Stats {
+  statusDistribution: Array<StatusStat>;
+  scoreDistribution: Array<ScoreStat>;
+}
+
 export interface DetailedMedia {
   id: number;
   idMal?: number | null;                        // MyAnimeList ID
@@ -199,6 +229,10 @@ export interface DetailedMedia {
     url: string;
     site: string;
   }> | null;
+
+  rankings?: Array<Ranking> | null;
+
+  stats?: Stats;
 }
 
 export interface DetailedMediaResponse {

@@ -36,80 +36,88 @@
   </ion-header>
 
   <ion-grid class="container">
-    @if (data) {
-      @if (data.bannerImage || data.coverImage?.color) {
+      @if (data?.bannerImage || data?.coverImage?.color) {
         <ion-row class="bannerContainer">
           <ion-backdrop class="backdrop" [visible]="true"></ion-backdrop>
-          <ion-img class="bannerImage" [src]="data.bannerImage ?? data.coverImage?.color"></ion-img>
+          <ion-img class="bannerImage" [src]="data?.bannerImage ?? data?.coverImage?.color"></ion-img>
         </ion-row>
       }
 
       <ion-row>
-        <ion-col class="ion-padding" size="12" sizeLg="6">
+        <ion-col class="ion-padding" size="12" sizeMd="6">
           <ion-row class="basicInfoContainer">
-            <ion-col class="coverImageContainer" size="6" sizeLg="4">
-              @if (data.bannerImage || data.coverImage?.color) {
-                <app-cover-image [float]="true" [src]="data.coverImage?.extraLarge ?? data.coverImage?.large ?? data.coverImage?.medium" [loading]="loading"></app-cover-image>
+            <ion-col class="coverImageContainer" size="6" sizeMd="6" sizeLg="5">
+              @if (data?.bannerImage || data?.coverImage?.color) {
+                <app-cover-image [float]="true" [src]="(data?.coverImage?.large?.replace('medium', 'large')) ?? data?.coverImage?.medium" [loading]="loading"></app-cover-image>
               } @else {
-                <app-cover-image [float]="false" [src]="data.coverImage?.extraLarge ?? data.coverImage?.large ?? data.coverImage?.medium" [loading]="loading"></app-cover-image>
+                <app-cover-image [float]="false" [src]="(data?.coverImage?.large?.replace('medium', 'large')) ?? data?.coverImage?.medium" [loading]="loading"></app-cover-image>
               }
             </ion-col>
 
-            <ion-col class="titleContainer" size="6" sizeLg="8">
+            <ion-col class="titleContainer" size="6" sizeMd="6" sizeLg="7">
               <ion-row>
-                <app-section-title [loading]="loading" [title]="data.title.english ?? data.title.romaji"/>
+                <app-section-title [loading]="loading" [title]="data?.title?.english ?? data?.title?.romaji"/>
               </ion-row>
 
               <ion-row>
                 <ion-col size="12">
-                  <app-meta-item icon="tv-outline" [text]="data.format ? toSentenceCase(data.format, ' ') : 'Unknown'" nolines [loading]="loading"/>
+                  <app-meta-item [icon]="data?.type==='MANGA' ? 'book-outline' : 'tv-outline'" [text]="data?.format ? toSentenceCase(data?.format, ' ') : 'Unknown'" nolines [loading]="loading"/>
                 </ion-col>
                 <ion-col size="12">
-                  <app-meta-item icon="time" [text]="data.episodes ? data.episodes+' episodes' : 'Unknown'" nolines [loading]="loading"/>
+                  <app-meta-item icon="time" [text]="data?.episodes ? data?.episodes+' episodes' : 'Unknown'" nolines [loading]="loading"/>
                 </ion-col>
                 <ion-col size="12">
-                  <app-meta-item icon="radio" [text]="data.status ? toSentenceCase(data.status, ' ') : 'Unknown'" nolines [loading]="loading"/>
+                  <app-meta-item icon="radio" [text]="data?.status ? toSentenceCase(data?.status, ' ') : 'Unknown'" nolines [loading]="loading"/>
                 </ion-col>
               </ion-row>
             </ion-col>
           </ion-row>
 
           <ion-row class="ratingsContainer ion-margin-top ion-margin-bottom">
-            @if (data.nextAiringEpisode && data.nextAiringEpisode.timeUntilAiring && data.nextAiringEpisode.episode) {
+            @if (data?.nextAiringEpisode && data?.nextAiringEpisode?.timeUntilAiring && data?.nextAiringEpisode?.episode) {
               <ion-col>
                 <app-info-chip class="rating"
-                  [info]="'Ep ' + data.nextAiringEpisode.episode + ' in ' + secondsToDays(data.nextAiringEpisode.timeUntilAiring) + ' days'"
+                  [info]="'Ep ' + data?.nextAiringEpisode?.episode + ' in ' + secondsToDays(data?.nextAiringEpisode?.timeUntilAiring) + ' days'"
                   note="Airing"
-                  [loading]="loading" />
+                  [loading]="loading"
+                  vertical
+                  />
               </ion-col>
             }
 
             <ion-col>
               <app-info-chip class="rating"
-                [info]="data.meanScore ? data.meanScore+'%' : '-'"
+                [info]="data?.meanScore ? data?.meanScore+'%' : '-'"
                 note="Mean score"
-                [loading]="loading" />
+                [loading]="loading"
+                vertical
+                />
             </ion-col>
 
             <ion-col>
               <app-info-chip class="rating"
-                [info]="data.averageScore ? data.averageScore+'%' : '-'"
+                [info]="data?.averageScore ? data?.averageScore+'%' : '-'"
                 note="Average score"
-                [loading]="loading" />
+                [loading]="loading"
+                vertical
+                />
             </ion-col>
 
             <ion-col>
               <app-info-chip class="rating"
-                [info]="data.popularity ? data.popularity+'%' : '-'"
+                [info]="data?.popularity ? data?.popularity?.toLocaleString() : '-'"
                 note="Popularity"
-                [loading]="loading" />
+                [loading]="loading"
+                />
             </ion-col>
 
             <ion-col>
               <app-info-chip class="rating"
-                [info]="data.favourites ? data.favourites+'%' : '-'"
+                [info]="data?.favourites ? data?.favourites?.toLocaleString() : '-'"
                 note="Favourites"
-                [loading]="loading" />
+                [loading]="loading"
+                vertical
+                />
             </ion-col>
           </ion-row>
 
@@ -120,7 +128,7 @@
               } @else {
                 <app-section-title class="ion-margin" title="Sinopsis"/>
                 <app-collapsible [thresholdHeight]="100">
-                  <ion-text [innerHTML]="data.description ?? 'No description available.'"></ion-text>
+                  <ion-text [innerHTML]="data?.description ?? 'No description available.'"></ion-text>
                 </app-collapsible>
               }
             </ion-col>
@@ -128,8 +136,8 @@
 
           @if (!loading) {
             <ion-row class="genresContainer ion-margin-top ion-margin-bottom" >
-              @for (genre of data.genres ?? []; track genre) {
-                <ion-col sizeLg="2">
+              @for (genre of data?.genres ?? []; track genre) {
+                <ion-col sizeMd="4" sizeLg="3">
                   <app-info-chip class="genre" [info]="genre" type="text" outline></app-info-chip>
                 </ion-col>
               }
@@ -138,7 +146,7 @@
         </ion-col>
 
 
-        <ion-col class="ion-padding" size="12" sizeLg="6">
+        <ion-col class="ion-padding" size="12" sizeMd="6">
           <ion-row class="tabNavigationContainer">
             <ion-segment
               [value]="selectedTab"
@@ -194,8 +202,6 @@
           </ion-row>
         </ion-col>
       </ion-row>
-
-    }
   </ion-grid>
 
 </ion-content>

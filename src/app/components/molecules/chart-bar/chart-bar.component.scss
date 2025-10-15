@@ -1,0 +1,15 @@
+.legend {
+  display: flex;
+}
+
+.value {
+  display: none;
+}
+
+:host([legend]) .legend {
+  display: flex;
+}
+
+:host([showValue]) .value {
+  display: flex;
+}

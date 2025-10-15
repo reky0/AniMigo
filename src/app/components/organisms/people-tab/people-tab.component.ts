@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { IonGrid, IonRow, IonCol, IonTitle, IonRouterOutlet, IonText, IonModal, IonSkeletonText } from "@ionic/angular/standalone";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
-import { PersonItemComponent } from "@components/molecule/person-item/person-item.component";
+import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
-import { CharacterItemComponent } from "@components/molecule/character-item/character-item.component";
+import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { RangePipe } from 'src/app/helpers/range.pipe';
 
 @Component({

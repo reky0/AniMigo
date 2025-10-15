@@ -1,3 +1,98 @@
-<p>
-  stats-tab works!
-</p>
+<ion-grid class="main ion-padding">
+
+  @if (data) {
+    @if (data.rankings) {
+      <ion-row>
+        <ion-col>
+          <app-section-title title="Rankings" class="ion-margin" />
+        </ion-col>
+      </ion-row>
+      @for (ranking of data.rankings; track ranking) {
+        <ion-row>
+          <ion-col size="12">
+            <app-info-chip
+              class="chip"
+              [icon]="ranking.type == 'RATED' ? 'star-outline' : 'heart-outline'"
+              [info]="`#${ranking.rank} ${toSentenceCase(ranking.context)} ${ranking.season ? toSentenceCase(ranking.season) : ''} ${ranking.year ?? (ranking.context.includes('all time') ? '' : ' all time') }`"
+              type="text"
+              horizontal
+              outline
+              />
+          </ion-col>
+        </ion-row>
+      }
+    }
+    @if (data.stats) {
+      @if (data.stats.statusDistribution) {
+        <ion-row>
+          <ion-col>
+            <app-section-title title="Status distribution" class="ion-margin" />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-grid>
+              <ion-row>
+                @for (status of coloredStatus; track status) {
+                  <ion-col size="4">
+                    <app-info-chip
+                      [info]="status.amount.toLocaleString()"
+                      [note]="toSentenceCase(status.status)"
+                      type="text"
+                      [color]="status.color"
+                      [textColor]="status.textColor"
+                      />
+                  </ion-col>
+                }
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-grid>
+                    <ion-row class="ion-no-padding ion-no-margin">
+                      @for (status of coloredStatus; track status) {
+                        <ion-col
+                          [size]="(11.5 * status.amount / totalStatus)"
+                          [style.background]="status.color" class="stackedBar"
+                          >
+                        </ion-col>
+                      }
+                    </ion-row>
+                  </ion-grid>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <ion-text>Total: {{ totalStatus.toLocaleString() }}</ion-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+      }
+      @if (data.stats.scoreDistribution) {
+        <ion-row>
+          <ion-col>
+            <app-section-title title="Score distribution"  />
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <ion-grid>
+              @for (score of coloredScores; track score){
+                <app-chart-bar
+                  [legend]="score.score.toString()"
+                  [highest]="maxScoreAmount"
+                  [value]="score.amount"
+                  [color]="score?.color"
+                  showValue
+                  />
+              }
+            </ion-grid>
+          </ion-col>
+        </ion-row>
+      }
+    }
+  } @else {
+    <ion-text>No stats to show</ion-text>
+  }
+</ion-grid>

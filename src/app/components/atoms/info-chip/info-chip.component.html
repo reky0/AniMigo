@@ -2,29 +2,36 @@
   <ion-skeleton-text animated />
 } @else {
   <ion-chip
+    [style.background]="color"
     >
     <ion-grid>
       <ion-row>
-        @if (icon) {
+        @if (img || icon) {
           <ion-col
             [size]="(info || note) ? 3 : 12"
             [sizeLg]="(info || note) ? 3 : 12"
             >
-            <ion-img class="icon" [src]="icon"></ion-img>
+            @if (img) {
+              <ion-img class="img" [src]="img"></ion-img>
+            } @else if (icon) {
+              <ion-icon class="icon" [name]="icon"/>
+            }
           </ion-col>
         }
 
         @if (info) {
           <ion-col
-            [size]="icon ? 9 : ((note && vertical ? 7 : 12))"
-            [sizeLg]="icon ? 9 : ((note && vertical ? 7 : 12))"
+            [size]="(img || icon) ? 9 : ((note && vertical ? 7 : 12))"
+            [sizeLg]="(img || icon) ? 9 : ((note && vertical ? 7 : 12))"
             >
             @switch (type) {
               @case ("text") {
-                <ion-text>{{ info }}</ion-text>
+                <ion-text
+                  [style.color]="textColor">{{ info }}</ion-text>
               }
               @default {
-                <ion-title>{{ info }}</ion-title>
+                <ion-title
+                  [style.color]="textColor">{{ info }}</ion-title>
               }
             }
           </ion-col>
@@ -32,12 +39,12 @@
 
         @if (note) {
           <ion-col
-            [size]="icon ? (info ? 12 : 9) : ((info && vertical) ? 5 : 12)"
-            [sizeLg]="icon ? (info ? 12 : 9) : ((info && vertical) ? 5 : 12)"
+            [size]="(img || icon) ? (info ? 12 : 9) : ((info && vertical) ? 5 : 12)"
+            [sizeLg]="(img || icon) ? (info ? 12 : 9) : ((info && vertical) ? 5 : 12)"
             >
             <ion-note
               [style.align-self]="vertical ? 'end' : ''"
-              >{{ note }}</ion-note>
+              [style.color]="textColor">{{ note }}</ion-note>
           </ion-col>
         }
       </ion-row>

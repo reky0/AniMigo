@@ -222,6 +222,9 @@ export const GET_MEDIA_BY_ID = gql`
               duration
               isAdult
               siteUrl
+              type
+              popularity
+              favourites
               nextAiringEpisode {
                 episode
                 timeUntilAiring
@@ -348,6 +351,26 @@ export const GET_MEDIA_BY_ID = gql`
                       medium
                     }
                   }
+                }
+              }
+              rankings {
+                allTime
+                context
+                format
+                id
+                rank
+                season
+                type
+                year
+              }
+              stats {
+                statusDistribution {
+                    amount
+                    status
+                }
+                scoreDistribution {
+                    amount
+                    score
                 }
               }
             }

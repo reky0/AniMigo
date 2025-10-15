@@ -15,7 +15,7 @@ import { RelationsTabComponent } from "@components/organisms/relations-tab/relat
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
 import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { gitNetworkOutline, heart, images, informationCircle, people, radio, shareSocial, shuffle, star, statsChart, time, tv, tvOutline } from 'ionicons/icons';
+import { bookOutline, gitNetworkOutline, heart, images, informationCircle, people, radio, shareSocial, shuffle, star, statsChart, time, tv, tvOutline } from 'ionicons/icons';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
@@ -31,7 +31,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
 export class MediaDetailsPageComponent implements OnInit {
 
   constructor(private apiService: ApiService, private route: ActivatedRoute) {
-    addIcons({heart,shareSocial,tvOutline,time,radio,informationCircle,people,shuffle,statsChart,images,gitNetworkOutline,star,tv,});
+    addIcons({heart,shareSocial,tvOutline,bookOutline,time,radio,informationCircle,people,shuffle,statsChart,images,gitNetworkOutline,star,tv,});
     this.setupStatusBar();
   }
 
@@ -39,11 +39,9 @@ export class MediaDetailsPageComponent implements OnInit {
   error: any;
   data: DetailedMedia | null | undefined = null;
   selectedTab: string = 'info';
-  // selectedTab: string = 'people';
+  // selectedTab: string = 'stats';
 
   ngOnInit() {
-    addIcons({shareSocial});
-
     const id = this.route.snapshot.paramMap.get("id");
     const type = this.route.snapshot.paramMap.get("type");
 
