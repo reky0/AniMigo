@@ -2,18 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { StatusBar, Style } from '@capacitor/status-bar';
 import { CoverImageComponent } from "@components/atoms/cover-image/cover-image.component";
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { MetaItemComponent } from "@components/atoms/meta-item/meta-item.component";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
 import { ApiService } from '@components/core/services/api-service';
+import { PlatformService } from '@components/core/services/platform-service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.component";
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
-import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { bookOutline, gitNetworkOutline, heart, images, informationCircle, people, radio, shareSocial, shuffle, star, statsChart, time, tv, tvOutline } from 'ionicons/icons';
 import { toSentenceCase } from 'src/app/helpers/utils';
@@ -30,9 +30,8 @@ import { RangePipe } from "../../../helpers/range.pipe";
 })
 export class MediaDetailsPageComponent implements OnInit {
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) {
-    addIcons({heart,shareSocial,tvOutline,bookOutline,time,radio,informationCircle,people,shuffle,statsChart,images,gitNetworkOutline,star,tv,});
-    this.setupStatusBar();
+  constructor(private readonly apiService: ApiService, private readonly route: ActivatedRoute, private readonly platformService: PlatformService) {
+    addIcons({ heart, shareSocial, tvOutline, bookOutline, time, radio, informationCircle, people, shuffle, statsChart, images, gitNetworkOutline, star, tv, });
   }
 
   loading = true;
@@ -54,22 +53,19 @@ export class MediaDetailsPageComponent implements OnInit {
     };
 
     this.apiService.fetchDetailedData(GET_MEDIA_BY_ID, variables).subscribe({
-          next: ({ data, loading, errors }) => {
-            this.loading = loading;
-            if (errors) {
-              this.error = errors[0];
-            } else {
-              this.data = data?.Media;
-              // console.log(this.data);
-              // console.log(this.data?.description);
-
-            }
-          },
-          error: (err) => {
-            this.error = err;
-            this.loading = false;
-          }
-        });
+      next: ({ data, loading, errors }) => {
+        this.loading = loading;
+        if (errors) {
+          this.error = errors[0];
+        } else {
+          this.data = data?.Media;
+        }
+      },
+      error: (err) => {
+        this.error = err;
+        this.loading = false;
+      }
+    });
   }
 
   toSentenceCase = toSentenceCase;
@@ -85,10 +81,5 @@ export class MediaDetailsPageComponent implements OnInit {
     this.selectedTab = event.detail.value as string;
 
     console.log('Tab changed to: ' + this.selectedTab);
-  }
-
-  async setupStatusBar() {
-    await StatusBar.setOverlaysWebView({ overlay: true });
-    await StatusBar.setStyle({ style: Style.Light });
   }
 }

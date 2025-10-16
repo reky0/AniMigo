@@ -5,7 +5,7 @@
     </ion-col>
   </ion-row>
   <ion-row>
-    @for (voiceActor of data; track voiceActor.id) {
+    @for (voiceActor of data; track $index) {
         <ion-col size="4">
           <app-person-item
             [image]="voiceActor.image.large ?? voiceActor.image.medium"

@@ -11,7 +11,7 @@
           @if (data) {
             <app-collapsible [thresholdHeight]="300">
               <ion-row>
-                @for (related of data.relations.edges; track related.node.id) {
+                @for (related of data.relations.edges; track $index) {
                   <ion-col size="4" sizeLg="2">
                     <app-catalog-item
                       [image]="related.node.coverImage?.large ?? related.node.coverImage?.medium"
@@ -46,7 +46,7 @@
           @if (data) {
             <app-collapsible [thresholdHeight]="300">
               <ion-row>
-                @for (recommendation of data.recommendations.nodes; track recommendation.mediaRecommendation.id) {
+                @for (recommendation of data.recommendations.nodes; track $index) {
                   <ion-col size="4" sizeLg="2">
                     <app-catalog-item
                       [image]="recommendation.mediaRecommendation.coverImage?.large ?? recommendation.mediaRecommendation.coverImage?.medium"

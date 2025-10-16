@@ -47,10 +47,20 @@
         <ion-col class="ion-padding" size="12" sizeMd="6">
           <ion-row class="basicInfoContainer">
             <ion-col class="coverImageContainer" size="6" sizeMd="6" sizeLg="5">
-              @if (data?.bannerImage || data?.coverImage?.color) {
-                <app-cover-image [float]="true" [src]="(data?.coverImage?.large?.replace('medium', 'large')) ?? data?.coverImage?.medium" [loading]="loading"></app-cover-image>
+              @if (data?.bannerImage) {
+                <app-cover-image
+                  [float]="true"
+                  [src]="(data?.coverImage?.large?.replace('medium', 'large')) ?? data?.coverImage?.medium"
+                  [fallbackSrc]="data?.coverImage?.large"
+                  [loading]="loading"
+                  />
               } @else {
-                <app-cover-image [float]="false" [src]="(data?.coverImage?.large?.replace('medium', 'large')) ?? data?.coverImage?.medium" [loading]="loading"></app-cover-image>
+                <app-cover-image
+                  [float]="false"
+                  [src]="(data?.coverImage?.large?.replace('medium', 'large')) ?? data?.coverImage?.medium"
+                  [fallbackSrc]="data?.coverImage?.large"
+                  [loading]="loading"
+                  />
               }
             </ion-col>
 
@@ -136,7 +146,7 @@
 
           @if (!loading) {
             <ion-row class="genresContainer ion-margin-top ion-margin-bottom" >
-              @for (genre of data?.genres ?? []; track genre) {
+              @for (genre of data?.genres ?? []; track $index) {
                 <ion-col sizeMd="4" sizeLg="3">
                   <app-info-chip class="genre" [info]="genre" type="text" outline></app-info-chip>
                 </ion-col>

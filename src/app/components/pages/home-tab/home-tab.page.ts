@@ -10,19 +10,19 @@ import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api-service';
 import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
+import { RangePipe } from 'src/app/helpers/range.pipe';
 
 @Component({
   selector: 'app-home-tab',
   templateUrl: './home-tab.page.html',
   styleUrls: ['./home-tab.page.scss'],
   standalone: true,
-  imports: [IonList, IonContent, IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, SectionHeaderComponent, CatalogItemComponent, IonCol]
+  imports: [IonList, IonContent, IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, SectionHeaderComponent, CatalogItemComponent, IonCol, RangePipe]
 })
 export class HomeTabPage implements OnInit {
   platformService: PlatformService = inject(PlatformService);
 
-  loadingItems = 10;
-  range = new Array(this.loadingItems);
+  loadItems = 10;
 
   trendingAnimes: BasicMedia[] | null | undefined = null;
   trendingAnimesLoading = true;

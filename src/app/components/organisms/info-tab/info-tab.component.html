@@ -93,7 +93,7 @@
           <ion-col size="8">
             <app-collapsible [thresholdHeight]="100">
               <ion-row>
-                @for (synonym of data.synonyms; track synonym){
+                @for (synonym of data.synonyms; track $index){
                   <ion-col size="12">
                     <ion-text>{{ synonym }}</ion-text>
                   </ion-col>
@@ -111,7 +111,7 @@
           </ion-col>
           <ion-col size="12">
             <ion-row>
-              @for (studio of mainStudios; track studio) {
+              @for (studio of mainStudios; track $index) {
                 <ion-col size="4" sizeLg="3">
                   <app-info-chip type="text" outline [info]="studio.node.name" />
                 </ion-col>
@@ -128,7 +128,7 @@
           </ion-col>
           <ion-col size="12">
             <ion-row>
-              @for (studio of otherStudios; track studio) {
+              @for (studio of otherStudios; track $index) {
                 <ion-col size="4" sizeLg="3">
                   <app-info-chip type="text" outline [info]="studio.node.name"></app-info-chip>
                 </ion-col>
@@ -143,7 +143,7 @@
 
         <app-collapsible [thresholdHeight]="100">
           <ion-row>
-            @for (tag of data.tags; track tag) {
+            @for (tag of data.tags; track $index) {
               <ion-col size="4" sizeLg="3">
                 <app-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" />
               </ion-col>
@@ -163,7 +163,7 @@
 
         <app-collapsible [thresholdHeight]="100">
           <ion-row>
-            @for (episode of data.streamingEpisodes; track episode) {
+            @for (episode of data.streamingEpisodes; track $index) {
               <ion-col size="4" sizeLg="3">
                 <app-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></app-media-thumbnail>
                 <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
@@ -177,7 +177,7 @@
         <ion-card-title class="ion-margin-top ion-margin-bottom">Streaming sites</ion-card-title>
 
         <ion-row>
-          @for (site of streamingSites; track site) {
+          @for (site of streamingSites; track $index) {
             <ion-col size="6" sizeLg="4">
               <app-info-chip
                 [img]="site?.icon"
@@ -197,7 +197,7 @@
 
         <app-collapsible [thresholdHeight]="150">
           <ion-row>
-            @for (link of externalLinks; track link) {
+            @for (link of externalLinks; track $index) {
               <ion-col size="6" sizeMd="3" sizeLg="4">
                 <app-info-chip type="text"
                   [img]="link?.icon"

@@ -7,7 +7,7 @@
           <app-section-title title="Rankings" class="ion-margin" />
         </ion-col>
       </ion-row>
-      @for (ranking of data.rankings; track ranking) {
+      @for (ranking of data.rankings; track $index) {
         <ion-row>
           <ion-col size="12">
             <app-info-chip
@@ -33,7 +33,7 @@
           <ion-col size="12">
             <ion-grid>
               <ion-row>
-                @for (status of coloredStatus; track status) {
+                @for (status of coloredStatus; track $index) {
                   <ion-col size="4">
                     <app-info-chip
                       [info]="status.amount.toLocaleString()"
@@ -49,12 +49,14 @@
                 <ion-col>
                   <ion-grid>
                     <ion-row class="ion-no-padding ion-no-margin">
-                      @for (status of coloredStatus; track status) {
-                        <ion-col
-                          [style.max-width.%]="100 * status.amount / totalStatus"
-                          [style.background]="status.color" class="stackedBar"
-                          >
-                        </ion-col>
+                      @for (status of coloredStatus; track $index) {
+                        @if (status.amount > 0) {
+                          <ion-col
+                            [style.max-width.%]="100 * status.amount / totalStatus"
+                            [style.background]="status.color" class="stackedBar"
+                            >
+                          </ion-col>
+                        }
                       }
                     </ion-row>
                   </ion-grid>
@@ -78,7 +80,7 @@
         <ion-row>
           <ion-col size="12">
             <ion-grid>
-              @for (score of coloredScores; track score){
+              @for (score of coloredScores; track $index){
                 <app-chart-bar
                   [legend]="score.score.toString()"
                   [highest]="maxScoreAmount"
