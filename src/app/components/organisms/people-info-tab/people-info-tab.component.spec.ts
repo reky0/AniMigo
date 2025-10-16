@@ -9,8 +9,7 @@ describe('PeopleInfoTabComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PeopleInfoTabComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ PeopleInfoTabComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PeopleInfoTabComponent);

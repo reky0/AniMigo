@@ -9,8 +9,7 @@ describe('LoadingStateComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoadingStateComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ LoadingStateComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoadingStateComponent);

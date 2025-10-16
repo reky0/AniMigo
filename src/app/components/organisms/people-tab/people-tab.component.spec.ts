@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
+import { ApolloTestingModule } from 'apollo-angular/testing';
 
 import { PeopleTabComponent } from './people-tab.component';
 
@@ -9,8 +10,7 @@ describe('CharactersTabComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PeopleTabComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ PeopleTabComponent, IonicModule.forRoot(), ApolloTestingModule ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PeopleTabComponent);

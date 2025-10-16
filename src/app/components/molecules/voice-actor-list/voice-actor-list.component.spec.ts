@@ -9,8 +9,7 @@ describe('VoiceActorListComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ VoiceActorListComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ VoiceActorListComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(VoiceActorListComponent);

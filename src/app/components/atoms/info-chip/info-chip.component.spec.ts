@@ -9,8 +9,7 @@ describe('InfoChipComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ InfoChipComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ InfoChipComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(InfoChipComponent);

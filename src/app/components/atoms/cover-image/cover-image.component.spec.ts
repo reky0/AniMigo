@@ -9,8 +9,7 @@ describe('CoverImageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CoverImageComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ CoverImageComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CoverImageComponent);

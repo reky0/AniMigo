@@ -9,8 +9,7 @@ describe('RelationsTabComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ RelationsTabComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ RelationsTabComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RelationsTabComponent);

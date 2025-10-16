@@ -9,8 +9,7 @@ describe('ChartBarComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChartBarComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ ChartBarComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(ChartBarComponent);

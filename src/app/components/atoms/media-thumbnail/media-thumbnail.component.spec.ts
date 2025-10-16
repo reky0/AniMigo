@@ -9,8 +9,7 @@ describe('MediaThumbnailComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MediaThumbnailComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ MediaThumbnailComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MediaThumbnailComponent);

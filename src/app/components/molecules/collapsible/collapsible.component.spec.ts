@@ -9,8 +9,7 @@ describe('CollapsibleComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CollapsibleComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ CollapsibleComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CollapsibleComponent);

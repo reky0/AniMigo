@@ -9,8 +9,7 @@ describe('StatsTabComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatsTabComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ StatsTabComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(StatsTabComponent);

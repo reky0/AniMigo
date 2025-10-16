@@ -9,8 +9,7 @@ describe('MetaItemComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ MetaItemComponent ],
-      imports: [IonicModule.forRoot()]
+      imports: [ MetaItemComponent, IonicModule.forRoot() ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(MetaItemComponent);
