@@ -1,4 +1,7 @@
 <ion-grid class="main ion-padding">
+  <!-- <ion-button
+    (click)="openModal()"
+    ></ion-button> -->
   @if (data) {
     @if ((data.staff && data.staff.edges && data.staff.edges.length > 0) || loading) {
       <ion-row>
@@ -11,12 +14,13 @@
           @if (!loading) {
             <app-collapsible [thresholdHeight]="250">
               <ion-row>
-                @for (person of data.staff?.edges; track person.id) {
+                @for (staff of data.staff?.edges; track $index) {
                   <ion-col size="4" sizeLg="2">
                     <app-person-item
-                      [image]="person.node.image.medium"
-                      [name]="person.node.name.full"
-                      [note]="person.role"
+                      (click)="openModal('staff', staff.node.id)"
+                      [image]="staff.node.image.medium"
+                      [name]="staff.node.name.full"
+                      [note]="staff.role"
                       />
                   </ion-col>
                 }
@@ -47,9 +51,10 @@
           @if (!loading) {
             <app-collapsible [thresholdHeight]="230">
               <ion-row>
-                @for (character of data.characters?.edges; track character.id) {
+                @for (character of data.characters?.edges; track $index) {
                   <ion-col size="4" sizeLg="2">
                     <app-character-item
+                      (click)="openModal('character', character.node.id)"
                       [image]="character.node.image.large"
                       [name]="character.node.name.full"
                       [note]="character.role"
@@ -61,7 +66,7 @@
             </app-collapsible>
           } @else {
             <ion-row>
-              @for (i of 7 | range; track i) {
+              @for (i of 7 | range; track $index) {
                 <ion-col size="4" sizeLg="2">
                   <app-character-item
                     [loading]="true"
@@ -75,3 +80,72 @@
     }
   }
 </ion-grid>
+
+ <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button
+              class="closeModalButton"
+              (click)="closeModal()"
+              >
+              <ion-icon name="arrow-back" />
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-grid>
+          <ion-row>
+            <ion-segment
+              [value]="modalSelectedTab"
+              (ionChange)="onSegmentChange($event)"
+              mode="md"
+              class="tab-segment">
+
+              <ion-segment-button value="info" layout="icon-top">
+                <ion-icon name="information-circle"></ion-icon>
+              </ion-segment-button>
+
+              <ion-segment-button value="media" layout="icon-top">
+                <ion-icon name="film"></ion-icon>
+              </ion-segment-button>
+
+              <!-- @if (modalData?.voiceActingRoles) {
+                <ion-segment-button value="va" layout="icon-top">
+                  <ion-icon name="mic"></ion-icon>
+                </ion-segment-button>
+              } -->
+            </ion-segment>
+          </ion-row>
+
+          <ion-row class="tabsContainer">
+            @if (!loading) {
+              @switch (modalSelectedTab) {
+                @case ('info') {
+                  <app-people-info-tab [data]="modalData" [loading]="loading" />
+                }
+                @case ('media') {
+                  <app-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
+                }
+                @case ('va') {
+                  <app-people-va-tab [data]="modalData" [loading]="loading" />
+                }
+              }
+            } <!-- @else {
+              <ion-col>
+                @for (i of 7 | range; track i) {
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-skeleton-text class="skeleton" animated/>
+                    </ion-col>
+                  </ion-row>
+                }
+              </ion-col>
+            } -->
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ng-template>
+  </ion-modal>

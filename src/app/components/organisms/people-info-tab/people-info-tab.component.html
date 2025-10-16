@@ -1,0 +1,77 @@
+<ion-grid class="main ion-padding-top">
+  @if (data && parsedDescription) {
+    <ion-row>
+      <ion-col size="4">
+        <ion-img class="img" [src]="data.image.large ?? data.image.medium" />
+      </ion-col>
+      <ion-col size="8">
+        <ion-row>
+          <ion-col size="12">
+            <ion-title class="ion-no-padding">{{ data.name.full }}</ion-title>
+          </ion-col>
+          <ion-col size="12">
+            <ion-note>{{ data.name.native }}</ion-note>
+          </ion-col>
+          <ion-col size="12">
+            <ion-note>{{ data.name.alternative.join(", ") }}</ion-note>
+          </ion-col>
+          @if (data.name.alternativeSpoiler.length > 0) {
+            <ion-col size="12" (click)="toggleShowSpoilerNames()">
+              @if (showSpoilerNames) {
+                <ion-note>{{ data.name.alternativeSpoiler.join(", ") }}</ion-note>
+              } @else {
+                <ion-skeleton-text animated class="skeleton ion-no-margin"></ion-skeleton-text>
+              }
+            </ion-col>
+          }
+        </ion-row>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Birthday</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ birthdate | date:'MMM d' }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Age</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.age ?? 'Unknown' }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Gender</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.gender ?? 'Unknown' }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="4">
+        <ion-note>Blood type</ion-note>
+      </ion-col>
+      <ion-col size="8">
+        <ion-text>{{ data.bloodType ?? 'Unknown' }}</ion-text>
+      </ion-col>
+    </ion-row>
+
+    @if (parsedDescription) {
+      <ion-row>
+        <ion-col>
+          <ion-text [innerHTML]="parsedDescription"></ion-text>
+        </ion-col>
+      </ion-row>
+    }
+  } @else {
+    <ion-text>aaaaaaaaaaa</ion-text>
+  }
+</ion-grid>

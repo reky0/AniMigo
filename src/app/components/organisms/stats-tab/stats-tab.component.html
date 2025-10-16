@@ -51,7 +51,7 @@
                     <ion-row class="ion-no-padding ion-no-margin">
                       @for (status of coloredStatus; track status) {
                         <ion-col
-                          [size]="(11.5 * status.amount / totalStatus)"
+                          [style.max-width.%]="100 * status.amount / totalStatus"
                           [style.background]="status.color" class="stackedBar"
                           >
                         </ion-col>

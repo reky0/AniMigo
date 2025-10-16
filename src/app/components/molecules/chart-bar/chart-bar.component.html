@@ -2,7 +2,10 @@
   <ion-col size="2" sizeLg="1" class="legend">
     <ion-note>{{ legend }}</ion-note>
   </ion-col>
-  <ion-col [size]="(((9 - (showValueUsed ? 2 : 0)) * value / highest)+1).toString()" [style.background]="color"
+  <!-- <ion-col [size]="(((10 - (showValueUsed ? 2 : 0)) * value / highest)).toString()" [style.background]="color" -->
+  <ion-col
+    [style.max-width.%]="100 * value / highest"
+    [style.background]="color"
     [style.border-radius.px]="5">
   </ion-col>
   <ion-col size="2" class="value">

@@ -376,3 +376,46 @@ export const GET_MEDIA_BY_ID = gql`
             }
           }
         `;
+
+export const GET_CHARACTER_BY_ID = gql`
+          query getCharacter($id: Int) {
+            Character(id: $id) {
+              id
+              name {
+                full
+                native
+                alternative
+                alternativeSpoiler
+              }
+              image {
+                large
+                medium
+              }
+              description(asHtml: false)
+              dateOfBirth {
+                  day
+                  month
+                  year
+              }
+              age
+              gender
+              bloodType
+              media(page: 1, perPage: 5) {
+                edges {
+                  node {
+                    id
+                    title {
+                      romaji
+                      english
+                    }
+                    coverImage {
+                      medium
+                      large
+                    }
+                    type
+                  }
+                }
+              }
+            }
+          }
+        `;

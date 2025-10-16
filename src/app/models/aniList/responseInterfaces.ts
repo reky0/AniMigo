@@ -238,3 +238,42 @@ export interface DetailedMedia {
 export interface DetailedMediaResponse {
   Media: DetailedMedia
 }
+
+export interface Character {
+  id: number;
+  name: {
+    full: string;
+    native: string;
+    alternative: string[];
+    alternativeSpoiler: string[];
+  };
+  image: {
+    large?: string | null;
+    medium: string;
+  };
+  description: string;
+  dateOfBirth?: FuzzyDate;
+  age?: string;
+  gender?: string;
+  bloodType: string | null;
+  media: {
+    edges: Array<{
+      node: {
+        id: number;
+        title: {
+          romaji: string;
+          english?: string | null;
+        }
+        coverImage: {
+          medium: string;
+          large?: string;
+        }
+        type: 'ANIME' | 'MANGA'
+      }
+    }>
+  }
+}
+
+export interface CharacterResponse {
+  Character: Character;
+}

@@ -1,0 +1,22 @@
+.tab-segment {
+  // background-color: red;
+  border-radius: 50px;
+  border: 1.5px solid white;
+
+
+  ion-segment-button {
+    --color-checked: white;
+    border-radius: 0;
+    --background-checked: #ffffff50;
+  }
+}
+
+ion-modal {
+  --border-radius: 20px;
+}
+
+app-people-info-tab,
+app-people-va-tab,
+app-people-media-tab {
+  width: 100%;
+}
