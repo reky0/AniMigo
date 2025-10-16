@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { map, Observable } from 'rxjs';
-import { BasicMediaResponse, Character, CharacterResponse, DetailedMediaResponse } from 'src/app/models/aniList/responseInterfaces';
+import { BasicMediaResponse, CharacterResponse, DetailedMediaResponse } from 'src/app/models/aniList/responseInterfaces';
 
 @Injectable({
   providedIn: 'root'

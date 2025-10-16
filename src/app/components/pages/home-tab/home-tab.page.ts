@@ -1,16 +1,15 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonIcon, IonText, IonItem, IonList, IonCol, IonSpinner, IonSkeletonText } from '@ionic/angular/standalone';
+import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { PlatformService } from '@components/core/services/platform-service';
 import { SectionHeaderComponent } from "@components/molecules/section-header/section-header.component";
-import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
+import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 
-import { Apollo, gql } from 'apollo-angular';
-import { BasicMedia, BasicMediaResponse } from 'src/app/models/aniList/responseInterfaces';
-import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
-import { ApiService } from '@components/core/services/api-service';
 import { Router } from '@angular/router';
+import { ApiService } from '@components/core/services/api-service';
+import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
+import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
   selector: 'app-home-tab',
@@ -23,7 +22,7 @@ export class HomeTabPage implements OnInit {
   platformService: PlatformService = inject(PlatformService);
 
   loadingItems = 10;
-  range = Array(this.loadingItems);
+  range = new Array(this.loadingItems);
 
   trendingAnimes: BasicMedia[] | null | undefined = null;
   trendingAnimesLoading = true;
@@ -43,7 +42,7 @@ export class HomeTabPage implements OnInit {
   error: any;
 
 
-  constructor(private apiService: ApiService, private router: Router) { }
+  constructor(private readonly apiService: ApiService, private readonly router: Router) { }
 
   ngOnInit() {
     let trendingAnimesVariables = {
