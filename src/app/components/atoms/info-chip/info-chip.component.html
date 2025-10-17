@@ -14,7 +14,11 @@
             @if (img) {
               <ion-img class="img" [src]="img"></ion-img>
             } @else if (icon) {
-              <ion-icon class="icon" [name]="icon"/>
+              <ion-icon
+                class="icon"
+                [name]="icon"
+                [style.color]="iconColor"
+                />
             }
           </ion-col>
         }

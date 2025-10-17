@@ -12,6 +12,7 @@ import { IonChip, IonCol, IonGrid, IonImg, IonNote, IonRow, IonSkeletonText, Ion
 export class InfoChipComponent extends LoadingStateComponent implements OnInit {
   @Input() img: string | null | undefined = '';
   @Input() icon: string | null | undefined = '';
+  @Input() iconColor: string | null | undefined = '';
   @Input() info: string | number | undefined = '';
   @Input() note: string | null |undefined = null;
   @Input() type: string | null = null;
