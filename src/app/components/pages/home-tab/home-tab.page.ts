@@ -4,20 +4,21 @@ import { FormsModule } from '@angular/forms';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { PlatformService } from '@components/core/services/platform-service';
 import { SectionHeaderComponent } from "@components/molecules/section-header/section-header.component";
-import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, IonRow } from '@ionic/angular/standalone';
 
 import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api-service';
 import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from 'src/app/helpers/range.pipe';
+import { IonicModule } from "@ionic/angular";
 
 @Component({
   selector: 'app-home-tab',
   templateUrl: './home-tab.page.html',
   styleUrls: ['./home-tab.page.scss'],
   standalone: true,
-  imports: [IonList, IonContent, IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, SectionHeaderComponent, CatalogItemComponent, IonCol, RangePipe]
+  imports: [IonList, IonContent, IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, SectionHeaderComponent, CatalogItemComponent, IonCol, RangePipe, IonGrid, IonRow]
 })
 export class HomeTabPage implements OnInit {
   platformService: PlatformService = inject(PlatformService);

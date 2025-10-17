@@ -9,6 +9,6 @@ export class PlatformService {
   constructor(private platform: Platform) { }
 
   isHybrid(): boolean {
-    return this.platform.is('hybrid') || this.platform.is('mobile');
+    return this.platform.is('hybrid');
   }
 }
