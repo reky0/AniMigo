@@ -1,6 +1,8 @@
 .main {
   height: 100%;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 
   ion-row, ion-col {
     padding: 0;
@@ -17,10 +19,12 @@
     .img {
       height: 100%;
       object-fit: cover;
+      display: flex;
     }
   }
 
   .img-loading {
+    width: 100%;
     height: 100%;
     justify-content: center;
   }
@@ -42,7 +46,6 @@
   }
 
   .label-container {
-    height: 15%;
 
     .label {
       margin-top: 5px;
@@ -52,26 +55,23 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
-      line-height: 1.2em; /* Adjust line height as needed */
-      max-height: 2.4em; /* line-height * number of lines */
     }
   }
 
   .rating {
-    display: block;
+    display: flex;
     align-items: center;
     font-size: 11px;
     color: #ffcc00;
   }
 
-  :host([recommendation]) .rating {
-    color: rgb(197, 197, 197);
+  /* Utility: push a row to the bottom of the grid */
+  .bottom-row {
+    margin-top: auto;
   }
 
-  .rating,
-  .note {
-    height: 5%;
-    padding-top: 5px;
+  :host([recommendation]) .rating {
+    color: rgb(197, 197, 197);
   }
 
   ion-icon {

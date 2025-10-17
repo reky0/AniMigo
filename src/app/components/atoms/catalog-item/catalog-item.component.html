@@ -22,7 +22,7 @@
       </ion-col>
     </ion-row>
     @if (rating) {
-      <ion-row class="rating">
+      <ion-row class="rating bottom-row">
         <ion-col>
           <ion-icon [name]="recommendation ? 'thumbs-up-sharp' : 'star'" mode="icon-only"></ion-icon>
           <ion-text>{{ rating + (recommendation ? '' : '%')}}</ion-text>

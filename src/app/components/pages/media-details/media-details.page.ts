@@ -7,7 +7,6 @@ import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.compone
 import { MetaItemComponent } from "@components/atoms/meta-item/meta-item.component";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
 import { ApiService } from '@components/core/services/api-service';
-import { PlatformService } from '@components/core/services/platform-service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.component";
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
@@ -30,7 +29,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
 })
 export class MediaDetailsPageComponent implements OnInit {
 
-  constructor(private readonly apiService: ApiService, private readonly route: ActivatedRoute, private readonly platformService: PlatformService) {
+  constructor(private readonly apiService: ApiService, private readonly route: ActivatedRoute) {
     addIcons({ heart, shareSocial, tvOutline, bookOutline, time, radio, informationCircle, people, shuffle, statsChart, images, gitNetworkOutline, star, tv, });
   }
 

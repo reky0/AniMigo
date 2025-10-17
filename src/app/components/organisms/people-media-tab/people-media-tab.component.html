@@ -1,7 +1,11 @@
-<ion-grid class="main ion-padding-top">
+<ion-grid class="main ion-padding-top" role="feed">
   @if (data) {
-    @for (media of data.media.edges; track $index) {
-      <ion-row (click)="triggerNavigationEvent(media.node.id, media.node.type)">
+    @for (media of mediaEdges; track $index) {
+      <ion-row
+        (click)="triggerNavigationEvent(media.node.id, media.node.type)"
+        role="article"
+        class="media"
+        >
         <ion-col size="3">
           <ion-img
             class="img"
@@ -20,6 +24,12 @@
         </ion-col>
       </ion-row>
     }
+    <ion-infinite-scroll
+      (ionInfinite)="loadMore($event)"
+      threshold="0px"
+      >
+      <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+    </ion-infinite-scroll>
   } @else {
     <ion-text>no data</ion-text>
   }

@@ -378,7 +378,7 @@ export const GET_MEDIA_BY_ID = gql`
         `;
 
 export const GET_CHARACTER_BY_ID = gql`
-          query getCharacter($id: Int) {
+          query getCharacter($id: Int!) {
             Character(id: $id) {
               id
               name {
@@ -400,7 +400,13 @@ export const GET_CHARACTER_BY_ID = gql`
               age
               gender
               bloodType
-              media(page: 1, perPage: 5) {
+              media(page: 1, perPage: 15) {
+                pageInfo {
+                  currentPage
+                  hasNextPage
+                  perPage
+                  total
+                }
                 edges {
                   node {
                     id
@@ -419,3 +425,33 @@ export const GET_CHARACTER_BY_ID = gql`
             }
           }
         `;
+
+export const GET_CHARACTER_MEDIA = gql`
+  query CharacterMedia($id: Int!, $page: Int = 1, $perPage: Int = 20) {
+    Character(id: $id) {
+      id
+      media(page: $page, perPage: $perPage, sort: POPULARITY_DESC) {
+        pageInfo {
+          currentPage
+          hasNextPage
+          perPage
+          total
+        }
+        edges {
+          node {
+            id
+            type
+            title {
+              romaji
+              english
+            }
+            coverImage {
+              medium
+              large
+            }
+          }
+        }
+      }
+    }
+  }
+`;

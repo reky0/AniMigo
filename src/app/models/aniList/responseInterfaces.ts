@@ -73,7 +73,7 @@ export interface CharacterConnection {
         native?: string | null;
       };
       image: {
-      medium: string
+        medium: string
         large?: string | null;
       };
     };
@@ -255,8 +255,14 @@ export interface Character {
   dateOfBirth?: FuzzyDate;
   age?: string;
   gender?: string;
-  bloodType: string | null;
+  bloodType?: string | null;
   media: {
+    pageInfo: {
+      currentPage: number,
+      hasNextPage: boolean,
+      perPage: number,
+      pagecurrentPage: number,
+    },
     edges: Array<{
       node: {
         id: number;

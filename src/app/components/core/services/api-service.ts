@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { map, Observable } from 'rxjs';
+import { map, Observable, take } from 'rxjs';
 import { BasicMediaResponse, CharacterResponse, DetailedMediaResponse } from 'src/app/models/aniList/responseInterfaces';
 
 @Injectable({
@@ -60,6 +60,26 @@ export class ApiService {
     });
 
     return queryRef.valueChanges.pipe(
+      map(result => ({
+        data: result.data,
+        loading: result.loading,
+        errors: result.errors ? result.errors[0] : undefined,
+      }))
+    );
+  }
+
+  fetchCharacterMedia(query: any, variables: Object): Observable<{
+    data: any;
+    loading: boolean;
+    errors?: any;
+  }> {
+    const queryRef = this.apollo.watchQuery<CharacterResponse>({
+      query: query,
+      variables: variables,
+    });
+
+    return queryRef.valueChanges.pipe(
+      take(1),
       map(result => ({
         data: result.data,
         loading: result.loading,
