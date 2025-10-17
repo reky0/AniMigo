@@ -1,7 +1,5 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, input, signal, Input } from '@angular/core';
 import { IonButton, IonIcon } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { chevronDown, chevronDownOutline, chevronUp, chevronUpOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-collapsible',
@@ -23,8 +21,6 @@ export class CollapsibleComponent implements AfterViewInit {
   private contentHeight = signal(0);
 
   constructor() {
-    // Register icons
-    addIcons({ chevronDown, chevronUp });
   }
 
   ngAfterViewInit() {

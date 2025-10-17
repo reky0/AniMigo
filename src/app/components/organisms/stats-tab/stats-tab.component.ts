@@ -2,8 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
 import { IonCol, IonGrid, IonRow, IonText } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { heartOutline, starOutline } from 'ionicons/icons';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { DetailedMedia, ScoreStat, StatusStat } from 'src/app/models/aniList/responseInterfaces';
 import { ChartBarComponent } from "@components/molecules/chart-bar/chart-bar.component";
@@ -30,8 +28,6 @@ export class StatsTabComponent implements OnInit {
   coloredScores: Array<ScoreStat> = Array();
 
   ngOnInit() {
-    addIcons({ starOutline, heartOutline })
-
     const statusColors = [
       ["#46e267", "#222"], // current
       ["#89938b", "white"], // planning

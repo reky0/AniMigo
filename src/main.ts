@@ -11,6 +11,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { ApolloLink, InMemoryCache, split } from '@apollo/client/core';
 
+import { addIcons } from 'ionicons';
+import * as allIcons from 'ionicons/icons';
+
 bootstrapApplication(AppComponent, {
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
@@ -41,3 +44,5 @@ bootstrapApplication(AppComponent, {
     })
   ],
 });
+
+addIcons(allIcons);

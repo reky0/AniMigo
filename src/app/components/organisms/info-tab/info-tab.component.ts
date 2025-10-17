@@ -3,8 +3,6 @@ import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.compone
 import { MediaThumbnailComponent } from "@components/atoms/media-thumbnail/media-thumbnail.component";
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonNote, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { playCircleOutline } from 'ionicons/icons';
 import { RangePipe } from 'src/app/helpers/range.pipe';
 import { formatDate, getLangCode, openUrl, toSentenceCase } from 'src/app/helpers/utils';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
@@ -56,7 +54,6 @@ export class InfoTabComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    addIcons({ playCircleOutline })
     console.log(this.data);
 
     this.mainStudios = this.data?.studios?.edges.filter(studio => studio.isMain);

@@ -18,8 +18,6 @@ import {
   IonSegmentButton,
   IonToolbar, IonButton, IonSkeletonText
 } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { arrowBack, film, informationCircle, mic } from 'ionicons/icons';
 import { RangePipe } from 'src/app/helpers/range.pipe';
 import { Character, DetailedMedia, VoiceActor } from 'src/app/models/aniList/responseInterfaces';
 import { PeopleInfoTabComponent } from "../people-info-tab/people-info-tab.component";
@@ -67,7 +65,6 @@ export class PeopleTabComponent implements OnInit {
   error: any;
 
   constructor(private apiService: ApiService, private router: Router) {
-    addIcons({ arrowBack, film, informationCircle, mic })
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
   }

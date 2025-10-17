@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { PlatformService } from '@components/core/services/platform-service';
 import { IonicModule, ModalController, PopoverController } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { mic } from 'ionicons/icons';
 import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
 import { PersonItemComponent } from '../person-item/person-item.component';
 import { VoiceActorListComponent } from '../voice-actor-list/voice-actor-list.component';
@@ -24,7 +22,6 @@ export class CharacterItemComponent extends PersonItemComponent implements OnIni
   ) {
   // constructor() {
     super()
-    addIcons({mic})
     this.platformService = platformService;
   }
 

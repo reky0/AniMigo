@@ -13,8 +13,6 @@ import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
 import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { bookOutline, gitNetworkOutline, heart, images, informationCircle, people, radio, shareSocial, shuffle, star, statsChart, time, tv, tvOutline } from 'ionicons/icons';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
@@ -30,7 +28,6 @@ import { RangePipe } from "../../../helpers/range.pipe";
 export class MediaDetailsPageComponent implements OnInit {
 
   constructor(private readonly apiService: ApiService, private readonly route: ActivatedRoute) {
-    addIcons({ heart, shareSocial, tvOutline, bookOutline, time, radio, informationCircle, people, shuffle, statsChart, images, gitNetworkOutline, star, tv, });
   }
 
   loading = true;

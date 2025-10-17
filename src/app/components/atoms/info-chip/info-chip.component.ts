@@ -2,8 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
 
 import { IonChip, IonCol, IonGrid, IonImg, IonNote, IonRow, IonSkeletonText, IonText, IonTitle, IonIcon } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { heartOutline, starOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-info-chip',
@@ -29,6 +27,5 @@ export class InfoChipComponent extends LoadingStateComponent implements OnInit {
   }
 
   ngOnInit() {
-    addIcons({starOutline, heartOutline})
   }
 }

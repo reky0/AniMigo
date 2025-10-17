@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
 import { IonImg, IonText, IonRow, IonIcon, IonSkeletonText, IonCol, IonGrid, IonNote } from "@ionic/angular/standalone";
-import { addIcons } from 'ionicons';
-import { star, thumbsUpSharp, tv } from 'ionicons/icons';
 import { IonicModule } from "@ionic/angular";
 
 @Component({
@@ -22,7 +20,5 @@ export class CatalogItemComponent extends LoadingStateComponent implements OnIni
     super();
   }
 
-  ngOnInit() {
-    addIcons({star, thumbsUpSharp});
-  }
+  ngOnInit() { }
 }

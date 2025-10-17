@@ -3,8 +3,6 @@ import { Apollo } from 'apollo-angular';
 import { catchError, map, Observable, take, throwError } from 'rxjs';
 import { BasicMediaResponse, CharacterResponse, DetailedMediaResponse } from 'src/app/models/aniList/responseInterfaces';
 import { ToastController } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { alertCircle } from 'ionicons/icons';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +11,7 @@ export class ApiService {
   constructor(
     private readonly apollo: Apollo,
     private readonly toastController: ToastController,
-  ) {
-    addIcons({alertCircle})
-  }
+  ) { }
 
   fetchBasicData(query: any, variables: Object, showToast = true): Observable<{
     data: BasicMediaResponse | null;
