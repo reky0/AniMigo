@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { catchError, map, Observable, take, throwError } from 'rxjs';
-import { BasicMediaResponse, CharacterResponse, DetailedMediaResponse } from 'src/app/models/aniList/responseInterfaces';
+import { BasicMediaResponse, CharacterResponse, DetailedMediaResponse, AiringSchedulesResponse } from 'src/app/models/aniList/responseInterfaces';
 import { ToastController } from '@ionic/angular';
 
 @Injectable({
@@ -135,6 +135,49 @@ export class ApiService {
       catchError(err => {
         if (showToast) {
           const errorMsg = this.formatNetworkError(err, 'Network error loading character media');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  fetchAiringSchedules(query: any, variables: Object, showToast = true, filterAdult = true): Observable<{
+    data: AiringSchedulesResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<AiringSchedulesResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only', // 🔹 always fetch fresh data
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load airing schedules');
+          this.showErrorToast(errorMsg);
+        }
+
+        // Filter out adult content if filterAdult is true
+        const filteredData = result.data && filterAdult ? {
+          ...result.data,
+          Page: {
+            ...result.data.Page,
+            airingSchedules: result.data.Page.airingSchedules.filter(
+              schedule => !schedule.media?.isAdult
+            )
+          }
+        } : result.data;
+
+        return {
+          data: filteredData,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading airing schedules');
           this.showErrorToast(errorMsg);
         }
         return throwError(() => err);

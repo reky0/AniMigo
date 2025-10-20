@@ -112,7 +112,7 @@
           <ion-col size="12">
             <ion-row>
               @for (studio of mainStudios; track $index) {
-                <ion-col size="4" sizeLg="3">
+                <ion-col size="6" sizeLg="3">
                   <app-info-chip type="text" outline [info]="studio.node.name" />
                 </ion-col>
               }
@@ -129,7 +129,7 @@
           <ion-col size="12">
             <ion-row>
               @for (studio of otherStudios; track $index) {
-                <ion-col size="4" sizeLg="3">
+                <ion-col size="6" sizeLg="3">
                   <app-info-chip type="text" outline [info]="studio.node.name"></app-info-chip>
                 </ion-col>
               }
@@ -144,7 +144,7 @@
         <app-collapsible [thresholdHeight]="100">
           <ion-row>
             @for (tag of data.tags; track $index) {
-              <ion-col size="4" sizeLg="3">
+              <ion-col size="6" sizeLg="3">
                 <app-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" />
               </ion-col>
             }
@@ -186,7 +186,7 @@
                 horizontal
                 clickable
                 (click)="openUrl(site.url)"
-                ></app-info-chip>
+                />
             </ion-col>
           }
         </ion-row>
@@ -198,7 +198,7 @@
         <app-collapsible [thresholdHeight]="150">
           <ion-row>
             @for (link of externalLinks; track $index) {
-              <ion-col size="6" sizeMd="3" sizeLg="4">
+              <ion-col size="6" sizeLg="4">
                 <app-info-chip type="text"
                   [img]="link?.icon"
                   [info]="link.site"
@@ -206,7 +206,8 @@
                   vertical
                   outline
                   clickable
-                  (click)="openUrl(link.url)" />
+                  (click)="openUrl(link.url)"
+                  />
               </ion-col>
             }
           </ion-row>

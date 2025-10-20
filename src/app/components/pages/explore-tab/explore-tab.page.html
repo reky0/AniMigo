@@ -1,15 +1,152 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Explore</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  <ion-header collapse="condense">
+@if (platformService.isHybrid()) {
+  <ion-header [translucent]="true">
     <ion-toolbar>
-      <ion-title size="large">Explore</ion-title>
+      <ion-title>Explore</ion-title>
     </ion-toolbar>
   </ion-header>
+}
 
-  <ion-text>Explore Tab Works</ion-text>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-searchbar
+          placeholder="Search for an anime, manga, character..."
+          animated
+          color="light"
+          ></ion-searchbar>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-title>Anime</ion-title>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="star"
+          info="Top 100"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="stats-chart"
+          info="Top Popular"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="time"
+          info="Upcoming"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="radio"
+          info="Airing"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="flower"
+          info="Spring"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="sunny"
+          info="Summer"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="rainy"
+          info="Fall"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="snow"
+          info="Winter"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6">
+        <app-info-chip
+          icon="film"
+          info="Top Movies"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6">
+        <app-info-chip
+          icon="calendar"
+          info="Calendar"
+          type="text"
+          (click)="navigate('calendar')"
+          clickable
+        />
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-title>Manga</ion-title>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="star"
+          info="Top 100"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="stats-chart"
+          info="Top Popular"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="time"
+          info="Upcoming"
+          type="text"
+          clickable
+        />
+      </ion-col>
+      <ion-col sizeXs="6" sizeMd="3">
+        <app-info-chip
+          icon="radio"
+          info="Publishing"
+          type="text"
+          clickable
+        />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

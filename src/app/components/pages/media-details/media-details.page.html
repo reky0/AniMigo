@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/"></ion-back-button>
+      <ion-back-button></ion-back-button>
     </ion-buttons>
 
     <ion-buttons slot="end">
@@ -78,6 +78,15 @@
                 </ion-col>
                 <ion-col size="12">
                   <app-meta-item icon="radio" [text]="data?.status ? toSentenceCase(data?.status, ' ') : 'Unknown'" nolines [loading]="loading"/>
+                </ion-col>
+                <ion-col size="12">
+                  <ion-button
+                    [href]="data?.siteUrl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    size="small"
+                    fill="outline"
+                    >Open in AniList</ion-button>
                 </ion-col>
               </ion-row>
             </ion-col>

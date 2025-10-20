@@ -430,7 +430,11 @@ export const GET_CHARACTER_MEDIA = gql`
   query CharacterMedia($id: Int!, $page: Int = 1, $perPage: Int = 20) {
     Character(id: $id) {
       id
-      media(page: $page, perPage: $perPage, sort: POPULARITY_DESC) {
+      media(
+        page: $page,
+        perPage: $perPage,
+        sort: POPULARITY_DESC,
+      ) {
         pageInfo {
           currentPage
           hasNextPage
@@ -451,6 +455,35 @@ export const GET_CHARACTER_MEDIA = gql`
             }
           }
         }
+      }
+    }
+  }
+`;
+
+export const GET_AIRING_SCHEDULES = gql`
+  query ($from: Int, $to: Int) {
+    Page(page: 1, perPage: 50) {
+      airingSchedules(
+        airingAt_greater: $from
+        airingAt_lesser: $to
+        sort: [TIME]
+      ) {
+        media {
+          id
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            medium
+            large
+          }
+          type
+          isAdult
+        }
+        episode
+        airingAt
+        timeUntilAiring
       }
     }
   }

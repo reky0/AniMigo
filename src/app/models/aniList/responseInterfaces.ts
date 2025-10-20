@@ -11,6 +11,7 @@ export interface BasicMedia {
     large?: string | null;
   } | null;
   type: 'ANIME' | 'MANGA',
+  isAdult?: boolean | null;
 }
 
 export interface BasicMediaResponse {
@@ -282,4 +283,17 @@ export interface Character {
 
 export interface CharacterResponse {
   Character: Character;
+}
+
+export interface AiringSchedule {
+  episode: number;
+  airingAt: number;
+  timeUntilAiring: number;
+  media: BasicMedia;
+}
+
+export interface AiringSchedulesResponse {
+  Page: {
+    airingSchedules: AiringSchedule[];
+  }
 }

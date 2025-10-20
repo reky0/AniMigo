@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-back-button slot="start" />
+
+    <ion-title>Calendar</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Calendar</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-segment
+        [value]="weekdayNumber.toString()"
+        scrollable
+        >
+        <ion-segment-button value="1" (click)="fetchAiringSchedules(1)">
+          Monday
+        </ion-segment-button>
+        <ion-segment-button value="2" (click)="fetchAiringSchedules(2)">
+          Tuesday
+        </ion-segment-button>
+        <ion-segment-button value="3" (click)="fetchAiringSchedules(3)">
+          Wednesday
+        </ion-segment-button>
+        <ion-segment-button value="4" (click)="fetchAiringSchedules(4)">
+          Thursday
+        </ion-segment-button>
+        <ion-segment-button value="5" (click)="fetchAiringSchedules(5)">
+          Friday
+        </ion-segment-button>
+        <ion-segment-button value="6" (click)="fetchAiringSchedules(6)">
+          Saturday
+        </ion-segment-button>
+        <ion-segment-button value="7" (click)="fetchAiringSchedules(7)">
+          Sunday
+        </ion-segment-button>
+      </ion-segment>
+    </ion-row>
+
+    <ion-row>
+      @if (loading) {
+        @for (i of 16 | range; track i) {
+          <ion-col size="4" sizeMd="3" sizeLg="1.5" class="catalogItemContainer">
+            <app-catalog-item [loading]="true"></app-catalog-item>
+          </ion-col>
+        }
+      } @else {
+        @for (schedule of airingSchedules; track $index) {
+          <ion-col size="4" sizeMd="3" sizeLg="1.5">
+            <app-catalog-item
+              class="catalogItemContainer"
+              [image]="schedule.media.coverImage?.large ?? schedule.media.coverImage?.medium"
+              [title]="schedule.media.title.english ?? schedule.media.title.romaji"
+              [note]="`Ep ${schedule.episode} airing at ${(schedule.airingAt * 1000) | date:'HH:mm'}`"
+              (click)="goToDetails(schedule.media.id)"
+              />
+          </ion-col>
+        }
+      }
+    </ion-row>
+  </ion-grid>
+</ion-content>
