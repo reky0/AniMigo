@@ -17,6 +17,7 @@ import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile-tab',
@@ -27,8 +28,11 @@ import { RangePipe } from "../../../helpers/range.pipe";
 })
 export class MediaDetailsPageComponent implements OnInit {
 
-  constructor(private readonly apiService: ApiService, private readonly route: ActivatedRoute) {
-  }
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly route: ActivatedRoute,
+    private readonly titleService: Title
+  ) { }
 
   loading = true;
   error: any;
@@ -55,6 +59,8 @@ export class MediaDetailsPageComponent implements OnInit {
           this.error = errors[0];
         } else {
           this.data = data?.Media;
+
+          this.titleService.setTitle(`${this.data?.title.romaji} (${this.data?.title.english}) · AniMigo`);
         }
       },
       error: (err) => {

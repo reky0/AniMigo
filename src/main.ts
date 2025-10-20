@@ -26,19 +26,9 @@ bootstrapApplication(AppComponent, {
       const anilistLink = httpLink.create({
         uri: 'https://graphql.anilist.co' }
       );
-      const animeThemesLink = httpLink.create({
-        uri: 'https://graphql.animethemes.moe',
-      });
-
-      // Route based on operation name
-      const link = split(
-        ({ operationName }) => operationName.startsWith('AnimeThemes'),
-        animeThemesLink, // if name starts with 'Theme'
-        anilistLink       // otherwise use AniList
-      );
 
       return {
-        link: ApolloLink.from([link]),
+        link: ApolloLink.from([anilistLink]),
         cache: new InMemoryCache(),
       }
     })

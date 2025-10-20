@@ -7,6 +7,11 @@ export const routes: Routes = [
   },
   {
     path: 'media/:type/:id',
-    loadComponent: () => import('./components/pages/media-details/media-details.page').then( m => m.MediaDetailsPageComponent)
+    loadComponent: () => import('./components/pages/media-details/media-details.page').then( m => m.MediaDetailsPageComponent),
+  },
+  {
+    path: 'calendar',
+    loadComponent: () => import('./components/pages/calendar/calendar.page').then( m => m.CalendarPage),
+    title: 'Calendar · AniMigo',
   },
 ];
