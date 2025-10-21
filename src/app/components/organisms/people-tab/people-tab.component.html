@@ -94,32 +94,37 @@
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
+        <ion-toolbar>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-segment
+                    [value]="modalSelectedTab"
+                    (ionChange)="onSegmentChange($event)"
+                    mode="md"
+                    class="tab-segment">
+
+                    <ion-segment-button value="info" layout="icon-top">
+                      <ion-icon name="information-circle"></ion-icon>
+                    </ion-segment-button>
+
+                    <ion-segment-button value="media" layout="icon-top">
+                      <ion-icon name="film"></ion-icon>
+                    </ion-segment-button>
+
+                    <!-- @if (modalData?.voiceActingRoles) {
+                      <ion-segment-button value="va" layout="icon-top">
+                        <ion-icon name="mic"></ion-icon>
+                      </ion-segment-button>
+                    } -->
+                  </ion-segment>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding">
+      <ion-content class="ion-no-padding">
         <ion-grid>
-          <ion-row>
-            <ion-segment
-              [value]="modalSelectedTab"
-              (ionChange)="onSegmentChange($event)"
-              mode="md"
-              class="tab-segment">
-
-              <ion-segment-button value="info" layout="icon-top">
-                <ion-icon name="information-circle"></ion-icon>
-              </ion-segment-button>
-
-              <ion-segment-button value="media" layout="icon-top">
-                <ion-icon name="film"></ion-icon>
-              </ion-segment-button>
-
-              <!-- @if (modalData?.voiceActingRoles) {
-                <ion-segment-button value="va" layout="icon-top">
-                  <ion-icon name="mic"></ion-icon>
-                </ion-segment-button>
-              } -->
-            </ion-segment>
-          </ion-row>
-
           <ion-row class="tabsContainer">
             @if (!loading) {
               @switch (modalSelectedTab) {

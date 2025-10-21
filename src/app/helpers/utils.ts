@@ -25,6 +25,7 @@ export function getLangCode(lang: string | null | undefined): string | null | un
 
 export function toSentenceCase(str: string | null | undefined, separator: string = " "): string {
   if (!str) return '';
+  if (str==='TV' || str==='OVA' || str==='ONA') return str;
 
   let lower = str.slice(1).toLowerCase();
 

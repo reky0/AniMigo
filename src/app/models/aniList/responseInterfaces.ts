@@ -276,6 +276,9 @@ export interface Character {
           large?: string;
         }
         type: 'ANIME' | 'MANGA'
+        format?: string | null;
+        seasonYear?: number | null;
+        averageScore?: string | null;
       }
     }>
   }

@@ -419,6 +419,9 @@ export const GET_CHARACTER_BY_ID = gql`
                       large
                     }
                     type
+                    format
+                    seasonYear
+                    averageScore
                   }
                 }
               }
@@ -453,6 +456,9 @@ export const GET_CHARACTER_MEDIA = gql`
               medium
               large
             }
+            format
+            seasonYear
+            averageScore
           }
         }
       }

@@ -5,11 +5,12 @@ import { Character } from 'src/app/models/aniList/responseInterfaces';
 import { ApiService } from '@components/core/services/api-service';
 import { GET_CHARACTER_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { take } from 'rxjs';
+import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 @Component({
   selector: 'app-people-media-tab',
   templateUrl: './people-media-tab.component.html',
   styleUrls: ['./people-media-tab.component.scss'],
-  imports: [IonicModule],
+  imports: [IonicModule, MediaListItemComponent],
 })
 export class PeopleMediaTabComponent implements OnInit {
   // TODO: Add same functionality for staff and voice actors too
@@ -45,7 +46,7 @@ export class PeopleMediaTabComponent implements OnInit {
     }
   }
 
-  triggerNavigationEvent(id: number, type: 'ANIME' | 'MANGA') {
+  triggerNavigationEvent(type: 'ANIME' | 'MANGA', id: number) {
     this.navigate.emit({ type: type.toLowerCase(), id: id });
   }
 
