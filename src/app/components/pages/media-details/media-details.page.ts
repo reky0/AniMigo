@@ -12,7 +12,7 @@ import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.compon
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
-import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar } from '@ionic/angular/standalone';
+import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar, IonModal } from '@ionic/angular/standalone';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
@@ -24,7 +24,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './media-details.page.html',
   styleUrls: ['./media-details.page.scss'],
   standalone: true,
-  imports: [IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
+  imports: [IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
 })
 export class MediaDetailsPageComponent implements OnInit {
 
@@ -83,5 +83,17 @@ export class MediaDetailsPageComponent implements OnInit {
     this.selectedTab = event.detail.value as string;
 
     console.log('Tab changed to: ' + this.selectedTab);
+  }
+
+  selectedImg: string = '';
+  showModal = false;
+
+  zoomImg(img: string | null | undefined) {
+    this.selectedImg = img || '';
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
   }
 }

@@ -10,16 +10,15 @@ import { take } from 'rxjs';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_TOP_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { RangePipe } from "../../../helpers/range.pipe";
-import { IonicModule } from "@ionic/angular";
 
 @Component({
-  selector: 'app-top-100',
-  templateUrl: './top-100.page.html',
-  styleUrls: ['./top-100.page.scss'],
+  selector: 'app-top-popular',
+  templateUrl: './top-popular.page.html',
+  styleUrls: ['./top-popular.page.scss'],
   standalone: true,
-  imports: [IonRow, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, IonGrid, IonCol, MediaListItemComponent, IonInfiniteScroll, IonInfiniteScrollContent, IonButtons, IonBackButton, RangePipe, IonSkeletonText, IonTitle],
+  imports: [IonTitle, IonRow, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, IonGrid, IonCol, MediaListItemComponent, IonInfiniteScroll, IonInfiniteScrollContent, IonButtons, IonBackButton, RangePipe, IonSkeletonText],
 })
-export class Top100Page implements OnInit {
+export class TopPopularPage implements OnInit {
 
   constructor(
     private readonly apiService: ApiService,
@@ -45,7 +44,7 @@ export class Top100Page implements OnInit {
   ngOnInit() {
     this.type = this.route.snapshot.paramMap.get("type");
 
-    this.titleService.setTitle(`Top 100 ${this.toSentenceCase(this.type)} · AniMigo`);
+    this.titleService.setTitle(`Top Popular ${this.toSentenceCase(this.type)} · AniMigo`);
 
     this.loadMore()
   }
@@ -69,7 +68,7 @@ export class Top100Page implements OnInit {
     const variables = {
       type: this.type?.toUpperCase(),
       page: this.page,
-      sort: ['SCORE_DESC'],
+      sort: ['POPULARITY_DESC'],
       perPage: this.perPage,
       isAdult: false
     };
@@ -104,9 +103,6 @@ export class Top100Page implements OnInit {
           if (event) {
             event.target.complete();
             if (!this.hasNextPage) {
-              event.target.disabled = true;
-            }
-            if (this.mediaEdges.length >= 100) {
               event.target.disabled = true;
             }
           }

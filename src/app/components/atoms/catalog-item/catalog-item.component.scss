@@ -55,6 +55,9 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
+
+      height: 2.4em; /* Approximate height for 2 lines */
+      line-height: 1.2em; /* Adjust line height as needed */
     }
   }
 

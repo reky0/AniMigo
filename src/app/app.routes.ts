@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: ':type/top-100',
     loadComponent: () => import('./components/pages/top-100/top-100.page').then( m => m.Top100Page),
   },
+  {
+    path: ':type/top-popular',
+    loadComponent: () => import('./components/pages/top-popular/top-popular.page').then( m => m.TopPopularPage)
+  },
 ];

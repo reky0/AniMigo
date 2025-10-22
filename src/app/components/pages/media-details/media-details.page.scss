@@ -93,3 +93,49 @@
 .skeleton {
   height: 20px;
 }
+
+ion-modal {
+  --background: rgba(0, 0, 0, 0);
+  --height: 100%;
+  --width: 100%;
+}
+
+.image-modal {
+  --background: transparent;
+  --padding-top: 5vh;
+  --padding-bottom: 5vh;
+  --padding-start: 5vw;
+  --padding-end: 5vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --backdrop-opacity: 0;
+
+  &::part(scroll) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.full-image {
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: white;
+  border-radius: 10px;
+  padding: 2px;
+
+  &::part(image) {
+    border-radius: 10px;
+  }
+}

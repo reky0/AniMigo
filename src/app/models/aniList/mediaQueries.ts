@@ -403,7 +403,7 @@ export const GET_AIRING_SCHEDULES = gql`
 `;
 
 export const GET_TOP_MEDIA = gql`
-  query ($page: Int = 1, $perPage: Int = 25, $type: MediaType!) {
+  query ($page: Int = 1, $perPage: Int = 25, $type: MediaType!, $sort: [MediaSort], $isAdult: Boolean = false) {
     Page(page: $page, perPage: $perPage) {
       pageInfo {
         currentPage
@@ -411,7 +411,7 @@ export const GET_TOP_MEDIA = gql`
         total
         perPage
       }
-      media(type: $type, sort: SCORE_DESC) {
+      media(type: $type, sort: $sort, isAdult: $isAdult) {
         id
         title {
           romaji
