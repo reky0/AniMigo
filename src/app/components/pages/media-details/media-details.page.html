@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/home"/>
     </ion-buttons>
 
     <ion-buttons slot="end">
@@ -17,24 +17,6 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="../"></ion-back-button>
-      </ion-buttons>
-
-      <ion-buttons slot="end">
-        <ion-button>
-          <ion-icon slot="icon-only" name="heart"></ion-icon>
-        </ion-button>
-
-        <ion-button>
-          <ion-icon slot="icon-only" name="share-social"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-
   <ion-grid class="container">
       @if (data?.bannerImage || data?.coverImage?.color) {
         <ion-row class="bannerContainer">
