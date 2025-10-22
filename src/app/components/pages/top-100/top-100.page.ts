@@ -1,16 +1,14 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonGrid, IonRow, IonCol, IonInfiniteScroll, IonInfiniteScrollContent, IonButtons, IonBackButton, IonSkeletonText } from '@ionic/angular/standalone';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api-service';
-import { Title } from '@angular/platform-browser';
-import { toSentenceCase } from 'src/app/helpers/utils';
-import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
-import { GET_TOP_MEDIA } from 'src/app/models/aniList/mediaQueries';
-import { take } from 'rxjs';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
-import { IonicModule } from "@ionic/angular";
+import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonSkeletonText, IonToolbar } from '@ionic/angular/standalone';
+import { take } from 'rxjs';
+import { toSentenceCase } from 'src/app/helpers/utils';
+import { GET_TOP_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
@@ -18,7 +16,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './top-100.page.html',
   styleUrls: ['./top-100.page.scss'],
   standalone: true,
-  imports: [IonRow, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonCol, MediaListItemComponent, IonInfiniteScroll, IonInfiniteScrollContent, IonButtons, IonBackButton, RangePipe, IonSkeletonText],
+  imports: [IonRow, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, IonGrid, IonCol, MediaListItemComponent, IonInfiniteScroll, IonInfiniteScrollContent, IonButtons, IonBackButton, RangePipe, IonSkeletonText],
 })
 export class Top100Page implements OnInit {
 

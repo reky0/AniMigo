@@ -1,0 +1,13 @@
+# Netlify configuration for Angular SPA routing
+
+[build]
+  # Build command (adjust if different)
+  command = "npm run build"
+  # Output directory - Angular/Ionic typically builds to www
+  publish = "www"
+
+[[redirects]]
+  # Redirect all routes to index.html for Angular routing
+  from = "/*"
+  to = "/index.html"
+  status = 200

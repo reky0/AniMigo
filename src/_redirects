@@ -1,0 +1,4 @@
+# Netlify redirects file for Angular SPA routing
+# This file will be copied to the build output directory
+
+/*    /index.html   200
