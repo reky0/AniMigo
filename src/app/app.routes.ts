@@ -14,4 +14,8 @@ export const routes: Routes = [
     loadComponent: () => import('./components/pages/calendar/calendar.page').then( m => m.CalendarPage),
     title: 'Calendar · AniMigo',
   },
+  {
+    path: ':type/top-100',
+    loadComponent: () => import('./components/pages/top-100/top-100.page').then( m => m.Top100Page),
+  },
 ];

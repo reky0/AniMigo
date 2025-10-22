@@ -1,0 +1,42 @@
+<ion-header translucent>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    @if (mediaEdges.length === 0) {
+      <ion-row class="ion-justify-content-center ion-align-items-center ion-margin-top">
+        @for (i of 20 | range; track $index) {
+          <ion-col size="12" sizeMd="6" sizeLg="4">
+            <ion-skeleton-text
+              animated
+              style="width: 100%; height: 170px; margin-bottom: 10px;"></ion-skeleton-text>
+          </ion-col>
+        }
+      </ion-row>
+    } @else {
+      <ion-row>
+        @for (media of mediaEdges; track $index) {
+          <ion-col size="12" sizeMd="6" sizeLg="4">
+            <app-media-list-item
+              class="media-item ion-activatable"
+              [media]="media"
+              (click)="goToDetails(media.id)"
+              [tag]="'#'+($index+1)"
+            />
+          </ion-col>
+        }
+      </ion-row>
+      <ion-infinite-scroll
+        (ionInfinite)="loadMore($event)"
+        threshold="0px"
+        >
+        <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+      </ion-infinite-scroll>
+    }
+  </ion-grid>
+</ion-content>

@@ -1,3 +1,10 @@
+export interface PageInfo {
+  currentPage?: number,
+  hasNextPage?: boolean,
+  perPage?: number,
+  pagecurrentPage?: number,
+}
+
 export interface BasicMedia {
   id: number;
   title: {
@@ -12,10 +19,14 @@ export interface BasicMedia {
   } | null;
   type: 'ANIME' | 'MANGA',
   isAdult?: boolean | null;
+  seasonYear?: number | null;
+  startDate?: FuzzyDate;
+  format?: string | null;
 }
 
 export interface BasicMediaResponse {
   Page: {
+    pageInfo: PageInfo;
     media: BasicMedia[];
   };
 }
@@ -258,12 +269,7 @@ export interface Character {
   gender?: string;
   bloodType?: string | null;
   media: {
-    pageInfo: {
-      currentPage: number,
-      hasNextPage: boolean,
-      perPage: number,
-      pagecurrentPage: number,
-    },
+    pageInfo: PageInfo,
     edges: Array<{
       node: {
         id: number;

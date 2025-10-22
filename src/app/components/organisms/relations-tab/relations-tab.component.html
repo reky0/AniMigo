@@ -1,5 +1,8 @@
 <ion-grid class="main ion-padding">
-  @if (data) {
+  @if (data &&
+    ((data.relations && data.relations.edges && data.relations.edges.length > 0) ||
+    (data.recommendations && data.recommendations.nodes && data.recommendations.nodes.length > 0))
+  ) {
     @if (data.relations && data.relations.edges && data.relations.edges.length > 0) {
       <ion-row>
         <ion-col>
@@ -71,5 +74,7 @@
         </ion-col>
       </ion-row>
     }
+  } @else {
+    <ion-title>No relations available</ion-title>
   }
 </ion-grid>

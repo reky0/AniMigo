@@ -1,5 +1,70 @@
-.media {
+.main {
   cursor: pointer;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  padding: 5px;
+
+  ion-ripple-effect {
+    color: var(--ion-color-tertiary);
+    --ripple-color: var(--ion-color-tertiary);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  ion-ripple-effect::part(native) {
+    animation-duration: 150ms;
+  }
+
+  .content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+
+    ion-row {
+      flex-shrink: 0;
+    }
+
+    .content-middle {
+      flex-grow: 1;
+    }
+  }
+
+  .content-top {
+    flex: 0 0 auto;
+  }
+
+  .content-middle {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+  }
+
+  .content-bottom {
+    flex: 0 0 auto;
+  }
+
+  .image-container {
+    position: relative;
+  }
+
+  .rank-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--ion-color-secondary);
+    color: var(--ion-color-secondary-contrast);
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 10px 0 10px 0;
+    z-index: 1;
+  }
 
   .title {
     display: -webkit-box;
@@ -18,5 +83,10 @@
 
   .img::part(image) {
     border-radius: 10px;
+  }
+
+  .scoreIcon {
+    vertical-align: bottom;
+    padding-right: 5px;
   }
 }

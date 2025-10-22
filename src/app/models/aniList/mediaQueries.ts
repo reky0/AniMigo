@@ -1,8 +1,8 @@
 import { gql } from "apollo-angular";
 
-export const GET_TRENDING_ANIMES = gql`
-          query TrendingAnime($page: Int = 1, $perPage: Int = 10, $isAdult: Boolean = false) {
-            Page(page: $page, perPage: $perPage) {
+export const GET_TRENDING_MEDIA = gql`
+          query TrendingAnime($page: Int = 1, $perPage: Int = 10, $type: MediaType!, $isAdult: Boolean = false, $context: String!) {
+            Page(page: $page, perPage: $perPage) @connection (key: "trendingMedia", filter: ["context"]) {
               pageInfo {
                 currentPage
                 hasNextPage
@@ -10,7 +10,7 @@ export const GET_TRENDING_ANIMES = gql`
                 perPage
               }
               media(
-                type: ANIME,
+                type: $type,
                 sort: TRENDING_DESC,
                 isAdult: $isAdult
               ) {
@@ -24,13 +24,7 @@ export const GET_TRENDING_ANIMES = gql`
                   medium
                   large
                 }
-                trending
-                description(asHtml: false)
-                episodes
                 averageScore
-                genres
-                season
-                seasonYear
                 type
               }
             }
@@ -75,9 +69,9 @@ export const GET_NEXT_SEASON_ANIMES = gql`
           }
         `;
 
-export const GET_TRENDING_MANGAS = gql`
-          query TrendingManga($page: Int = 1, $perPage: Int = 20, $isAdult: Boolean = false) {
-            Page(page: $page, perPage: $perPage) {
+export const GET_NEWLY_ADDED_MEDIA = gql`
+          query ($page: Int = 1, $perPage: Int = 20, $type: MediaType!, $isAdult: Boolean = false, $context: String!) {
+            Page(page: $page, perPage: $perPage) @connection (key: "newlyAddedMedia", filter: ["context"]) {
               pageInfo {
                 currentPage
                 hasNextPage
@@ -85,8 +79,8 @@ export const GET_TRENDING_MANGAS = gql`
                 perPage
               }
               media(
-                type: MANGA,
-                sort: TRENDING_DESC,
+                type: $type,
+                sort: ID_DESC,
                 isAdult: $isAdult
               ) {
                 id
@@ -99,94 +93,7 @@ export const GET_TRENDING_MANGAS = gql`
                   medium
                   large
                 }
-                trending
-                description(asHtml: false)
-                chapters
-                volumes
                 averageScore
-                genres
-                status
-                type
-              }
-            }
-          }
-        `;
-
-export const GET_NEWLY_ADDED_ANIMES = gql`
-          query NewlyAddedAnime($page: Int = 1, $perPage: Int = 20, $sort: [MediaSort] = [ID_DESC], $isAdult: Boolean = false) {
-            Page(page: $page, perPage: $perPage) {
-              pageInfo {
-                currentPage
-                hasNextPage
-                total
-                perPage
-              }
-              media(
-                type: ANIME,
-                sort: $sort,
-                isAdult: $isAdult
-              ) {
-                id
-                title {
-                  romaji
-                  english
-                  native
-                }
-                coverImage {
-                  medium
-                  large
-                }
-                description(asHtml: false)
-                episodes
-                averageScore
-                genres
-                startDate {
-                  year
-                  month
-                  day
-                }
-                status
-                type
-              }
-            }
-          }
-        `;
-
-export const GET_NEWLY_ADDED_MANGAS = gql`
-          query NewlyAddedManga($page: Int = 1, $perPage: Int = 20, $sort: [MediaSort] = [ID_DESC], $isAdult: Boolean = false) {
-            Page(page: $page, perPage: $perPage) {
-              pageInfo {
-                currentPage
-                hasNextPage
-                total
-                perPage
-              }
-              media(
-                type: MANGA,
-                sort: $sort,
-                isAdult: $isAdult
-              ) {
-                id
-                title {
-                  romaji
-                  english
-                  native
-                }
-                coverImage {
-                  medium
-                  large
-                }
-                description(asHtml: false)
-                chapters
-                volumes
-                averageScore
-                genres
-                startDate {
-                  year
-                  month
-                  day
-                }
-                status
                 type
               }
             }
@@ -490,6 +397,39 @@ export const GET_AIRING_SCHEDULES = gql`
         episode
         airingAt
         timeUntilAiring
+      }
+    }
+  }
+`;
+
+export const GET_TOP_MEDIA = gql`
+  query ($page: Int = 1, $perPage: Int = 25, $type: MediaType!) {
+    Page(page: $page, perPage: $perPage) {
+      pageInfo {
+        currentPage
+        hasNextPage
+        total
+        perPage
+      }
+      media(type: $type, sort: SCORE_DESC) {
+        id
+        title {
+          romaji
+          english
+          native
+        }
+        coverImage {
+          medium
+          large
+        }
+        averageScore
+        seasonYear
+        startDate {
+          year
+        }
+        type
+        isAdult
+        format
       }
     }
   }

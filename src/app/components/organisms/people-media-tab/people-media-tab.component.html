@@ -2,7 +2,7 @@
   @if (data) {
     @for (media of mediaEdges; track $index) {
       <app-media-list-item
-        [media]="media"
+        [media]="media.node"
         (click)="triggerNavigationEvent(media.node.type, media.node.id)"
         />
     }

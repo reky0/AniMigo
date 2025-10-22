@@ -8,10 +8,9 @@ import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, 
 
 import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api-service';
-import { GET_NEWLY_ADDED_ANIMES, GET_NEWLY_ADDED_MANGAS, GET_NEXT_SEASON_ANIMES, GET_TRENDING_ANIMES, GET_TRENDING_MANGAS } from 'src/app/models/aniList/mediaQueries';
+import { GET_NEWLY_ADDED_MEDIA, GET_NEXT_SEASON_ANIMES, GET_TRENDING_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from 'src/app/helpers/range.pipe';
-import { IonicModule } from "@ionic/angular";
 
 @Component({
   selector: 'app-home-tab',
@@ -49,7 +48,10 @@ export class HomeTabPage implements OnInit {
     let trendingAnimesVariables = {
       page: 1,
       perPage: 20,
-      isAdult: false
+      isAdult: false,
+      type: 'ANIME',
+      context: "trendingAnimes",
+      sort: 'TRENDING_DESC',
     };
 
     let nextSeasonAnimesVariables = {
@@ -63,22 +65,31 @@ export class HomeTabPage implements OnInit {
     let trendingMangasVariables = {
       page: 1,
       perPage: 20,
-      isAdult: false
+      isAdult: false,
+      type: 'MANGA',
+      context: "trendingMangas",
+      sort: 'TRENDING_DESC',
     };
 
     let newlyAddedAnimesVariables = {
       page: 1,
       perPage: 20,
-      isAdult: false
+      isAdult: false,
+      type: 'ANIME',
+      context: "newlyAddedAnimes",
+      sort: 'ID_DESC',
     };
 
     let newlyAddedMangasVariables = {
       page: 1,
       perPage: 20,
-      isAdult: false
+      isAdult: false,
+      type: 'MANGA',
+      context: "newlyAddedMangas",
+      sort: 'ID_DESC',
     };
 
-    this.apiService.fetchBasicData(GET_TRENDING_ANIMES, trendingAnimesVariables).subscribe({
+    this.apiService.fetchBasicData(GET_TRENDING_MEDIA, trendingAnimesVariables).subscribe({
       next: ({ data, loading, errors }) => {
         this.trendingAnimesLoading = loading;
         if (errors) {
@@ -108,7 +119,7 @@ export class HomeTabPage implements OnInit {
       }
     });
 
-    this.apiService.fetchBasicData(GET_TRENDING_MANGAS, trendingMangasVariables).subscribe({
+    this.apiService.fetchBasicData(GET_TRENDING_MEDIA, trendingMangasVariables).subscribe({
       next: ({ data, loading, errors }) => {
         this.trendingMangasLoading = loading;
         if (errors) {
@@ -123,7 +134,7 @@ export class HomeTabPage implements OnInit {
       }
     });
 
-    this.apiService.fetchBasicData(GET_NEWLY_ADDED_ANIMES, newlyAddedAnimesVariables).subscribe({
+    this.apiService.fetchBasicData(GET_NEWLY_ADDED_MEDIA, newlyAddedAnimesVariables).subscribe({
       next: ({ data, loading, errors }) => {
         this.newlyAddedAnimesLoading = loading;
         if (errors) {
@@ -138,7 +149,7 @@ export class HomeTabPage implements OnInit {
       }
     });
 
-    this.apiService.fetchBasicData(GET_NEWLY_ADDED_MANGAS, newlyAddedMangasVariables).subscribe({
+    this.apiService.fetchBasicData(GET_NEWLY_ADDED_MEDIA, newlyAddedMangasVariables).subscribe({
       next: ({ data, loading, errors }) => {
         this.newlyAddedMangasLoading = loading;
         if (errors) {

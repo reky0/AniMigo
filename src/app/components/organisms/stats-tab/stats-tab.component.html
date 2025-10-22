@@ -1,7 +1,7 @@
 <ion-grid class="main ion-padding">
 
-  @if (data) {
-    @if (data.rankings) {
+  @if (data && ((data.rankings && data.rankings.length > 0) || (data.stats && data.stats.scoreDistribution && data.stats.statusDistribution))) {
+    @if (data.rankings && data.rankings.length > 0) {
       <ion-row>
         <ion-col>
           <app-section-title title="Rankings" class="ion-margin" />
@@ -96,6 +96,6 @@
       }
     }
   } @else {
-    <ion-text>No stats to show</ion-text>
+    <ion-title>No stats available</ion-title>
   }
 </ion-grid>

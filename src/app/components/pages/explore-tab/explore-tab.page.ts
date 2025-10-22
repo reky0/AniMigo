@@ -24,10 +24,6 @@ export class ExploreTabPage implements OnInit {
   navigate(target: string) {
     console.log('Navigate to:', target);
 
-    switch(target) {
-      case 'calendar':
-        this.router.navigate(['calendar']);
-        break;
-    }
+    this.router.navigate([target]);
   }
 }

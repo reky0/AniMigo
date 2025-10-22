@@ -1,21 +1,29 @@
-<ion-row srole="article"
-  class="media ion-margin-top ion-margin-bottom">
-  <ion-col size="3">
-    <ion-img class="img" [src]="media.node.coverImage.large ?? media.node.coverImage.medium" />
+<ion-row srole="article" class="main ion-margin-top ion-margin-bottom ion-activatable">
+  <ion-ripple-effect></ion-ripple-effect>
+  <ion-col size="3" class="image-container ion-no-padding">
+    <ion-img class="img" [src]="media.coverImage.large ?? media.coverImage.medium" />
+    @if (tag) {
+    <div class="rank-tag"> {{ tag }}</div>
+    }
   </ion-col>
-  <ion-col size="9">
-    <ion-row>
-      <ion-col size="12">
-        <ion-card-title class="title ion-no-padding">{{ media.node.title.english ?? media.node.title.romaji
-          }}</ion-card-title>
-      </ion-col>
-      <ion-col size="12">
-        <ion-note>{{ `${toSentenceCase(media.node.format)} · ${toSentenceCase(media.node.type)} ${media.node.seasonYear ? ` · ${media.node.seasonYear}` : ''}` }}</ion-note>
-      </ion-col>
-      <ion-col size="12">
-        <ion-icon name="star" class="ion-padding-end"></ion-icon>
-        <ion-note>{{ media.node.averageScore }}</ion-note>
+  <ion-col size="9" class="content-container ion-padding">
+    <ion-row class="ion-no-padding ion-align-items-start content-top">
+      <ion-col size="12" class="ion-no-padding">
+        <ion-card-title class="title ion-no-padding">{{ media.title.english ?? media.title.romaji }}</ion-card-title>
       </ion-col>
     </ion-row>
+    <ion-row class="ion-no-padding ion-align-items-center ion-justify-content-center content-middle">
+      <ion-col size="12" class="ion-no-padding">
+        <ion-note>{{ `${toSentenceCase(media.format)} ${media.seasonYear ? ` · ${media.seasonYear}` : ''}` }}</ion-note>
+      </ion-col>
+    </ion-row>
+    @if (media.averageScore) {
+      <ion-row class="ion-no-padding ion-align-items-end content-bottom">
+        <ion-col size="12" class="ion-no-padding">
+          <ion-icon name="star" class="scoreIcon"></ion-icon>
+          <ion-note>{{ media.averageScore }}%</ion-note>
+        </ion-col>
+      </ion-row>
+    }
   </ion-col>
 </ion-row>
