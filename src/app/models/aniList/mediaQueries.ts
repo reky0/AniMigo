@@ -434,3 +434,602 @@ export const GET_TOP_MEDIA = gql`
     }
   }
 `;
+
+// ============================================
+// User Queries
+// ============================================
+
+export const GET_CURRENT_USER = gql`
+  query GetCurrentUser {
+    Viewer {
+      id
+      name
+      about
+      avatar {
+        large
+        medium
+      }
+      bannerImage
+      options {
+        titleLanguage
+        displayAdultContent
+        airingNotifications
+        profileColor
+      }
+      mediaListOptions {
+        scoreFormat
+        rowOrder
+        animeList {
+          sectionOrder
+          splitCompletedSectionByFormat
+          customLists
+          advancedScoring
+          advancedScoringEnabled
+        }
+        mangaList {
+          sectionOrder
+          splitCompletedSectionByFormat
+          customLists
+          advancedScoring
+          advancedScoringEnabled
+        }
+      }
+      statistics {
+        anime {
+          count
+          episodesWatched
+          minutesWatched
+          meanScore
+          standardDeviation
+        }
+        manga {
+          count
+          chaptersRead
+          volumesRead
+          meanScore
+          standardDeviation
+        }
+      }
+      unreadNotificationCount
+      siteUrl
+      donatorTier
+      donatorBadge
+      moderatorRoles
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USER_BY_ID = gql`
+  query GetUserById($id: Int!) {
+    User(id: $id) {
+      id
+      name
+      about
+      avatar {
+        large
+        medium
+      }
+      bannerImage
+      isFollowing
+      isFollower
+      isBlocked
+      options {
+        titleLanguage
+        displayAdultContent
+        profileColor
+      }
+      statistics {
+        anime {
+          count
+          episodesWatched
+          minutesWatched
+          meanScore
+          standardDeviation
+        }
+        manga {
+          count
+          chaptersRead
+          volumesRead
+          meanScore
+          standardDeviation
+        }
+      }
+      siteUrl
+      donatorTier
+      donatorBadge
+      moderatorRoles
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+export const GET_USER_STATISTICS = gql`
+  query GetUserStatistics($userId: Int!) {
+    User(id: $userId) {
+      id
+      name
+      statistics {
+        anime {
+          count
+          episodesWatched
+          minutesWatched
+          meanScore
+          standardDeviation
+          statuses {
+            status
+            count
+            minutesWatched
+            meanScore
+          }
+          scores {
+            score
+            count
+            minutesWatched
+            meanScore
+          }
+          formats {
+            format
+            count
+            minutesWatched
+            meanScore
+          }
+          genres {
+            genre
+            count
+            minutesWatched
+            meanScore
+          }
+          tags(limit: 10, sort: COUNT_DESC) {
+            tag {
+              id
+              name
+            }
+            count
+            minutesWatched
+            meanScore
+          }
+          releaseYears {
+            releaseYear
+            count
+            minutesWatched
+            meanScore
+          }
+          startYears {
+            startYear
+            count
+            minutesWatched
+            meanScore
+          }
+        }
+        manga {
+          count
+          chaptersRead
+          volumesRead
+          meanScore
+          standardDeviation
+          statuses {
+            status
+            count
+            chaptersRead
+            meanScore
+          }
+          scores {
+            score
+            count
+            chaptersRead
+            meanScore
+          }
+          formats {
+            format
+            count
+            chaptersRead
+            meanScore
+          }
+          genres {
+            genre
+            count
+            chaptersRead
+            meanScore
+          }
+          tags(limit: 10, sort: COUNT_DESC) {
+            tag {
+              id
+              name
+            }
+            count
+            chaptersRead
+            meanScore
+          }
+          releaseYears {
+            releaseYear
+            count
+            chaptersRead
+            meanScore
+          }
+          startYears {
+            startYear
+            count
+            chaptersRead
+            meanScore
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_FAVOURITES = gql`
+  query GetUserFavourites($userId: Int!) {
+    User(id: $userId) {
+      id
+      name
+      favourites {
+        anime {
+          nodes {
+            id
+            title {
+              romaji
+              english
+              native
+            }
+            coverImage {
+              large
+              medium
+            }
+            type
+            format
+            seasonYear
+            averageScore
+          }
+        }
+        manga {
+          nodes {
+            id
+            title {
+              romaji
+              english
+              native
+            }
+            coverImage {
+              large
+              medium
+            }
+            type
+            format
+            seasonYear
+            averageScore
+          }
+        }
+        characters {
+          nodes {
+            id
+            name {
+              full
+              native
+            }
+            image {
+              large
+              medium
+            }
+          }
+        }
+        staff {
+          nodes {
+            id
+            name {
+              full
+              native
+            }
+            image {
+              large
+              medium
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_MEDIA_LIST = gql`
+  query GetUserMediaList($userId: Int!, $type: MediaType!, $status: MediaListStatus) {
+    MediaListCollection(userId: $userId, type: $type, status: $status) {
+      lists {
+        name
+        isCustomList
+        isSplitCompletedList
+        status
+        entries {
+          id
+          mediaId
+          status
+          score
+          progress
+          progressVolumes
+          repeat
+          priority
+          private
+          notes
+          hiddenFromStatusLists
+          startedAt {
+            year
+            month
+            day
+          }
+          completedAt {
+            year
+            month
+            day
+          }
+          updatedAt
+          createdAt
+          media {
+            id
+            title {
+              romaji
+              english
+              native
+              userPreferred
+            }
+            coverImage {
+              extraLarge
+              large
+              medium
+              color
+            }
+            type
+            format
+            status
+            episodes
+            chapters
+            volumes
+            season
+            seasonYear
+            averageScore
+            popularity
+            genres
+            nextAiringEpisode {
+              episode
+              timeUntilAiring
+              airingAt
+            }
+          }
+        }
+      }
+      user {
+        id
+        name
+        avatar {
+          large
+          medium
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_PROFILE_DATA = gql`
+  query GetUserProfileData($userId: Int!) {
+    User(id: $userId) {
+      id
+      name
+      about
+      avatar {
+        large
+        medium
+      }
+      bannerImage
+      isFollowing
+      isFollower
+      isBlocked
+      options {
+        titleLanguage
+        displayAdultContent
+        profileColor
+      }
+      mediaListOptions {
+        scoreFormat
+        rowOrder
+      }
+      statistics {
+        anime {
+          count
+          episodesWatched
+          minutesWatched
+          meanScore
+          standardDeviation
+          statuses {
+            status
+            count
+            minutesWatched
+            meanScore
+          }
+          scores(limit: 5, sort: COUNT_DESC) {
+            score
+            count
+            minutesWatched
+            meanScore
+          }
+          formats {
+            format
+            count
+            minutesWatched
+            meanScore
+          }
+          genres(limit: 10, sort: COUNT_DESC) {
+            genre
+            count
+            minutesWatched
+            meanScore
+          }
+        }
+        manga {
+          count
+          chaptersRead
+          volumesRead
+          meanScore
+          standardDeviation
+          statuses {
+            status
+            count
+            chaptersRead
+            meanScore
+          }
+          scores(limit: 5, sort: COUNT_DESC) {
+            score
+            count
+            chaptersRead
+            meanScore
+          }
+          formats {
+            format
+            count
+            chaptersRead
+            meanScore
+          }
+          genres(limit: 10, sort: COUNT_DESC) {
+            genre
+            count
+            chaptersRead
+            meanScore
+          }
+        }
+      }
+      favourites {
+        anime(page: 1, perPage: 6) {
+          nodes {
+            id
+            title {
+              romaji
+              english
+              native
+            }
+            coverImage {
+              large
+              medium
+            }
+            type
+            format
+            seasonYear
+            averageScore
+          }
+        }
+        manga(page: 1, perPage: 6) {
+          nodes {
+            id
+            title {
+              romaji
+              english
+              native
+            }
+            coverImage {
+              large
+              medium
+            }
+            type
+            format
+            seasonYear
+            averageScore
+          }
+        }
+        characters(page: 1, perPage: 6) {
+          nodes {
+            id
+            name {
+              full
+              native
+            }
+            image {
+              large
+              medium
+            }
+          }
+        }
+      }
+      siteUrl
+      donatorTier
+      donatorBadge
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+// Query to get accurate status counts for both anime and manga in a single request
+export const GET_USER_STATUS_COUNTS = gql`
+  query GetUserStatusCounts($userId: Int!) {
+    animeCurrent: MediaListCollection(userId: $userId, type: ANIME, status: CURRENT) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    animeCompleted: MediaListCollection(userId: $userId, type: ANIME, status: COMPLETED) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    animePaused: MediaListCollection(userId: $userId, type: ANIME, status: PAUSED) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    animeDropped: MediaListCollection(userId: $userId, type: ANIME, status: DROPPED) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    animePlanning: MediaListCollection(userId: $userId, type: ANIME, status: PLANNING) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    mangaCurrent: MediaListCollection(userId: $userId, type: MANGA, status: CURRENT) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    mangaCompleted: MediaListCollection(userId: $userId, type: MANGA, status: COMPLETED) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    mangaPaused: MediaListCollection(userId: $userId, type: MANGA, status: PAUSED) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    mangaDropped: MediaListCollection(userId: $userId, type: MANGA, status: DROPPED) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    mangaPlanning: MediaListCollection(userId: $userId, type: MANGA, status: PLANNING) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+  }
+`;

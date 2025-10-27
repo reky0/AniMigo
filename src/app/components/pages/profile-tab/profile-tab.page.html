@@ -1,15 +1,336 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="false">
+  @if (!isAuthenticated) {
+    <ion-card class="log-in-card ion-padding">
+      <ion-card-title class="ion-margin">Not logged in yet?</ion-card-title>
+      <ion-img src="assets/images/megamind-sad.jpg" alt="Login with AniList" class="img ion-margin" />
+      <ion-text class="ion-margin">Worry not! Here you go, press this button to log in.</ion-text>
+      <br>
+      <ion-button class="ion-margin" color="primary" (click)="login()">
+        <ion-icon slot="start" name="log-in-outline"></ion-icon>
+        Login with AniList
+      </ion-button>
+    </ion-card>
+  } @else {
+    <!-- Profile Banner -->
+    <div class="profile-banner">
+    @if (userBanner) {
+        <div class="banner-image" [style.background-image]="'url(' + userBanner + ')'"></div>
+        <div class="banner-overlay"></div>
+      } @else {
+        <ion-skeleton-text animated />
+      }
+    </div>
 
-<ion-content>
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <ion-grid class="ion-no-padding">
+        <ion-row>
+          <ion-col size="12">
+            <div class="profile-header-content">
+              <!-- Avatar -->
+              <div class="avatar-container">
+                @if (userAvatar) {
+                  <ion-avatar class="profile-avatar">
+                    <img [src]="userAvatar" [alt]="username + ' Avatar'" />
+                  </ion-avatar>
+                } @else {
+                  <ion-skeleton-text animated class="profile-avatar" />
+                }
+                @if (isAuthenticated) {
+                  <div class="avatar-status online"></div>
+                }
+              </div>
 
-  <ion-text>Profile Tab Works</ion-text>
+              <!-- User Info -->
+              <div class="user-info">
+                <h1 class="username">{{ username }}</h1>
+                <p class="user-bio">{{ userBio }}</p>
+                <div class="user-meta">
+                  <span class="meta-item">
+                    <ion-icon name="calendar-outline"></ion-icon>
+                    {{ joinDate }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="profile-actions">
+                @if (isAuthenticated) {
+                  <ion-button fill="outline" color="danger" size="small" (click)="logout()">
+                    <ion-icon slot="start" name="log-out-outline"></ion-icon>
+                    Logout
+                  </ion-button>
+                } @else {
+                  <ion-button color="primary" size="small" (click)="login()">
+                    <ion-icon slot="start" name="log-in-outline"></ion-icon>
+                    Login with AniList
+                  </ion-button>
+                }
+                <ion-buttons>
+                  <ion-button size="small">
+                    <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </div>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <ion-card class="stats-card">
+              <ion-card-content>
+                @if (loading && !userData) {
+                  <div class="loading-placeholder">Loading statistics...</div>
+                } @else {
+                  <ion-grid class="ion-no-padding">
+                    <ion-row>
+                      <ion-col size="6" size-md="3">
+                        <div class="stat-item">
+                          <div class="stat-value">{{ totalAnime }}</div>
+                          <div class="stat-label">Total Anime</div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6" size-md="3">
+                        <div class="stat-item">
+                          <div class="stat-value">{{ totalManga }}</div>
+                          <div class="stat-label">Total Manga</div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6" size-md="3">
+                        <div class="stat-item">
+                          <div class="stat-value">{{ watchTime }}</div>
+                          <div class="stat-label">Watch Time</div>
+                        </div>
+                      </ion-col>
+                      <ion-col size="6" size-md="3">
+                        <div class="stat-item">
+                          <div class="stat-value">{{ chaptersRead }}</div>
+                          <div class="stat-label">Chapters Read</div>
+                        </div>
+                      </ion-col>
+                    </ion-row>
+                  </ion-grid>
+                }
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Profile Content -->
+    <div class="profile-content">
+      <ion-grid>
+        <ion-row>
+          <!-- Left Column - Main Content -->
+          <ion-col size="12" size-lg="8">
+
+            <!-- Favorites Section -->
+            <div class="content-section">
+              <div class="section-header">
+                <h2>Favorite Anime</h2>
+                @if (isAuthenticated && userData?.siteUrl) {
+                  <ion-button fill="clear" size="small" [href]="(userData?.siteUrl || '') + '/animelist'" target="_blank">
+                    View List
+                    <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                  </ion-button>
+                }
+              </div>
+
+              @if (loading && !userData) {
+                <div class="loading-placeholder">Loading favorites...</div>
+              } @else if (favoriteAnime.length > 0) {
+                <ion-grid class="favorites-grid">
+                  <ion-row>
+                    @for (anime of favoriteAnime; track $index) {
+                      <ion-col size="4" sizeMd="2">
+                        <app-catalog-item
+                          [title]="anime.title.romaji || anime.title.english"
+                          [image]="anime.coverImage.large?.replace('medium', 'large')"
+                          />
+                      </ion-col>
+                    }
+                  </ion-row>
+                </ion-grid>
+              } @else {
+                <ion-card>
+                  <ion-card-content>
+                    <p class="empty-state">No favorite anime yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                  </ion-card-content>
+                </ion-card>
+              }
+
+              <div class="section-header">
+                <h2>Favorite Manga</h2>
+                @if (isAuthenticated && userData?.siteUrl) {
+                  <ion-button fill="clear" size="small" [href]="(userData?.siteUrl || '') + '/mangalist'" target="_blank">
+                    View List
+                    <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                  </ion-button>
+                }
+              </div>
+
+              @if (loading && !userData) {
+                <div class="loading-placeholder">Loading favorites...</div>
+              } @else if (favoriteManga.length > 0) {
+                <ion-grid class="favorites-grid">
+                  <ion-row>
+                    @for (manga of favoriteManga; track $index) {
+                      <ion-col size="4" sizeMd="2">
+                        <app-catalog-item
+                          [title]="manga.title.romaji || manga.title.english"
+                          [image]="manga.coverImage.large?.replace('medium', 'large')"
+                          />
+                      </ion-col>
+                    }
+                  </ion-row>
+                </ion-grid>
+              } @else {
+                <ion-card>
+                  <ion-card-content>
+                    <p class="empty-state">No favorite anime yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                  </ion-card-content>
+                </ion-card>
+              }
+            </div>
+
+            <!-- Genre Distribution -->
+            <div class="content-section">
+              <div class="section-header">
+                <h2>Genre Overview</h2>
+              </div>
+
+              <ion-card class="genre-card">
+                <ion-card-content>
+                  @if (loading && !userData) {
+                    <div class="loading-placeholder">Loading genre data...</div>
+                  } @else if (topGenres.length > 0) {
+                    <div class="genre-item" *ngFor="let genreData of topGenres">
+                      <div class="genre-info">
+                        <span class="genre-name">{{ genreData.genre }}</span>
+                        <span class="genre-count">{{ genreData.count }}</span>
+                      </div>
+                      <ion-progress-bar [value]="genreData.count / totalAnime" color="primary"></ion-progress-bar>
+                    </div>
+                  } @else {
+                    <p class="empty-state">No genre data available</p>
+                  }
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </ion-col>
+
+          <!-- Right Column - Sidebar -->
+          <ion-col size="12" sizeLg="4">
+            <!-- Watch List Stats -->
+            <div class="content-section">
+              <div class="section-header">
+                <h2>Anime List</h2>
+              </div>
+
+              <ion-card class="list-stats-card">
+                <ion-list lines="none">
+                  <ion-item>
+                    <ion-icon name="play-circle-outline" slot="start" color="success"></ion-icon>
+                    <ion-label>
+                      <h3>Watching</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="success">{{ animeStatusCounts.watching }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="checkmark-circle-outline" slot="start" color="primary"></ion-icon>
+                    <ion-label>
+                      <h3>Completed</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="primary">{{ animeStatusCounts.completed }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="pause-circle-outline" slot="start" color="warning"></ion-icon>
+                    <ion-label>
+                      <h3>On Hold</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="warning">{{ animeStatusCounts.onHold }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="close-circle-outline" slot="start" color="danger"></ion-icon>
+                    <ion-label>
+                      <h3>Dropped</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="danger">{{ animeStatusCounts.dropped }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="bookmark-outline" slot="start" color="medium"></ion-icon>
+                    <ion-label>
+                      <h3>Plan to Watch</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="medium">{{ animeStatusCounts.planToWatch }}</ion-badge>
+                  </ion-item>
+                </ion-list>
+              </ion-card>
+            </div>
+            <div class="content-section">
+              <div class="section-header">
+                <h2>Manga List</h2>
+              </div>
+
+              <ion-card class="list-stats-card">
+                <ion-list lines="none">
+                  <ion-item>
+                    <ion-icon name="play-circle-outline" slot="start" color="success"></ion-icon>
+                    <ion-label>
+                      <h3>Reading</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="success">{{ mangaStatusCounts.reading }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="checkmark-circle-outline" slot="start" color="primary"></ion-icon>
+                    <ion-label>
+                      <h3>Completed</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="primary">{{ mangaStatusCounts.completed }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="pause-circle-outline" slot="start" color="warning"></ion-icon>
+                    <ion-label>
+                      <h3>On Hold</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="warning">{{ mangaStatusCounts.onHold }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="close-circle-outline" slot="start" color="danger"></ion-icon>
+                    <ion-label>
+                      <h3>Dropped</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="danger">{{ mangaStatusCounts.dropped }}</ion-badge>
+                  </ion-item>
+
+                  <ion-item>
+                    <ion-icon name="bookmark-outline" slot="start" color="medium"></ion-icon>
+                    <ion-label>
+                      <h3>Plan to Read</h3>
+                    </ion-label>
+                    <ion-badge slot="end" color="medium">{{ mangaStatusCounts.planToRead }}</ion-badge>
+                  </ion-item>
+                </ion-list>
+              </ion-card>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  }
+
 </ion-content>

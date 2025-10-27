@@ -306,3 +306,284 @@ export interface AiringSchedulesResponse {
     airingSchedules: AiringSchedule[];
   }
 }
+
+// ============================================
+// User Interfaces
+// ============================================
+
+export interface UserAvatar {
+  large?: string | null;
+  medium?: string | null;
+}
+
+export interface UserStatistics {
+  anime: {
+    count: number;
+    episodesWatched: number;
+    minutesWatched: number;
+    meanScore: number;
+    standardDeviation: number;
+    statuses?: Array<{
+      status: string;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    scores?: Array<{
+      score: number;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    lengths?: Array<{
+      length: string;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    releaseYears?: Array<{
+      releaseYear: number;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    startYears?: Array<{
+      startYear: number;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    formats?: Array<{
+      format: string;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    genres?: Array<{
+      genre: string;
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+    tags?: Array<{
+      tag: {
+        id: number;
+        name: string;
+      };
+      count: number;
+      minutesWatched: number;
+      meanScore: number;
+    }>;
+  };
+  manga: {
+    count: number;
+    chaptersRead: number;
+    volumesRead: number;
+    meanScore: number;
+    standardDeviation: number;
+    statuses?: Array<{
+      status: string;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    scores?: Array<{
+      score: number;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    lengths?: Array<{
+      length: string;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    releaseYears?: Array<{
+      releaseYear: number;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    startYears?: Array<{
+      startYear: number;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    formats?: Array<{
+      format: string;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    genres?: Array<{
+      genre: string;
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+    tags?: Array<{
+      tag: {
+        id: number;
+        name: string;
+      };
+      count: number;
+      chaptersRead: number;
+      meanScore: number;
+    }>;
+  };
+}
+
+export interface MediaListEntry {
+  id: number;
+  mediaId: number;
+  status: string;
+  score: number;
+  progress: number;
+  progressVolumes?: number | null;
+  repeat: number;
+  priority: number;
+  private: boolean;
+  notes?: string | null;
+  hiddenFromStatusLists: boolean;
+  startedAt?: FuzzyDate | null;
+  completedAt?: FuzzyDate | null;
+  updatedAt?: number | null;
+  createdAt?: number | null;
+  media: {
+    id: number;
+    title: Title;
+    coverImage: CoverImage;
+    type: 'ANIME' | 'MANGA';
+    format?: string | null;
+    status?: string | null;
+    episodes?: number | null;
+    chapters?: number | null;
+    volumes?: number | null;
+    season?: string | null;
+    seasonYear?: number | null;
+    averageScore?: number | null;
+    popularity?: number | null;
+    genres?: string[] | null;
+    nextAiringEpisode?: NextAiringEpisode | null;
+  };
+}
+
+export interface MediaListCollection {
+  lists: Array<{
+    name: string;
+    isCustomList: boolean;
+    isSplitCompletedList: boolean;
+    status?: string | null;
+    entries: MediaListEntry[];
+  }>;
+  user: {
+    id: number;
+    name: string;
+    avatar: UserAvatar;
+  };
+}
+
+export interface FavouriteMedia {
+  nodes: Array<{
+    id: number;
+    title: Title;
+    coverImage: CoverImage;
+    type: 'ANIME' | 'MANGA';
+    format?: string | null;
+    seasonYear?: number | null;
+    averageScore?: number | null;
+  }>;
+}
+
+export interface FavouriteCharacters {
+  nodes: Array<{
+    id: number;
+    name: {
+      full: string;
+      native?: string | null;
+    };
+    image: {
+      large?: string | null;
+      medium: string;
+    };
+  }>;
+}
+
+export interface FavouriteStaff {
+  nodes: Array<{
+    id: number;
+    name: {
+      full: string;
+      native?: string | null;
+    };
+    image: {
+      large?: string | null;
+      medium?: string | null;
+    };
+  }>;
+}
+
+export interface UserFavourites {
+  anime?: FavouriteMedia;
+  manga?: FavouriteMedia;
+  characters?: FavouriteCharacters;
+  staff?: FavouriteStaff;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  about?: string | null;
+  avatar: UserAvatar;
+  bannerImage?: string | null;
+  isFollowing?: boolean;
+  isFollower?: boolean;
+  isBlocked?: boolean;
+  options?: {
+    titleLanguage?: string | null;
+    displayAdultContent?: boolean;
+    airingNotifications?: boolean;
+    profileColor?: string | null;
+  };
+  mediaListOptions?: {
+    scoreFormat?: string | null;
+    rowOrder?: string | null;
+    animeList?: {
+      sectionOrder?: string[];
+      splitCompletedSectionByFormat?: boolean;
+      customLists?: string[];
+      advancedScoring?: string[];
+      advancedScoringEnabled?: boolean;
+    };
+    mangaList?: {
+      sectionOrder?: string[];
+      splitCompletedSectionByFormat?: boolean;
+      customLists?: string[];
+      advancedScoring?: string[];
+      advancedScoringEnabled?: boolean;
+    };
+  };
+  favourites?: UserFavourites;
+  statistics?: UserStatistics;
+  unreadNotificationCount?: number;
+  siteUrl?: string | null;
+  donatorTier?: number;
+  donatorBadge?: string | null;
+  moderatorRoles?: string[];
+  createdAt?: number | null;
+  updatedAt?: number | null;
+}
+
+export interface UserResponse {
+  User: User;
+}
+
+export interface ViewerResponse {
+  Viewer: User;
+}
+
+export interface MediaListCollectionResponse {
+  MediaListCollection: MediaListCollection;
+}

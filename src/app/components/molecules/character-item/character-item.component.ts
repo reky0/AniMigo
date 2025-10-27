@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PlatformService } from '@components/core/services/platform-service';
+import { PlatformService } from '@components/core/services/platform.service';
 import { IonicModule, ModalController, PopoverController } from '@ionic/angular';
 import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
 import { PersonItemComponent } from '../person-item/person-item.component';

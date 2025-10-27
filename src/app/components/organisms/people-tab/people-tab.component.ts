@@ -23,7 +23,7 @@ import { Character, DetailedMedia, VoiceActor } from 'src/app/models/aniList/res
 import { PeopleInfoTabComponent } from "../people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "../people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
-import { ApiService } from '@components/core/services/api-service';
+import { ApiService } from '@components/core/services/api.service';
 import { GET_CHARACTER_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { Router } from '@angular/router';
 

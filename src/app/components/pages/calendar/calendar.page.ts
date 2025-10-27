@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
-import { ApiService } from '@components/core/services/api-service';
+import { ApiService } from '@components/core/services/api.service';
 import { IonBackButton, IonCol, IonContent, IonGrid, IonHeader, IonRow, IonTitle, IonToolbar, IonSegment, IonSegmentButton, IonText } from '@ionic/angular/standalone';
 import { Subject } from 'rxjs';
 import { GET_AIRING_SCHEDULES } from 'src/app/models/aniList/mediaQueries';

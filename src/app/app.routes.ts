@@ -22,4 +22,9 @@ export const routes: Routes = [
     path: ':type/top-popular',
     loadComponent: () => import('./components/pages/top-popular/top-popular.page').then( m => m.TopPopularPage)
   },
+  {
+    path: 'auth/callback',
+    loadComponent: () => import('./components/pages/auth-callback/auth-callback.page').then(m => m.AuthCallbackPage),
+    title: 'Authenticating · AniMigo',
+  },
 ];

@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { catchError, map, Observable, take, throwError } from 'rxjs';
-import { BasicMediaResponse, CharacterResponse, DetailedMediaResponse, AiringSchedulesResponse } from 'src/app/models/aniList/responseInterfaces';
+import {
+  BasicMediaResponse,
+  CharacterResponse,
+  DetailedMediaResponse,
+  AiringSchedulesResponse,
+  UserResponse,
+  ViewerResponse,
+  MediaListCollectionResponse
+} from 'src/app/models/aniList/responseInterfaces';
 import { ToastController } from '@ionic/angular';
 
 @Injectable({
@@ -178,6 +186,160 @@ export class ApiService {
       catchError(err => {
         if (showToast) {
           const errorMsg = this.formatNetworkError(err, 'Network error loading airing schedules');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  // ============================================
+  // User Data Methods
+  // ============================================
+
+  /**
+   * Fetch current authenticated user data
+   * @param query - GraphQL query for viewer data
+   * @param showToast - Whether to show error toasts
+   * @returns Observable with viewer data, loading state, and errors
+   */
+  fetchCurrentUser(query: any, showToast = true): Observable<{
+    data: ViewerResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<ViewerResponse>({
+      query: query,
+      fetchPolicy: 'network-only',
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load user data');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading user data');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
+   * Fetch user data by user ID
+   * @param query - GraphQL query for user data
+   * @param variables - Variables including userId
+   * @param showToast - Whether to show error toasts
+   * @returns Observable with user data, loading state, and errors
+   */
+  fetchUserById(query: any, variables: Object, showToast = true): Observable<{
+    data: UserResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<UserResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only',
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load user profile');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading user profile');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
+   * Fetch user's media list collection
+   * @param query - GraphQL query for media list
+   * @param variables - Variables including userId, type, and optional status
+   * @param showToast - Whether to show error toasts
+   * @returns Observable with media list data, loading state, and errors
+   */
+  fetchUserMediaList(query: any, variables: Object, showToast = true): Observable<{
+    data: MediaListCollectionResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<MediaListCollectionResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only',
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load media list');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading media list');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
+   * Fetch comprehensive user profile data including statistics and favorites
+   * @param query - GraphQL query for complete profile data
+   * @param variables - Variables including userId
+   * @param showToast - Whether to show error toasts
+   * @returns Observable with complete profile data, loading state, and errors
+   */
+  fetchUserProfileData(query: any, variables: Object, showToast = true): Observable<{
+    data: UserResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<UserResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only',
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load profile data');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading profile data');
           this.showErrorToast(errorMsg);
         }
         return throwError(() => err);

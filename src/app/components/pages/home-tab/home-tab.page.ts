@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
-import { PlatformService } from '@components/core/services/platform-service';
+import { PlatformService } from '@components/core/services/platform.service';
 import { SectionHeaderComponent } from "@components/molecules/section-header/section-header.component";
 import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, IonRow } from '@ionic/angular/standalone';
 
 import { Router } from '@angular/router';
-import { ApiService } from '@components/core/services/api-service';
+import { ApiService } from '@components/core/services/api.service';
 import { GET_NEWLY_ADDED_MEDIA, GET_NEXT_SEASON_ANIMES, GET_TRENDING_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from 'src/app/helpers/range.pipe';

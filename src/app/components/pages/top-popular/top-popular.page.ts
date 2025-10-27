@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService } from '@components/core/services/api-service';
+import { ApiService } from '@components/core/services/api.service';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonSkeletonText, IonToolbar, IonTitle } from '@ionic/angular/standalone';
 import { take } from 'rxjs';

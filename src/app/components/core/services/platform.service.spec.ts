@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PlatformService } from './platform-service';
+import { PlatformService } from './platform.service';
 
 describe('PlatformService', () => {
   let service: PlatformService;

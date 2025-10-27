@@ -6,7 +6,7 @@ import { CoverImageComponent } from "@components/atoms/cover-image/cover-image.c
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { MetaItemComponent } from "@components/atoms/meta-item/meta-item.component";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
-import { ApiService } from '@components/core/services/api-service';
+import { ApiService } from '@components/core/services/api.service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.component";
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
