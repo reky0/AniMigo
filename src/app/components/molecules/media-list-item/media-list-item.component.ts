@@ -14,9 +14,17 @@ export class MediaListItemComponent  implements OnInit {
   @Input() media: any;
   @Input() tag: string | undefined;
 
+  coverImg: string = '';
+
   toSentenceCase = toSentenceCase;
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.coverImg = this.media.coverImage.large?.replace('medium', 'large') ?? this.media.coverImage.medium;
+  }
+
+  onImageError() {
+    this.coverImg = this.media.coverImage.large;
+  }
 }

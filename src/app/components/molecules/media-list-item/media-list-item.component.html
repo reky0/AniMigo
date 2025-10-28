@@ -1,7 +1,10 @@
 <ion-row srole="article" class="main ion-activatable">
   <ion-ripple-effect></ion-ripple-effect>
   <ion-col size="3" class="image-container ion-no-padding">
-    <ion-img class="img" [src]="media.coverImage.large ?? media.coverImage.medium" />
+    <ion-img class="img"
+      [src]="coverImg"
+      (ionError)="onImageError()"
+      />
     @if (tag) {
     <div class="rank-tag"> {{ tag }}</div>
     }
@@ -18,7 +21,7 @@
       </ion-col>
     </ion-row>
     @if (media.averageScore) {
-      <ion-row class="ion-no-padding ion-align-items-end content-bottom">
+      <ion-row class="rating-container ion-no-padding ion-align-items-end content-bottom">
         <ion-col size="12" class="ion-no-padding">
           <ion-icon name="star" class="scoreIcon"></ion-icon>
           <ion-note>{{ media.averageScore }}%</ion-note>
