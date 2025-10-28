@@ -16,7 +16,7 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonToolbar, IonButton, IonSkeletonText
+  IonToolbar, IonButton, IonSkeletonText, IonSpinner
 } from "@ionic/angular/standalone";
 import { RangePipe } from 'src/app/helpers/range.pipe';
 import { Character, DetailedMedia, VoiceActor } from 'src/app/models/aniList/responseInterfaces';
@@ -26,6 +26,7 @@ import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
 import { ApiService } from '@components/core/services/api.service';
 import { GET_CHARACTER_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-people-tab',
@@ -49,6 +50,7 @@ import { Router } from '@angular/router';
     IonSegment,
     IonSegmentButton,
     IonIcon,
+    IonSpinner,
     PeopleInfoTabComponent,
     PeopleMediaTabComponent,
     PeopleVATabComponent
@@ -63,6 +65,7 @@ export class PeopleTabComponent implements OnInit {
   modalSelectedTab: string; // info | media | va
   modalData: Character | undefined;
   error: any;
+  isTogglingFavorite: boolean = false;
 
   constructor(private apiService: ApiService, private router: Router) {
     this.isModalOpen = false;
@@ -124,5 +127,31 @@ export class PeopleTabComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate(['media', data.type, data.id])
     }, 100);
+  }
+
+  toggleCharacterFavorite() {
+    if (!this.modalData?.id || this.isTogglingFavorite) return;
+
+    this.isTogglingFavorite = true;
+
+    this.apiService.toggleFavoriteCharacter(this.modalData.id)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.isTogglingFavorite = false;
+          if (result.success && this.modalData) {
+            // Update local state by creating a new object
+            console.log('fav operation success');
+
+            this.modalData = {
+              ...this.modalData,
+              isFavourite: result.isFavorite
+            };
+          }
+        },
+        error: () => {
+          this.isTogglingFavorite = false;
+        }
+      });
   }
 }

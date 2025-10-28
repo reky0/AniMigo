@@ -590,3 +590,8 @@ export interface ViewerResponse {
 export interface MediaListCollectionResponse {
   MediaListCollection: MediaListCollection;
 }
+
+// ============================================
+// Re-export Mutation Interfaces
+// ============================================
+export * from './mutationInterfaces';

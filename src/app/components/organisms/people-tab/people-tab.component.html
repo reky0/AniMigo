@@ -95,8 +95,16 @@
           </ion-buttons>
 
           <ion-buttons slot="end">
-            <ion-button>
-              <ion-icon slot="icon-only" name="heart" [color]="modalData?.isFavourite ? 'danger' : 'white'"></ion-icon>
+            <ion-button (click)="toggleCharacterFavorite()" [disabled]="isTogglingFavorite">
+              @if (isTogglingFavorite) {
+                <ion-spinner name="dots" slot="icon-only"></ion-spinner>
+              } @else {
+                <ion-icon
+                  slot="icon-only"
+                  [name]="modalData?.isFavourite ? 'heart' : 'heart-outline'"
+                  [color]="modalData?.isFavourite ? 'danger' : 'medium'">
+                </ion-icon>
+              }
             </ion-button>
 
             <ion-button>

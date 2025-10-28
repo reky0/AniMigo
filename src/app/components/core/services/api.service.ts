@@ -8,8 +8,16 @@ import {
   AiringSchedulesResponse,
   UserResponse,
   ViewerResponse,
-  MediaListCollectionResponse
+  MediaListCollectionResponse,
+  FavoriteType,
+  FavoriteToggleResult
 } from 'src/app/models/aniList/responseInterfaces';
+import {
+  TOGGLE_FAVORITE_MEDIA,
+  TOGGLE_FAVORITE_CHARACTER,
+  TOGGLE_FAVORITE_STAFF,
+  TOGGLE_FAVORITE_STUDIO
+} from 'src/app/models/aniList/mutations';
 import { ToastController } from '@ionic/angular';
 
 @Injectable({
@@ -380,5 +388,221 @@ export class ApiService {
     const status = error?.status || error?.statusCode || 'Network Error';
     const message = error?.message || error?.statusText || 'Unable to connect';
     return `${friendlyMessage}\nHTTP ${status}: ${message}`;
+  }
+
+  // ============================================
+  // Favorite Toggle Methods
+  // ============================================
+
+  /**
+   * Toggle favorite status for any AniList entity
+   * @param id - The ID of the entity to toggle
+   * @param type - The type of entity (ANIME, MANGA, CHARACTER, STAFF, STUDIO)
+   * @param showToast - Whether to show success/error toasts
+   * @returns Observable with toggle result including new favorite status
+   */
+  toggleFavorite(
+    id: number,
+    type: FavoriteType,
+    showToast = true
+  ): Observable<FavoriteToggleResult> {
+    const { mutation, variables } = this.prepareFavoriteMutation(id, type);
+
+    return this.apollo.mutate({
+      mutation,
+      variables
+    }).pipe(
+      map((result: any) => {
+        const favoriteIds = this.extractFavoriteIds(result.data, type);
+        const isFavorite = favoriteIds.includes(id);
+
+        if (showToast) {
+          this.showFavoriteSuccessToast(isFavorite, type);
+        }
+
+        return {
+          success: true,
+          isFavorite,
+          favoriteIds
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          this.showFavoriteErrorToast(err, type);
+        }
+        return throwError(() => ({
+          success: false,
+          isFavorite: false,
+          favoriteIds: [],
+          error: err.message || 'Failed to toggle favorite'
+        }));
+      })
+    );
+  }
+
+  /**
+   * Toggle favorite for anime
+   */
+  toggleFavoriteAnime(id: number, showToast = true): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'ANIME', showToast);
+  }
+
+  /**
+   * Toggle favorite for manga
+   */
+  toggleFavoriteManga(id: number, showToast = true): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'MANGA', showToast);
+  }
+
+  /**
+   * Toggle favorite for character
+   */
+  toggleFavoriteCharacter(id: number, showToast = true): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'CHARACTER', showToast);
+  }
+
+  /**
+   * Toggle favorite for staff
+   */
+  toggleFavoriteStaff(id: number, showToast = true): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'STAFF', showToast);
+  }
+
+  /**
+   * Toggle favorite for studio
+   */
+  toggleFavoriteStudio(id: number, showToast = true): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'STUDIO', showToast);
+  }
+
+  /**
+   * Toggle favorite for media (auto-detect anime or manga)
+   * @param id - Media ID
+   * @param mediaType - 'ANIME' or 'MANGA'
+   * @param showToast - Whether to show toasts
+   */
+  toggleFavoriteMedia(
+    id: number,
+    mediaType: 'ANIME' | 'MANGA',
+    showToast = true
+  ): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, mediaType, showToast);
+  }
+
+  // ============================================
+  // Private Favorite Helper Methods
+  // ============================================
+
+  /**
+   * Prepare mutation and variables based on type
+   */
+  private prepareFavoriteMutation(id: number, type: FavoriteType): { mutation: any, variables: any } {
+    switch (type) {
+      case 'ANIME':
+        return {
+          mutation: TOGGLE_FAVORITE_MEDIA,
+          variables: { animeId: id }
+        };
+      case 'MANGA':
+        return {
+          mutation: TOGGLE_FAVORITE_MEDIA,
+          variables: { mangaId: id }
+        };
+      case 'CHARACTER':
+        return {
+          mutation: TOGGLE_FAVORITE_CHARACTER,
+          variables: { characterId: id }
+        };
+      case 'STAFF':
+        return {
+          mutation: TOGGLE_FAVORITE_STAFF,
+          variables: { staffId: id }
+        };
+      case 'STUDIO':
+        return {
+          mutation: TOGGLE_FAVORITE_STUDIO,
+          variables: { studioId: id }
+        };
+      default:
+        throw new Error(`Unsupported favorite type: ${type}`);
+    }
+  }
+
+  /**
+   * Extract favorite IDs from mutation response
+   */
+  private extractFavoriteIds(data: any, type: FavoriteType): number[] {
+    if (!data?.ToggleFavourite) return [];
+
+    switch (type) {
+      case 'ANIME':
+        return (data.ToggleFavourite.anime?.nodes || []).map((n: any) => n.id);
+      case 'MANGA':
+        return (data.ToggleFavourite.manga?.nodes || []).map((n: any) => n.id);
+      case 'CHARACTER':
+        return (data.ToggleFavourite.characters?.nodes || []).map((n: any) => n.id);
+      case 'STAFF':
+        return (data.ToggleFavourite.staff?.nodes || []).map((n: any) => n.id);
+      case 'STUDIO':
+        return (data.ToggleFavourite.studios?.nodes || []).map((n: any) => n.id);
+      default:
+        return [];
+    }
+  }
+
+  /**
+   * Show success toast for favorite toggle
+   */
+  private async showFavoriteSuccessToast(isFavorite: boolean, type: FavoriteType) {
+    const entityName = this.getFavoriteEntityName(type);
+    const action = isFavorite ? 'added to' : 'removed from';
+    const message = `${entityName} ${action} favorites`;
+
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      position: 'bottom',
+      color: 'success',
+      icon: isFavorite ? 'heart' : 'heart-dislike'
+    });
+
+    await toast.present();
+  }
+
+  /**
+   * Show error toast for favorite toggle
+   */
+  private async showFavoriteErrorToast(error: any, type: FavoriteType) {
+    const entityName = this.getFavoriteEntityName(type);
+    let message = `Failed to toggle ${entityName.toLowerCase()} favorite`;
+
+    // Check for authentication error
+    if (error.message?.includes('authentication') || error.message?.includes('token')) {
+      message = 'Please log in to manage favorites';
+    }
+
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger',
+      icon: 'alert-circle'
+    });
+
+    await toast.present();
+  }
+
+  /**
+   * Get friendly entity name
+   */
+  private getFavoriteEntityName(type: FavoriteType): string {
+    switch (type) {
+      case 'ANIME': return 'Anime';
+      case 'MANGA': return 'Manga';
+      case 'CHARACTER': return 'Character';
+      case 'STAFF': return 'Staff';
+      case 'STUDIO': return 'Studio';
+      default: return 'Item';
+    }
   }
 }

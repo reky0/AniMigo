@@ -12,19 +12,20 @@ import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.compon
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
-import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar, IonModal } from '@ionic/angular/standalone';
+import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar, IonModal, IonSpinner } from '@ionic/angular/standalone';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 import { Title } from '@angular/platform-browser';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-profile-tab',
   templateUrl: './media-details.page.html',
   styleUrls: ['./media-details.page.scss'],
   standalone: true,
-  imports: [IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
+  imports: [IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
 })
 export class MediaDetailsPageComponent implements OnInit {
 
@@ -38,7 +39,7 @@ export class MediaDetailsPageComponent implements OnInit {
   error: any;
   data: DetailedMedia | null | undefined = null;
   selectedTab: string = 'info';
-  // selectedTab: string = 'stats';
+  isTogglingFavorite: boolean = false;
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get("id");
@@ -95,5 +96,31 @@ export class MediaDetailsPageComponent implements OnInit {
 
   closeModal() {
     this.showModal = false;
+  }
+
+  toggleMediaFavorite() {
+    if (!this.data?.id || this.isTogglingFavorite) return;
+
+    this.isTogglingFavorite = true;
+
+    this.apiService.toggleFavoriteMedia(this.data.id, this.data.type)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.isTogglingFavorite = false;
+          if (result.success && this.data) {
+            // Update local state by creating a new object
+            console.log('fav operation success');
+
+            this.data = {
+              ...this.data,
+              isFavourite: result.isFavorite
+            };
+          }
+        },
+        error: () => {
+          this.isTogglingFavorite = false;
+        }
+      });
   }
 }

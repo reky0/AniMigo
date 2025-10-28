@@ -5,8 +5,16 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button>
-        <ion-icon slot="icon-only" name="heart" [color]="data?.isFavourite ? 'danger' : 'white'"></ion-icon>
+      <ion-button (click)="toggleMediaFavorite()" [disabled]="isTogglingFavorite">
+        @if (isTogglingFavorite) {
+          <ion-spinner name="dots" slot="icon-only"></ion-spinner>
+        } @else {
+          <ion-icon
+            slot="icon-only"
+            [name]="data?.isFavourite ? 'heart' : 'heart-outline'"
+            [color]="data?.isFavourite ? 'danger' : 'medium'">
+          </ion-icon>
+        }
       </ion-button>
 
       <ion-button>
