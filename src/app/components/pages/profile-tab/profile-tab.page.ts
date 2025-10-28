@@ -17,7 +17,7 @@ import { ToastController } from '@ionic/angular';
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, PersonItemComponent]
+  imports: [IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, PersonItemComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
@@ -312,6 +312,10 @@ export class ProfileTabPage implements OnInit {
   get followingCount(): number {
     // AniList doesn't expose following count in User query, would need separate query
     return 0; // Placeholder
+  }
+
+  goToSettings() {
+    this.router.navigate(['settings'])
   }
 
   goToDetails(id: number, type: 'ANIME' | 'MANGA', isAdult: boolean | null | undefined) {

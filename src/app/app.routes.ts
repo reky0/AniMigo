@@ -27,4 +27,9 @@ export const routes: Routes = [
     loadComponent: () => import('./components/pages/auth-callback/auth-callback.page').then(m => m.AuthCallbackPage),
     title: 'Authenticating · AniMigo',
   },
+  {
+    path: 'settings',
+    loadComponent: () => import('./components/pages/settings/settings.page').then( m => m.SettingsPage),
+    title: 'Settings · AniMigo',
+  },
 ];

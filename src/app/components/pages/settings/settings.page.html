@@ -1,0 +1,102 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>settings</ion-title>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"/>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid class="ion-padding">
+
+    <!-- SHOW ADULT CONTENT -->
+    <ion-row
+      class="ion-padding-top ion-padding-bottom"
+      >
+      <ion-col size="1" />
+      <ion-col class="ion-padding-start">
+        <ion-card-subtitle>Content</ion-card-subtitle>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      class="ion-padding-top ion-padding-bottom"
+      >
+      <ion-col size="1" class="ion-no-padding">
+        <ion-icon name="eye-off-outline"/>
+      </ion-col>
+      <ion-col size="10" class="ion-padding-start">
+        <ion-text>Show adult content</ion-text>
+      </ion-col>
+      <ion-col size="1">
+        <ion-toggle [checked]="userData?.options?.displayAdultContent"></ion-toggle>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row
+      class="ion-padding-top ion-padding-bottom"
+      >
+      <ion-col size="1" />
+      <ion-col class="ion-padding-start">
+        <ion-card-subtitle>Account</ion-card-subtitle>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      class="ion-padding-top ion-padding-bottom ion-activatable"
+      (click)="logOut()"
+      >
+      <ion-col size="1" class="ion-no-padding">
+        <ion-icon name="log-out-outline"/>
+      </ion-col>
+      <ion-col class="ion-padding-start">
+        <ion-text>Log out</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <!-- ABOUT -->
+    <ion-row
+      class="ion-padding-top ion-padding-bottom"
+      >
+      <ion-col size="1" />
+      <ion-col class="ion-padding-start">
+        <ion-card-subtitle>About</ion-card-subtitle>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      class="ion-padding-top ion-padding-bottom"
+      (click)="openUrl('https://github.com/reky0/animigo')">
+      <ion-col size="1" class="ion-no-padding">
+        <ion-icon name="logo-github"/>
+      </ion-col>
+      <ion-col class="ion-padding-start">
+        <ion-text>Github repo</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row
+      class="ion-padding-top ion-padding-bottom"
+      (click)="openUrl('https://github.com/reky0')"
+      >
+      <ion-col size="1" class="ion-no-padding">
+        <ion-icon name="code-slash-outline"/>
+      </ion-col>
+      <ion-col class="ion-padding-start">
+        <ion-text>Developed by reky0</ion-text>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="ion-padding-top">
+      <ion-col size="1" class="ion-no-padding">
+        <ion-icon name="information-circle-outline"/>
+      </ion-col>
+      <ion-col class="ion-padding-start">
+        <ion-card-subtitle color="medium">
+          Data provided by <a href="https://anilist.co" target="_blank" style="color: var(--ion-color-primary); text-decoration: none;">AniList</a>
+        </ion-card-subtitle>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

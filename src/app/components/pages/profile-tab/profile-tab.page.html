@@ -55,19 +55,8 @@
 
               <!-- Action Buttons -->
               <div class="profile-actions">
-                @if (isAuthenticated) {
-                  <ion-button fill="outline" color="danger" size="small" (click)="logout()">
-                    <ion-icon slot="start" name="log-out-outline"></ion-icon>
-                    Logout
-                  </ion-button>
-                } @else {
-                  <ion-button color="primary" size="small" (click)="login()">
-                    <ion-icon slot="start" name="log-in-outline"></ion-icon>
-                    Login with AniList
-                  </ion-button>
-                }
                 <ion-buttons>
-                  <ion-button size="small">
+                  <ion-button size="small" (click)="goToSettings()">
                     <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
                   </ion-button>
                 </ion-buttons>
