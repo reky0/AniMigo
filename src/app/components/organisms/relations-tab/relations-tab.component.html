@@ -17,7 +17,8 @@
                 @for (related of data.relations.edges; track $index) {
                   <ion-col size="4" sizeLg="2">
                     <app-catalog-item
-                      [image]="related.node.coverImage?.large ?? related.node.coverImage?.medium"
+                      [image]="related.node.coverImage?.large?.replace('medium', 'large') ?? related.node.coverImage?.medium"
+                      [fallbackImage]="related.node.coverImage?.large"
                       [title]="related.node.title.english ?? related.node.title.romaji"
                       [note]="toSentenceCase(related.relationType)"
                       (click)="goToDetails(related.node.id, related.node.type)"

@@ -26,7 +26,8 @@
               <app-catalog-item
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
-                [image]="media.coverImage?.large ?? media.coverImage?.medium"
+                [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
+                [fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }
@@ -51,7 +52,8 @@
               <app-catalog-item
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
-                [image]="media.coverImage?.large ?? media.coverImage?.medium"
+                [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
+                [fallbackImage]="media.coverImage?.large"
                 />
             }
           </ion-list>
@@ -75,7 +77,8 @@
               <app-catalog-item
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
-                [image]="media.coverImage?.large ?? media.coverImage?.medium"
+                [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
+                [fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }
@@ -100,7 +103,8 @@
               <app-catalog-item
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
-                [image]="media.coverImage?.large ?? media.coverImage?.medium"
+                [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
+                [fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }
@@ -125,7 +129,8 @@
               <app-catalog-item
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
-                [image]="media.coverImage?.large ?? media.coverImage?.medium"
+                [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
+                [fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }

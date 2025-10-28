@@ -11,6 +11,7 @@ import { IonicModule } from "@ionic/angular";
 })
 export class CatalogItemComponent extends LoadingStateComponent implements OnInit {
   @Input() image: string | null | undefined = null;
+  @Input() fallbackImage: string | null | undefined = null;
   @Input() title: string | null | undefined = null;
   @Input() note: string | null | undefined = null;
   @Input() rating: number | null | undefined = null;
@@ -21,4 +22,10 @@ export class CatalogItemComponent extends LoadingStateComponent implements OnIni
   }
 
   ngOnInit() { }
+
+  onImageError() {
+    if (this.image !== this.fallbackImage) {
+      this.image = this.fallbackImage;
+    }
+  }
 }

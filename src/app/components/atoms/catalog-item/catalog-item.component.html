@@ -13,7 +13,7 @@
   } @else {
     <ion-row class="img-container">
       <ion-col>
-        <ion-img [src]="image" class="img"></ion-img>
+        <ion-img [src]="image" class="img" (ionError)="onImageError()"></ion-img>
       </ion-col>
     </ion-row>
     <ion-row class="label-container">
