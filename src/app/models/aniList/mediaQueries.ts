@@ -113,6 +113,7 @@ export const GET_MEDIA_BY_ID = gql`
                 large
                 medium
               }
+              isFavourite
               bannerImage
               description(asHtml: false)
               averageScore
@@ -307,6 +308,7 @@ export const GET_CHARACTER_BY_ID = gql`
               age
               gender
               bloodType
+              isFavourite
               media(page: 1, perPage: 15) {
                 pageInfo {
                   currentPage
@@ -915,6 +917,7 @@ export const GET_USER_PROFILE_DATA = gql`
             format
             seasonYear
             averageScore
+            isAdult
           }
         }
         manga(page: 1, perPage: 6) {
@@ -933,6 +936,7 @@ export const GET_USER_PROFILE_DATA = gql`
             format
             seasonYear
             averageScore
+            isAdult
           }
         }
         characters(page: 1, perPage: 6) {

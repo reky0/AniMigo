@@ -242,19 +242,10 @@
 }
 .list-stats-card {
   margin: 0;
-}
-.social-stat {
-  text-align: center;
-  padding: 8px 0;
-}
-.social-value {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--ion-color-primary);
-}
-.social-label {
-  font-size: 12px;
-  color: var(--ion-color-medium);
+
+  ion-badge {
+    padding: 10px
+  }
 }
 @media (min-width: 992px) {
   .profile-content {

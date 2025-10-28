@@ -8,14 +8,16 @@ import { logInOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline
 import { GET_CURRENT_USER, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
 import { User } from 'src/app/models/aniList/responseInterfaces';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
-import { IonicModule } from "@ionic/angular";
+import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile-tab',
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle]
+  imports: [IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, PersonItemComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
@@ -42,7 +44,9 @@ export class ProfileTabPage implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private router: Router,
+    private readonly toastController: ToastController,
   ) {
     addIcons({ calendarOutline, logOutOutline, logInOutline, settingsOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, playCircleOutline, checkmarkCircleOutline, pauseCircleOutline, closeCircleOutline, bookmarkOutline, shieldCheckmarkOutline, keyOutline, linkOutline });
   }
@@ -78,7 +82,7 @@ export class ProfileTabPage implements OnInit {
     this.error = null;
 
     // First get the current user ID
-    this.apiService.fetchCurrentUser(GET_CURRENT_USER, false).subscribe({
+    this.apiService.fetchCurrentUser(GET_CURRENT_USER).subscribe({
       next: (result) => {
         if (result.data?.Viewer) {
           const userId = result.data.Viewer.id;
@@ -100,7 +104,7 @@ export class ProfileTabPage implements OnInit {
   }
 
   loadFullProfileData(userId: number) {
-    this.apiService.fetchUserProfileData(GET_USER_PROFILE_DATA, { userId }, false).subscribe({
+    this.apiService.fetchUserProfileData(GET_USER_PROFILE_DATA, { userId }).subscribe({
       next: (result) => {
         if (result.data?.User) {
           this.userData = result.data.User;
@@ -123,7 +127,7 @@ export class ProfileTabPage implements OnInit {
   }
 
   loadStatusCounts(userId: number) {
-    this.apiService.fetchUserMediaList(GET_USER_STATUS_COUNTS, { userId }, false).subscribe({
+    this.apiService.fetchUserMediaList(GET_USER_STATUS_COUNTS, { userId }).subscribe({
       next: (result: any) => {
         console.log('Raw status counts response:', result);
 
@@ -201,7 +205,7 @@ export class ProfileTabPage implements OnInit {
   }
 
   get userBanner(): string {
-    return this.userData?.bannerImage || '';
+    return this.userData?.bannerImage || 'assets/images/animigo-logo-banner.jpeg';
   }
 
   get joinDate(): string {
@@ -308,5 +312,29 @@ export class ProfileTabPage implements OnInit {
   get followingCount(): number {
     // AniList doesn't expose following count in User query, would need separate query
     return 0; // Placeholder
+  }
+
+  goToDetails(id: number, type: 'ANIME' | 'MANGA', isAdult: boolean | null | undefined) {
+    if (isAdult) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+    } else {
+      this.router.navigate(['media', type.toLowerCase(), id])
+    }
+  }
+
+  private async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      animated: true,
+      icon: 'alert-circle',
+      color: 'danger',
+      position: 'bottom',
+      cssClass: 'multiline-toast', // Add custom class
+      swipeGesture: 'vertical'
+    });
+    console.log(message);
+
+    await toast.present();
   }
 }

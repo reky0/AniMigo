@@ -12,6 +12,7 @@ import { toSentenceCase } from 'src/app/helpers/utils';
 export class PersonItemComponent  implements OnInit {
   @Input() loading: boolean = false;
   @Input() image: string | null | undefined = "";
+  @Input() fallbackImage: string | null | undefined = "";
   @Input() name: string = "";
   @Input() note: string = "";
 
@@ -21,4 +22,9 @@ export class PersonItemComponent  implements OnInit {
 
   ngOnInit() {}
 
+  onImageError() {
+    if (this.image !== this.fallbackImage) {
+      this.image = this.fallbackImage;
+    }
+  }
 }

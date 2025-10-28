@@ -177,6 +177,7 @@ export interface DetailedMedia {
   bannerImage?: string | null;
   genres?: string[] | null;
   isAdult?: boolean | null;
+  isFavourite?: boolean | null;
 
   averageScore?: number | null;                 // Average score in percentage
   meanScore?: number | null;                 // Average score in percentage
@@ -268,6 +269,7 @@ export interface Character {
   age?: string;
   gender?: string;
   bloodType?: string | null;
+  isFavourite?: boolean | null;
   media: {
     pageInfo: PageInfo,
     edges: Array<{
@@ -494,6 +496,7 @@ export interface FavouriteMedia {
     format?: string | null;
     seasonYear?: number | null;
     averageScore?: number | null;
+    isAdult?: boolean | null;
   }>;
 }
 

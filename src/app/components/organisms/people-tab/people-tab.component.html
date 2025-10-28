@@ -93,31 +93,41 @@
               <ion-icon name="arrow-back" />
             </ion-button>
           </ion-buttons>
+
+          <ion-buttons slot="end">
+            <ion-button>
+              <ion-icon slot="icon-only" name="heart" [color]="modalData?.isFavourite ? 'danger' : 'white'"></ion-icon>
+            </ion-button>
+
+            <ion-button>
+              <ion-icon slot="icon-only" name="share-social"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
         <ion-toolbar>
           <ion-grid>
             <ion-row>
               <ion-col>
                 <ion-segment
-                    [value]="modalSelectedTab"
-                    (ionChange)="onSegmentChange($event)"
-                    mode="md"
-                    class="tab-segment">
+                  [value]="modalSelectedTab"
+                  (ionChange)="onSegmentChange($event)"
+                  mode="md"
+                  class="tab-segment">
 
-                    <ion-segment-button value="info" layout="icon-top">
-                      <ion-icon name="information-circle"></ion-icon>
+                  <ion-segment-button value="info" layout="icon-top">
+                    <ion-icon name="information-circle"></ion-icon>
+                  </ion-segment-button>
+
+                  <ion-segment-button value="media" layout="icon-top">
+                    <ion-icon name="film"></ion-icon>
+                  </ion-segment-button>
+
+                  <!-- @if (modalData?.voiceActingRoles) {
+                    <ion-segment-button value="va" layout="icon-top">
+                      <ion-icon name="mic"></ion-icon>
                     </ion-segment-button>
-
-                    <ion-segment-button value="media" layout="icon-top">
-                      <ion-icon name="film"></ion-icon>
-                    </ion-segment-button>
-
-                    <!-- @if (modalData?.voiceActingRoles) {
-                      <ion-segment-button value="va" layout="icon-top">
-                        <ion-icon name="mic"></ion-icon>
-                      </ion-segment-button>
-                    } -->
-                  </ion-segment>
+                  } -->
+                </ion-segment>
               </ion-col>
             </ion-row>
           </ion-grid>

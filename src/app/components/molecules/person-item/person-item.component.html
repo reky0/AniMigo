@@ -4,7 +4,7 @@
       @if (loading) {
         <ion-skeleton-text class="img-loading" animated/>
       } @else {
-        <ion-img class="img" [src]="image" />
+        <ion-img class="img" [src]="image" (ionError)="onImageError()" />
       }
     </ion-col>
   </ion-row>

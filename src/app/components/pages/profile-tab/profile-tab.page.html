@@ -13,11 +13,11 @@
   } @else {
     <!-- Profile Banner -->
     <div class="profile-banner">
-    @if (userBanner) {
+      @if (loading) {
+        <ion-skeleton-text animated />
+      } @else {
         <div class="banner-image" [style.background-image]="'url(' + userBanner + ')'"></div>
         <div class="banner-overlay"></div>
-      } @else {
-        <ion-skeleton-text animated />
       }
     </div>
 
@@ -135,12 +135,12 @@
             <div class="content-section">
               <div class="section-header">
                 <h2>Favorite Anime</h2>
-                @if (isAuthenticated && userData?.siteUrl) {
+                <!-- @if (isAuthenticated && userData?.siteUrl) {
                   <ion-button fill="clear" size="small" [href]="(userData?.siteUrl || '') + '/animelist'" target="_blank">
                     View List
                     <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
                   </ion-button>
-                }
+                } -->
               </div>
 
               @if (loading && !userData) {
@@ -152,7 +152,9 @@
                       <ion-col size="4" sizeMd="2">
                         <app-catalog-item
                           [title]="anime.title.romaji || anime.title.english"
-                          [image]="anime.coverImage.large?.replace('medium', 'large')"
+                          [image]="anime.coverImage.large?.replace('medium', 'large') ?? anime.coverImage.medium"
+                          [fallbackImage]="anime.coverImage.large"
+                          (click)="goToDetails(anime.id, anime.type, anime.isAdult)"
                           />
                       </ion-col>
                     }
@@ -161,19 +163,13 @@
               } @else {
                 <ion-card>
                   <ion-card-content>
-                    <p class="empty-state">No favorite anime yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                    <p class="empty-state">No favorite animes yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
                   </ion-card-content>
                 </ion-card>
               }
 
               <div class="section-header">
                 <h2>Favorite Manga</h2>
-                @if (isAuthenticated && userData?.siteUrl) {
-                  <ion-button fill="clear" size="small" [href]="(userData?.siteUrl || '') + '/mangalist'" target="_blank">
-                    View List
-                    <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
-                  </ion-button>
-                }
               </div>
 
               @if (loading && !userData) {
@@ -185,7 +181,9 @@
                       <ion-col size="4" sizeMd="2">
                         <app-catalog-item
                           [title]="manga.title.romaji || manga.title.english"
-                          [image]="manga.coverImage.large?.replace('medium', 'large')"
+                          [image]="manga.coverImage.large?.replace('medium', 'large') ?? manga.coverImage.medium"
+                          [fallbackImage]="manga.coverImage.large"
+                          (click)="goToDetails(manga.id, manga.type, manga.isAdult)"
                           />
                       </ion-col>
                     }
@@ -194,7 +192,35 @@
               } @else {
                 <ion-card>
                   <ion-card-content>
-                    <p class="empty-state">No favorite anime yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                    <p class="empty-state">No favorite mangas yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                  </ion-card-content>
+                </ion-card>
+              }
+
+              <div class="section-header">
+                <h2>Favorite Characters</h2>
+              </div>
+
+              @if (loading && !userData) {
+                <div class="loading-placeholder">Loading favorites...</div>
+              } @else if (favoriteCharacters.length > 0) {
+                <ion-grid class="favorites-grid">
+                  <ion-row>
+                    @for (character of favoriteCharacters; track $index) {
+                      <ion-col size="4" sizeMd="2">
+                        <app-person-item
+                          [name]="character.name.full"
+                          [image]="character.image.large?.replace('medium', 'large') ?? character.image.medium"
+                          [fallbackImage]="character.image.large"
+                          />
+                      </ion-col>
+                    }
+                  </ion-row>
+                </ion-grid>
+              } @else {
+                <ion-card>
+                  <ion-card-content>
+                    <p class="empty-state">No favorite characters yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
                   </ion-card-content>
                 </ion-card>
               }
