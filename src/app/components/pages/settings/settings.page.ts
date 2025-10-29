@@ -61,8 +61,8 @@ export class SettingsPage implements OnInit {
       this.apiService.fetchCurrentUser(GET_CURRENT_USER).subscribe({
         next: (result) => {
           if (result.data?.Viewer) {
-            const userId = result.data.Viewer.id;
-            console.log('User ID:', userId);
+            this.userData = result.data.Viewer;
+            console.log('User ID:', this.userData.id);
           } else {
             this.loading = false;
             window.location.reload();

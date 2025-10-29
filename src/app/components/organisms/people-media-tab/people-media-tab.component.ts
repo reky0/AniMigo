@@ -15,7 +15,7 @@ import { MediaListItemComponent } from "@components/molecules/media-list-item/me
 export class PeopleMediaTabComponent implements OnInit {
   // TODO: Add same functionality for staff and voice actors too
   @Input() data: Character | undefined;
-  @Output() navigate = new EventEmitter<{ id: number, type: string }>(); // Emit changes
+  @Output() navigate = new EventEmitter<{ id: number, type: string, isAdult: boolean }>(); // Emit changes
 
   toSentenceCase = toSentenceCase;
 
@@ -34,24 +34,22 @@ export class PeopleMediaTabComponent implements OnInit {
   ngOnInit() {
     console.log(this.data);
 
-    const edges = this.data?.media.edges ?? [];
-    this.mediaEdges = [...edges];
-    for (const e of edges) this.mediaIdSet.add(e?.node.id);
+    // Start from page 0 so first loadMore fetches page 1
+    this.currentPage = 0;
+    this.hasNextPage = true;
 
-    const pageInfo = this.data?.media.pageInfo;
-    if (pageInfo) {
-      this.currentPage = pageInfo?.currentPage ?? 1;
-      this.perPage = pageInfo?.perPage ?? 20;
-      this.hasNextPage = pageInfo?.hasNextPage ?? false;
-    }
+    // Trigger initial load
+    this.loadMore(null);
   }
 
-  triggerNavigationEvent(type: 'ANIME' | 'MANGA', id: number) {
-    this.navigate.emit({ type: type.toLowerCase(), id: id });
+  triggerNavigationEvent(type: 'ANIME' | 'MANGA', id: number, isAdult: boolean) {
+    this.navigate.emit({ type: type.toLowerCase(), id: id, isAdult: isAdult });
   }
 
   // TODO: Add same functionality for staff and voice actors too
   async loadMore(event: any) {
+    console.log("loadMore triggered.");
+
     if (this.loadingMore || !this.hasNextPage || !this.data?.id) {
       event?.target?.complete();
       return;
@@ -77,6 +75,9 @@ export class PeopleMediaTabComponent implements OnInit {
               if (id && !this.mediaIdSet.has(id)) {
                 this.mediaIdSet.add(id);
                 this.mediaEdges.push(e);
+
+                console.log(this.mediaEdges);
+
               }
             }
 
@@ -86,14 +87,14 @@ export class PeopleMediaTabComponent implements OnInit {
           }
 
           this.loadingMore = false;
-          event.target.complete();
-          if (!this.hasNextPage) {
+          event?.target?.complete();
+          if (!this.hasNextPage && event?.target) {
             event.target.disabled = true;
           }
         },
         error: () => {
           this.loadingMore = false;
-          event.target.complete();
+          event?.target?.complete();
         }
       });
   }

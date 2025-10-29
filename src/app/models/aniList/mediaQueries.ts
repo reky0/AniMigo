@@ -26,6 +26,7 @@ export const GET_TRENDING_MEDIA = gql`
                 }
                 averageScore
                 type
+                isFavourite
               }
             }
           }
@@ -64,6 +65,7 @@ export const GET_NEXT_SEASON_ANIMES = gql`
                 season
                 seasonYear
                 type
+                isFavourite
               }
             }
           }
@@ -95,6 +97,7 @@ export const GET_NEWLY_ADDED_MEDIA = gql`
                 }
                 averageScore
                 type
+                isFavourite
               }
             }
           }
@@ -188,6 +191,7 @@ export const GET_MEDIA_BY_ID = gql`
                     type
                     format
                     status
+                    isFavourite
                   }
                 }
               }
@@ -205,6 +209,7 @@ export const GET_MEDIA_BY_ID = gql`
                     }
                     siteUrl
                     type
+                    isFavourite
                   }
                   rating
                 }
@@ -280,6 +285,16 @@ export const GET_MEDIA_BY_ID = gql`
                     amount
                     score
                 }
+              }
+              startDate {
+                day,
+                month,
+                year
+              }
+              endDate {
+                day,
+                month,
+                year
               }
             }
           }
@@ -368,6 +383,10 @@ export const GET_CHARACTER_MEDIA = gql`
             format
             seasonYear
             averageScore
+            isFavourite
+            startDate {
+              year
+            }
           }
         }
       }
@@ -432,6 +451,7 @@ export const GET_TOP_MEDIA = gql`
         type
         isAdult
         format
+        isFavourite
       }
     }
   }

@@ -3,7 +3,8 @@
     @for (media of mediaEdges; track $index) {
       <app-media-list-item
         [media]="media.node"
-        (click)="triggerNavigationEvent(media.node.type, media.node.id)"
+        [isFavourite]="media.node.isFavourite"
+        (click)="triggerNavigationEvent(media.node.type, media.node.id, media.node.isAdult)"
         />
     }
     <ion-infinite-scroll

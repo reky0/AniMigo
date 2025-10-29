@@ -355,6 +355,37 @@ export class ApiService {
     );
   }
 
+  fetchUserFavorites(query: any, variables: Object, showToast = true): Observable<{
+    data: UserResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<UserResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only',
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load favorites');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading favorites');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
   private async showErrorToast(message: string) {
     const toast = await this.toastController.create({
       message,

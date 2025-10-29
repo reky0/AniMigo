@@ -16,6 +16,7 @@ export class CatalogItemComponent extends LoadingStateComponent implements OnIni
   @Input() note: string | null | undefined = null;
   @Input() rating: number | null | undefined = null;
   @Input() recommendation: any = null;
+  @Input() isFavourite: boolean | null | undefined = false;
 
   constructor() {
     super();

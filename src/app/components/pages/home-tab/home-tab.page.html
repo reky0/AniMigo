@@ -27,7 +27,8 @@
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
-                [fallbackImage]="media.coverImage?.large"
+                [isFavourite]="media.isFavourite"
+[fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }
@@ -53,7 +54,8 @@
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
-                [fallbackImage]="media.coverImage?.large"
+                [isFavourite]="media.isFavourite"
+[fallbackImage]="media.coverImage?.large"
                 />
             }
           </ion-list>
@@ -78,7 +80,8 @@
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
-                [fallbackImage]="media.coverImage?.large"
+                [isFavourite]="media.isFavourite"
+[fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }
@@ -104,7 +107,8 @@
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
-                [fallbackImage]="media.coverImage?.large"
+                [isFavourite]="media.isFavourite"
+[fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }
@@ -130,7 +134,8 @@
                 (click)="goToDetails(media.id, media.type)"
                 [title]="media.title.english ?? media.title.romaji"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
-                [fallbackImage]="media.coverImage?.large"
+                [isFavourite]="media.isFavourite"
+[fallbackImage]="media.coverImage?.large"
                 [rating]="media.averageScore"
                 />
             }

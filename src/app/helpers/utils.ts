@@ -37,11 +37,14 @@ export function formatDate(date: FuzzyDate | null | undefined): string {
     return "Unknown"
   }
 
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
   let day = String(date?.day) ?? '1';
-  let month = String(date?.month) ?? '1';
+  let monthNum = date?.month ?? 1;
+  let monthName = monthNames[monthNum - 1] || String(monthNum);
   let year = String(date?.year) ?? '1';
 
-  return `${day} ${month}, ${year}`
+  return `${day} ${monthName}, ${year}`
 }
 
 export function slugify(str: string): string {

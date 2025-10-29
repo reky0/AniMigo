@@ -22,6 +22,7 @@ export interface BasicMedia {
   seasonYear?: number | null;
   startDate?: FuzzyDate;
   format?: string | null;
+  isFavourite?: boolean | null;
 }
 
 export interface BasicMediaResponse {
@@ -287,6 +288,7 @@ export interface Character {
         format?: string | null;
         seasonYear?: number | null;
         averageScore?: string | null;
+        isFavourite?: boolean | null;
       }
     }>
   }
@@ -469,6 +471,7 @@ export interface MediaListEntry {
     popularity?: number | null;
     genres?: string[] | null;
     nextAiringEpisode?: NextAiringEpisode | null;
+    isFavourite?: boolean | null;
   };
 }
 
@@ -497,6 +500,7 @@ export interface FavouriteMedia {
     seasonYear?: number | null;
     averageScore?: number | null;
     isAdult?: boolean | null;
+    isFavourite?: boolean | null;
   }>;
 }
 

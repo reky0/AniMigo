@@ -21,6 +21,7 @@
                       [fallbackImage]="related.node.coverImage?.large"
                       [title]="related.node.title.english ?? related.node.title.romaji"
                       [note]="toSentenceCase(related.relationType)"
+                      [isFavourite]="related.node.isFavourite"
                       (click)="goToDetails(related.node.id, related.node.type)"
                       />
                   </ion-col>
@@ -57,6 +58,7 @@
                       [title]="recommendation.mediaRecommendation.title.english ?? recommendation.mediaRecommendation.title.romaji"
                       [rating]="recommendation.rating"
                       recommendation="true"
+                      [isFavourite]="recommendation.mediaRecommendation.isFavourite"
                       (click)="goToDetails(recommendation.mediaRecommendation.id, recommendation.mediaRecommendation.type)"
                       />
                   </ion-col>

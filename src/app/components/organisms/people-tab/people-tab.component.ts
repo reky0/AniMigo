@@ -121,7 +121,7 @@ export class PeopleTabComponent implements OnInit {
     console.log('Modal tab changed to: ' + this.modalSelectedTab);
   }
 
-  goToDetails(data: {id: number, type: string}) {
+  goToDetails(data: {id: number, type: string, isAdult: boolean}) {
     this.closeModal();
 
     setTimeout(() => {

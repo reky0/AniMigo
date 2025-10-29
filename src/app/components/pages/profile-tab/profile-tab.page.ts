@@ -1,29 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonButton, IonIcon, IonGrid, IonCol, IonRow, IonCard, IonCardContent, IonAvatar, IonBadge, IonList, IonItem, IonLabel, IonProgressBar, IonSkeletonText, IonButtons, IonText, IonImg, IonCardTitle, IonTitle } from '@ionic/angular/standalone';
+import { IonContent, IonButton, IonIcon, IonGrid, IonCol, IonRow, IonCard, IonCardContent, IonAvatar, IonBadge, IonList, IonItem, IonLabel, IonProgressBar, IonSkeletonText, IonButtons, IonText, IonImg, IonCardTitle, IonTitle, IonCardSubtitle, IonModal, IonHeader, IonToolbar, IonSpinner, IonSegmentButton } from '@ionic/angular/standalone';
 import { AuthService } from '@components/core/services/auth.service';
 import { ApiService } from '@components/core/services/api.service';
 import { addIcons } from 'ionicons';
-import { logInOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline, settingsOutline, calendarOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, createOutline, playCircleOutline, pauseCircleOutline, bookmarkOutline, shieldCheckmarkOutline, keyOutline, linkOutline } from 'ionicons/icons';
-import { GET_CURRENT_USER, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
-import { User } from 'src/app/models/aniList/responseInterfaces';
+import { logInOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline, settingsOutline, calendarOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, createOutline, playCircleOutline, pauseCircleOutline, bookmarkOutline, shieldCheckmarkOutline, keyOutline, linkOutline, arrowBack, shareSocial, informationCircle, film } from 'ionicons/icons';
+import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
+import { Character, User } from 'src/app/models/aniList/responseInterfaces';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { take } from 'rxjs';
+import { IonSegment } from "@ionic/angular/standalone";
+import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
+import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
+import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
+import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
+import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
   selector: 'app-profile-tab',
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, PersonItemComponent]
+  imports: [IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, PersonItemComponent, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
   userData: User | null = null;
   loading: boolean = false;
-  error: string | null = null;
 
   // Store accurate status counts for both anime and manga
   actualAnimeStatusCounts = {
@@ -42,13 +48,27 @@ export class ProfileTabPage implements OnInit {
     planToRead: 0
   };
 
+  isModalOpen: boolean;
+  isFavouritesModalOpen: boolean;
+  modalSelectedTab: string; // info | media | va
+  favouriteCategory: string = 'media';
+  favouriteType: string = 'anime';
+  modalData: Character | undefined;
+  isTogglingFavorite: boolean = false;
+
+  error: any;
+
   constructor(
     public authService: AuthService,
     private apiService: ApiService,
     private router: Router,
     private readonly toastController: ToastController,
   ) {
-    addIcons({ calendarOutline, logOutOutline, logInOutline, settingsOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, playCircleOutline, checkmarkCircleOutline, pauseCircleOutline, closeCircleOutline, bookmarkOutline, shieldCheckmarkOutline, keyOutline, linkOutline });
+    addIcons({ logInOutline, settingsOutline, calendarOutline, playCircleOutline, checkmarkCircleOutline, pauseCircleOutline, closeCircleOutline, bookmarkOutline, arrowBack, shareSocial, informationCircle, film, logOutOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, shieldCheckmarkOutline, keyOutline, linkOutline });
+
+    this.isModalOpen = false;
+    this.isFavouritesModalOpen = false;
+    this.modalSelectedTab = 'info';
   }
 
   ngOnInit() {
@@ -318,12 +338,173 @@ export class ProfileTabPage implements OnInit {
     this.router.navigate(['settings'])
   }
 
-  goToDetails(id: number, type: 'ANIME' | 'MANGA', isAdult: boolean | null | undefined) {
-    if (isAdult) {
+  goToDetails(data: { id: number, type: string, isAdult: boolean | null | undefined }) {
+    if (data.isAdult && !this.userData?.options?.displayAdultContent) {
       this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
     } else {
-      this.router.navigate(['media', type.toLowerCase(), id])
+
+      this.closeModal();
+
+      setTimeout(() => {
+        this.router.navigate(['media', data.type.toLowerCase(), data.id])
+      }, 100);
     }
+  }
+
+  openModal(type: 'staff' | 'character' | 'va', id: number) {
+    let variables = {
+      id: id
+    }
+
+    console.log(variables);
+
+    switch (type) {
+      case ('staff'):
+        break;
+      case ('character'):
+        this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
+          next: ({ data, loading, errors }) => {
+            this.loading = loading;
+            if (errors) {
+              this.error = errors[0];
+            } else {
+              this.modalData = data?.Character;
+              console.log(this.modalData);
+              this.isModalOpen = true;
+              // console.log(this.data?.description);
+            }
+          },
+          error: (err) => {
+            this.error = err;
+            this.loading = false;
+          }
+        });
+        break;
+      case ('va'):
+        break;
+    }
+  }
+
+  openFavouritesModal(type: 'anime' | 'manga' | 'staff' | 'characters' | 'va') {
+    switch (type) {
+      case ('anime'):
+        this.favouriteCategory = 'media';
+        this.favouriteType = type;
+        this.isFavouritesModalOpen = true;
+        break;
+      case ('manga'):
+        this.favouriteCategory = 'media';
+        this.favouriteType = type;
+        this.isFavouritesModalOpen = true;
+        break;
+      case ('staff'):
+        break;
+      case ('characters'):
+        this.favouriteCategory = 'people';
+        this.favouriteType = type;
+        this.isFavouritesModalOpen = true;
+        break;
+      case ('va'):
+        break;
+    }
+
+    this.apiService.fetchUserFavorites(GET_USER_FAVOURITES, { userId: this.userData?.id || 0 }).subscribe({
+      next: ({ data, loading, errors }) => {
+        this.loading = loading;
+        if (errors) {
+          this.error = errors[0];
+        } else {
+          // Append new favorites to existing ones, preventing duplicates
+          if (this.userData && data?.User?.favourites) {
+            const newFavourites = data.User.favourites;
+
+            // Helper function to merge and deduplicate by ID
+            const mergeUnique = <T extends { id: number }>(existing: T[], incoming: T[]): T[] => {
+              const existingIds = new Set(existing.map(item => item.id));
+              const uniqueIncoming = incoming.filter(item => !existingIds.has(item.id));
+              return [...existing, ...uniqueIncoming];
+            };
+
+            // Update userData with appended favorites (no duplicates)
+            this.userData = {
+              ...this.userData,
+              favourites: {
+                anime: {
+                  nodes: mergeUnique(
+                    this.userData.favourites?.anime?.nodes || [],
+                    newFavourites.anime?.nodes || []
+                  )
+                },
+                manga: {
+                  nodes: mergeUnique(
+                    this.userData.favourites?.manga?.nodes || [],
+                    newFavourites.manga?.nodes || []
+                  )
+                },
+                characters: {
+                  nodes: mergeUnique(
+                    this.userData.favourites?.characters?.nodes || [],
+                    newFavourites.characters?.nodes || []
+                  )
+                },
+                staff: {
+                  nodes: mergeUnique(
+                    this.userData.favourites?.staff?.nodes || [],
+                    newFavourites.staff?.nodes || []
+                  )
+                }
+              }
+            };
+
+            console.log('Appended favourites (no duplicates):', this.userData.favourites);
+          }
+        }
+      },
+      error: (err) => {
+        this.error = err;
+        this.loading = false;
+      }
+    });
+
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.isFavouritesModalOpen = false;
+    this.modalSelectedTab = 'info';
+    this.favouriteCategory = 'media';
+  }
+
+  onSegmentChange(event: any) {
+    this.modalSelectedTab = event.detail.value as string;
+
+    console.log('Modal tab changed to: ' + this.modalSelectedTab);
+  }
+
+  toggleCharacterFavorite() {
+    if (!this.modalData?.id || this.isTogglingFavorite) return;
+
+    this.isTogglingFavorite = true;
+
+    this.apiService.toggleFavoriteCharacter(this.modalData.id)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.isTogglingFavorite = false;
+          if (result.success && this.modalData) {
+            // Update local state by creating a new object
+            console.log('fav operation success');
+
+            this.modalData = {
+              ...this.modalData,
+              isFavourite: result.isFavorite
+            };
+          }
+        },
+        error: () => {
+          this.isTogglingFavorite = false;
+        }
+      });
   }
 
   private async showErrorToast(message: string) {
@@ -342,3 +523,4 @@ export class ProfileTabPage implements OnInit {
     await toast.present();
   }
 }
+

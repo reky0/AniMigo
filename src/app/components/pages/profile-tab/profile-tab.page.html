@@ -26,9 +26,11 @@
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col size="12">
-            <div class="profile-header-content">
-              <!-- Avatar -->
-              <div class="avatar-container">
+            <!-- Avatar -->
+            <ion-row class="avatar-container">
+              <ion-col size="4" sizeMd="0" />
+
+              <ion-col size="4" sizeMd="2">
                 @if (userAvatar) {
                   <ion-avatar class="profile-avatar">
                     <img [src]="userAvatar" [alt]="username + ' Avatar'" />
@@ -36,32 +38,36 @@
                 } @else {
                   <ion-skeleton-text animated class="profile-avatar" />
                 }
-                @if (isAuthenticated) {
-                  <div class="avatar-status online"></div>
-                }
-              </div>
+              </ion-col>
 
-              <!-- User Info -->
-              <div class="user-info">
-                <h1 class="username">{{ username }}</h1>
-                <p class="user-bio">{{ userBio }}</p>
-                <div class="user-meta">
-                  <span class="meta-item">
-                    <ion-icon name="calendar-outline"></ion-icon>
-                    {{ joinDate }}
-                  </span>
-                </div>
-              </div>
+              <ion-col size="2" sizeMd="8" />
 
               <!-- Action Buttons -->
-              <div class="profile-actions">
+              <ion-col size="2" class="profile-actions">
                 <ion-buttons>
-                  <ion-button size="small" (click)="goToSettings()">
+                  <ion-button
+                    (click)="goToSettings()">
                     <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
                   </ion-button>
                 </ion-buttons>
-              </div>
-            </div>
+              </ion-col>
+            </ion-row>
+
+            <!-- User Info -->
+            <ion-row class="user-info">
+              <ion-col size="12" sizeMd="6">
+                <ion-title class="username">{{ username }}</ion-title>
+              </ion-col>
+              <ion-col size="12" sizeMd="6" class="user-meta">
+                <ion-card-subtitle class="meta-item">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  {{ joinDate }}
+                </ion-card-subtitle>
+              </ion-col>
+              <ion-col size="12">
+                <ion-card-subtitle class="user-bio">{{ userBio }}</ion-card-subtitle>
+              </ion-col>
+            </ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -77,34 +83,38 @@
                 @if (loading && !userData) {
                   <div class="loading-placeholder">Loading statistics...</div>
                 } @else {
-                  <ion-grid class="ion-no-padding">
-                    <ion-row>
-                      <ion-col size="6" size-md="3">
-                        <div class="stat-item">
-                          <div class="stat-value">{{ totalAnime }}</div>
-                          <div class="stat-label">Total Anime</div>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6" size-md="3">
-                        <div class="stat-item">
-                          <div class="stat-value">{{ totalManga }}</div>
-                          <div class="stat-label">Total Manga</div>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6" size-md="3">
-                        <div class="stat-item">
-                          <div class="stat-value">{{ watchTime }}</div>
-                          <div class="stat-label">Watch Time</div>
-                        </div>
-                      </ion-col>
-                      <ion-col size="6" size-md="3">
-                        <div class="stat-item">
-                          <div class="stat-value">{{ chaptersRead }}</div>
-                          <div class="stat-label">Chapters Read</div>
-                        </div>
-                      </ion-col>
-                    </ion-row>
-                  </ion-grid>
+                  @if (totalAnime != 0 || totalManga != 0 || watchTime != '0d 0h' || chaptersRead != 0) {
+                    <ion-grid class="ion-no-padding">
+                      <ion-row>
+                        <ion-col size="6" sizeMd="3">
+                          <div class="stat-item">
+                            <div class="stat-value">{{ totalAnime }}</div>
+                            <div class="stat-label">Total Anime</div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="6" sizeMd="3">
+                          <div class="stat-item">
+                            <div class="stat-value">{{ watchTime }}</div>
+                            <div class="stat-label">Watch Time</div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="6" sizeMd="3">
+                          <div class="stat-item">
+                            <div class="stat-value">{{ totalManga }}</div>
+                            <div class="stat-label">Total Manga</div>
+                          </div>
+                        </ion-col>
+                        <ion-col size="6" sizeMd="3">
+                          <div class="stat-item">
+                            <div class="stat-value">{{ chaptersRead }}</div>
+                            <div class="stat-label">Chapters Read</div>
+                          </div>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  } @else {
+                    <p class="empty-state">No statistics available. @if (isAuthenticated) { Most stats refresh after 24h. }</p>
+                  }
                 }
               </ion-card-content>
             </ion-card>
@@ -118,18 +128,18 @@
       <ion-grid>
         <ion-row>
           <!-- Left Column - Main Content -->
-          <ion-col size="12" size-lg="8">
+          <ion-col size="12" sizeLg="8">
 
             <!-- Favorites Section -->
             <div class="content-section">
               <div class="section-header">
                 <h2>Favorite Anime</h2>
-                <!-- @if (isAuthenticated && userData?.siteUrl) {
-                  <ion-button fill="clear" size="small" [href]="(userData?.siteUrl || '') + '/animelist'" target="_blank">
-                    View List
+                @if (isAuthenticated) {
+                  <ion-button fill="clear" size="small" (click)="openFavouritesModal('anime')">
+                    View All
                     <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
                   </ion-button>
-                } -->
+                }
               </div>
 
               @if (loading && !userData) {
@@ -137,15 +147,17 @@
               } @else if (favoriteAnime.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (anime of favoriteAnime; track $index) {
-                      <ion-col size="4" sizeMd="2">
-                        <app-catalog-item
-                          [title]="anime.title.romaji || anime.title.english"
-                          [image]="anime.coverImage.large?.replace('medium', 'large') ?? anime.coverImage.medium"
-                          [fallbackImage]="anime.coverImage.large"
-                          (click)="goToDetails(anime.id, anime.type, anime.isAdult)"
-                          />
-                      </ion-col>
+                    @for (i of 6 | range; track $index) {
+                      @if (favoriteAnime[i-1]) {
+                        <ion-col size="4" sizeMd="2">
+                          <app-catalog-item
+                            [title]="favoriteAnime[i-1].title.romaji || favoriteAnime[i-1].title.english"
+                            [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
+                            [fallbackImage]="favoriteAnime[i-1].coverImage.large"
+                            (click)="goToDetails({id: favoriteAnime[i-1].id, type: favoriteAnime[i-1].type, isAdult: favoriteAnime[i-1].isAdult})"
+                            />
+                        </ion-col>
+                      }
                     }
                   </ion-row>
                 </ion-grid>
@@ -159,6 +171,12 @@
 
               <div class="section-header">
                 <h2>Favorite Manga</h2>
+                @if (isAuthenticated) {
+                  <ion-button fill="clear" size="small" (click)="openFavouritesModal('manga')">
+                    View All
+                    <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                  </ion-button>
+                }
               </div>
 
               @if (loading && !userData) {
@@ -166,15 +184,17 @@
               } @else if (favoriteManga.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (manga of favoriteManga; track $index) {
-                      <ion-col size="4" sizeMd="2">
-                        <app-catalog-item
-                          [title]="manga.title.romaji || manga.title.english"
-                          [image]="manga.coverImage.large?.replace('medium', 'large') ?? manga.coverImage.medium"
-                          [fallbackImage]="manga.coverImage.large"
-                          (click)="goToDetails(manga.id, manga.type, manga.isAdult)"
-                          />
-                      </ion-col>
+                    @for (i of 6 | range; track $index) {
+                      @if (favoriteManga[i-1]) {
+                        <ion-col size="4" sizeMd="2">
+                          <app-catalog-item
+                            [title]="favoriteManga[i-1].title.romaji || favoriteManga[i-1].title.english"
+                            [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
+                            [fallbackImage]="favoriteManga[i-1].coverImage.large"
+                            (click)="goToDetails({id: favoriteManga[i-1].id, type: favoriteManga[i-1].type, isAdult: favoriteManga[i-1].isAdult})"
+                            />
+                        </ion-col>
+                      }
                     }
                   </ion-row>
                 </ion-grid>
@@ -188,6 +208,12 @@
 
               <div class="section-header">
                 <h2>Favorite Characters</h2>
+                @if (isAuthenticated) {
+                  <ion-button fill="clear" size="small" (click)="openFavouritesModal('characters')">
+                    View All
+                    <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                  </ion-button>
+                }
               </div>
 
               @if (loading && !userData) {
@@ -195,14 +221,17 @@
               } @else if (favoriteCharacters.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (character of favoriteCharacters; track $index) {
-                      <ion-col size="4" sizeMd="2">
-                        <app-person-item
-                          [name]="character.name.full"
-                          [image]="character.image.large?.replace('medium', 'large') ?? character.image.medium"
-                          [fallbackImage]="character.image.large"
-                          />
-                      </ion-col>
+                    @for (i of 8 | range; track $index) {
+                      @if (favoriteCharacters[i-1]) {
+                        <ion-col size="4" sizeMd="1.5">
+                          <app-person-item
+                            [name]="favoriteCharacters[i-1].name.full"
+                            [image]="favoriteCharacters[i-1].image.large?.replace('medium', 'large') ?? favoriteCharacters[i-1].image.medium"
+                            [fallbackImage]="favoriteCharacters[i-1].image.large"
+                            (click)="openModal('character', favoriteCharacters[i-1].id)"
+                            />
+                        </ion-col>
+                      }
                     }
                   </ion-row>
                 </ion-grid>
@@ -348,4 +377,165 @@
     </div>
   }
 
+  <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button
+              class="closeModalButton"
+              (click)="closeModal()"
+              >
+              <ion-icon name="arrow-back" />
+            </ion-button>
+          </ion-buttons>
+
+          <ion-buttons slot="end">
+            <ion-button (click)="toggleCharacterFavorite()" [disabled]="isTogglingFavorite">
+              @if (isTogglingFavorite) {
+                <ion-spinner name="dots" slot="icon-only"></ion-spinner>
+              } @else {
+                <ion-icon
+                  slot="icon-only"
+                  [name]="modalData?.isFavourite ? 'heart' : 'heart-outline'"
+                  [color]="modalData?.isFavourite ? 'danger' : 'medium'">
+                </ion-icon>
+              }
+            </ion-button>
+
+            <ion-button>
+              <ion-icon slot="icon-only" name="share-social"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-segment
+                  [value]="modalSelectedTab"
+                  (ionChange)="onSegmentChange($event)"
+                  mode="md"
+                  class="tab-segment">
+
+                  <ion-segment-button value="info" layout="icon-top">
+                    <ion-icon name="information-circle"></ion-icon>
+                  </ion-segment-button>
+
+                  <ion-segment-button value="media" layout="icon-top">
+                    <ion-icon name="film"></ion-icon>
+                  </ion-segment-button>
+
+                  <!-- @if (modalData?.voiceActingRoles) {
+                    <ion-segment-button value="va" layout="icon-top">
+                      <ion-icon name="mic"></ion-icon>
+                    </ion-segment-button>
+                  } -->
+                </ion-segment>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-no-padding">
+        <ion-grid>
+          <ion-row class="tabsContainer">
+            @if (!loading) {
+              @switch (modalSelectedTab) {
+                @case ('info') {
+                  <app-people-info-tab [data]="modalData" [loading]="loading" />
+                }
+                @case ('media') {
+                  <app-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
+                }
+                @case ('va') {
+                  <app-people-va-tab [data]="modalData" [loading]="loading" />
+                }
+              }
+            } <!-- @else {
+              <ion-col>
+                @for (i of 7 | range; track i) {
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-skeleton-text class="skeleton" animated/>
+                    </ion-col>
+                  </ion-row>
+                }
+              </ion-col>
+            } -->
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isFavouritesModalOpen" (willDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button
+              class="closeModalButton"
+              (click)="closeModal()"
+              >
+              <ion-icon name="arrow-back" />
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-no-padding">
+        <ion-grid>
+          <ion-row>
+            @if (!loading) {
+              @switch (favouriteType) {
+                @case ('anime') {
+                  @for (anime of favoriteAnime; track $index) {
+                    <app-media-list-item
+                      [title]="anime.title.romaji || anime.title.english"
+                      [media]="anime"
+                      (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
+                      />
+                  }
+                }
+                @case ('manga') {
+                  @for (manga of favoriteManga; track $index) {
+                    <app-media-list-item
+                      [title]="manga.title.romaji || manga.title.english"
+                      [media]="manga"
+                      (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
+                      />
+                  }
+                }
+                @case ('characters') {
+                  @for (character of favoriteCharacters; track $index) {
+                    <ion-col size="4" sizeMd="3">
+                      <app-person-item
+                        [name]="character.name.full"
+                        [image]="character.image.large?.replace('medium', 'large') ?? character.image.medium"
+                        [fallbackImage]="character.image.large"
+                        (click)="openModal('character', character.id)"
+                        />
+                    </ion-col>
+                  }
+                }
+              }
+
+            } <!-- @else {
+              <ion-col>
+                @for (i of 7 | range; track i) {
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-skeleton-text class="skeleton" animated/>
+                    </ion-col>
+                  </ion-row>
+                }
+              </ion-col>
+            } -->
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>
+

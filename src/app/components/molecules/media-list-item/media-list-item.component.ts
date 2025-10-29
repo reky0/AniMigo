@@ -13,6 +13,7 @@ import { toSentenceCase } from 'src/app/helpers/utils';
 export class MediaListItemComponent  implements OnInit {
   @Input() media: any;
   @Input() tag: string | undefined;
+  @Input() isFavourite: boolean = false;
 
   coverImg: string = '';
 

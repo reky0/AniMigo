@@ -56,7 +56,7 @@
                   <app-meta-item [icon]="data?.type==='MANGA' ? 'book-outline' : 'tv-outline'" [text]="data?.format ? toSentenceCase(data?.format, ' ') : 'Unknown'" nolines [loading]="loading"/>
                 </ion-col>
                 <ion-col size="12">
-                  <app-meta-item icon="time" [text]="data?.episodes ? data?.episodes+' episodes' : 'Unknown'" nolines [loading]="loading"/>
+                  <app-meta-item icon="time" [text]="data?.episodes ? data?.episodes+' episodes' : data?.chapters ? data?.chapters+' chapters' : 'Unknown'" nolines [loading]="loading"/>
                 </ion-col>
                 <ion-col size="12">
                   <app-meta-item icon="radio" [text]="data?.status ? toSentenceCase(data?.status, ' ') : 'Unknown'" nolines [loading]="loading"/>

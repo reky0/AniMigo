@@ -14,6 +14,9 @@
     <ion-row class="img-container">
       <ion-col>
         <ion-img [src]="image" class="img" (ionError)="onImageError()"></ion-img>
+        @if (isFavourite) {
+          <div class="favorite-tag"> <ion-icon name="heart" class="heart-icon"></ion-icon></div>
+        }
       </ion-col>
     </ion-row>
     <ion-row class="label-container">
