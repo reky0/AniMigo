@@ -37,7 +37,7 @@
               color="primary"
               class="filter-chip ion-color-secondary"
               [class.active]="category === 'anime'"
-              (click)="category = 'anime'; performSearch()"
+              (click)="category = 'anime'; performSearch(searchQuery !== storedQuery)"
               >
               <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
               Anime
@@ -49,7 +49,7 @@
               color="primary"
               class="filter-chip ion-color-secondary"
               [class.active]="category === 'manga'"
-              (click)="category = 'manga'; performSearch()"
+              (click)="category = 'manga'; performSearch(searchQuery !== storedQuery)"
               >
               <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
               Manga
@@ -61,7 +61,7 @@
               color="primary"
               class="filter-chip ion-color-secondary"
               [class.active]="category === 'characters'"
-              (click)="category = 'characters'; performSearch()"
+              (click)="category = 'characters'; performSearch(searchQuery !== storedQuery)"
               >
               <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
               Characters
