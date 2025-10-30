@@ -19,6 +19,7 @@ import {
   TOGGLE_FAVORITE_STUDIO
 } from 'src/app/models/aniList/mutations';
 import { ToastController } from '@ionic/angular';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,7 @@ export class ApiService {
   constructor(
     private readonly apollo: Apollo,
     private readonly toastController: ToastController,
+    private readonly authService: AuthService
   ) { }
 
   fetchBasicData(query: any, variables: Object, showToast = true): Observable<{
@@ -36,7 +38,8 @@ export class ApiService {
   }> {
     const queryRef = this.apollo.watchQuery<BasicMediaResponse>({
       query: query,
-      variables: variables
+      variables: variables,
+      fetchPolicy: 'cache-and-network',
     });
 
     return queryRef.valueChanges.pipe(
@@ -68,7 +71,8 @@ export class ApiService {
   }> {
     const queryRef = this.apollo.watchQuery<DetailedMediaResponse>({
       query: query,
-      variables: variables
+      variables: variables,
+      fetchPolicy: 'cache-and-network',
     });
 
     return queryRef.valueChanges.pipe(
@@ -100,7 +104,8 @@ export class ApiService {
   }> {
     const queryRef = this.apollo.watchQuery<CharacterResponse>({
       query: query,
-      variables: variables
+      variables: variables,
+      fetchPolicy: 'cache-and-network',
     });
 
     return queryRef.valueChanges.pipe(
@@ -133,6 +138,7 @@ export class ApiService {
     const queryRef = this.apollo.watchQuery<CharacterResponse>({
       query: query,
       variables: variables,
+      fetchPolicy: 'cache-and-network',
     });
 
     return queryRef.valueChanges.pipe(
@@ -608,7 +614,7 @@ export class ApiService {
     let message = `Failed to toggle ${entityName.toLowerCase()} favorite`;
 
     // Check for authentication error
-    if (error.message?.includes('authentication') || error.message?.includes('token')) {
+    if (error.message?.includes('authentication') || error.message?.includes('token') || !this.authService.isAuthenticated()) {
       message = 'Please log in to manage favorites';
     }
 

@@ -151,7 +151,7 @@
                       @if (favoriteAnime[i-1]) {
                         <ion-col size="4" sizeMd="2">
                           <app-catalog-item
-                            [title]="favoriteAnime[i-1].title.romaji || favoriteAnime[i-1].title.english"
+                            [title]="favoriteAnime[i-1].title.english || favoriteAnime[i-1].title.romaji"
                             [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
                             [fallbackImage]="favoriteAnime[i-1].coverImage.large"
                             (click)="goToDetails({id: favoriteAnime[i-1].id, type: favoriteAnime[i-1].type, isAdult: favoriteAnime[i-1].isAdult})"
@@ -188,7 +188,7 @@
                       @if (favoriteManga[i-1]) {
                         <ion-col size="4" sizeMd="2">
                           <app-catalog-item
-                            [title]="favoriteManga[i-1].title.romaji || favoriteManga[i-1].title.english"
+                            [title]="favoriteManga[i-1].title.english || favoriteManga[i-1].title.romaji"
                             [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
                             [fallbackImage]="favoriteManga[i-1].coverImage.large"
                             (click)="goToDetails({id: favoriteManga[i-1].id, type: favoriteManga[i-1].type, isAdult: favoriteManga[i-1].isAdult})"
@@ -491,7 +491,7 @@
                 @case ('anime') {
                   @for (anime of favoriteAnime; track $index) {
                     <app-media-list-item
-                      [title]="anime.title.romaji || anime.title.english"
+                      [title]="anime.title.english ?? anime.title.romaji"
                       [media]="anime"
                       (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
                       />
@@ -500,7 +500,7 @@
                 @case ('manga') {
                   @for (manga of favoriteManga; track $index) {
                     <app-media-list-item
-                      [title]="manga.title.romaji || manga.title.english"
+                      [title]="manga.title.english ?? manga.title.romaji"
                       [media]="manga"
                       (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
                       />

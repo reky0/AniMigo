@@ -8,9 +8,16 @@
 
 <ion-content>
   <!-- <ion-text>Home Tab Works</ion-text> -->
+  @if (platformService.isTouchDevice()) {
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+      <ion-refresher-content
+        refreshingSpinner="circles"
+      />
+    </ion-refresher>
+  }
 
   <ion-grid>
-    <ion-row>
+    <ion-row class="ion-margin-top ion-margin-bottom">
       <ion-col>
         <app-section-header title="Trending now" [loading]="false"></app-section-header>
 
@@ -37,7 +44,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row class="ion-margin-top ion-margin-bottom">
       <ion-col>
         <app-section-header title="Next season" [loading]="false"></app-section-header>
 
@@ -63,7 +70,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row class="ion-margin-top ion-margin-bottom">
       <ion-col>
         <app-section-header title="Trending manga" [loading]="false"></app-section-header>
 
@@ -90,7 +97,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row class="ion-margin-top ion-margin-bottom">
       <ion-col>
         <app-section-header title="Newly added anime" [loading]="false"></app-section-header>
 
@@ -117,7 +124,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
+    <ion-row class="ion-margin-top ion-margin-bottom">
       <ion-col>
         <app-section-header title="Newly added manga" [loading]="false"></app-section-header>
 

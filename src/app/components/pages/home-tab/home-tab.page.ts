@@ -4,20 +4,30 @@ import { FormsModule } from '@angular/forms';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { PlatformService } from '@components/core/services/platform.service';
 import { SectionHeaderComponent } from "@components/molecules/section-header/section-header.component";
-import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, IonRow } from '@ionic/angular/standalone';
+import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, IonRow, IonRefresherContent, IonRefresher } from '@ionic/angular/standalone';
 
 import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api.service';
 import { GET_NEWLY_ADDED_MEDIA, GET_NEXT_SEASON_ANIMES, GET_TRENDING_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from 'src/app/helpers/range.pipe';
+import { forkJoin } from 'rxjs';
+import { tap, filter, take } from 'rxjs/operators';
+
+interface DataSection {
+  data: BasicMedia[] | null | undefined;
+  loading: boolean;
+  query: any;
+  variables: any;
+  key: 'trendingAnimes' | 'nextSeasonAnimes' | 'trendingMangas' | 'newlyAddedAnimes' | 'newlyAddedMangas';
+}
 
 @Component({
   selector: 'app-home-tab',
   templateUrl: './home-tab.page.html',
   styleUrls: ['./home-tab.page.scss'],
   standalone: true,
-  imports: [IonList, IonContent, IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, SectionHeaderComponent, CatalogItemComponent, IonCol, RangePipe, IonGrid, IonRow]
+  imports: [IonRefresher, IonRefresherContent, IonList, IonContent, IonTitle, IonToolbar, CommonModule, FormsModule, IonHeader, SectionHeaderComponent, CatalogItemComponent, IonCol, RangePipe, IonGrid, IonRow]
 })
 export class HomeTabPage implements OnInit {
   platformService: PlatformService = inject(PlatformService);
@@ -41,131 +51,217 @@ export class HomeTabPage implements OnInit {
 
   error: any;
 
+  private dataSections: DataSection[] = [
+    {
+      data: null,
+      loading: true,
+      query: GET_TRENDING_MEDIA,
+      variables: {
+        page: 1,
+        perPage: 20,
+        isAdult: false,
+        type: 'ANIME',
+        context: "trendingAnimes",
+        sort: 'TRENDING_DESC',
+      },
+      key: 'trendingAnimes'
+    },
+    {
+      data: null,
+      loading: true,
+      query: GET_NEXT_SEASON_ANIMES,
+      variables: {
+        page: 1,
+        perPage: 20,
+        season: "WINTER",
+        seasonYear: 2026,
+        isAdult: false
+      },
+      key: 'nextSeasonAnimes'
+    },
+    {
+      data: null,
+      loading: true,
+      query: GET_TRENDING_MEDIA,
+      variables: {
+        page: 1,
+        perPage: 20,
+        isAdult: false,
+        type: 'MANGA',
+        context: "trendingMangas",
+        sort: 'TRENDING_DESC',
+      },
+      key: 'trendingMangas'
+    },
+    {
+      data: null,
+      loading: true,
+      query: GET_NEWLY_ADDED_MEDIA,
+      variables: {
+        page: 1,
+        perPage: 20,
+        isAdult: false,
+        type: 'ANIME',
+        context: "newlyAddedAnimes",
+        sort: 'ID_DESC',
+      },
+      key: 'newlyAddedAnimes'
+    },
+    {
+      data: null,
+      loading: true,
+      query: GET_NEWLY_ADDED_MEDIA,
+      variables: {
+        page: 1,
+        perPage: 20,
+        isAdult: false,
+        type: 'MANGA',
+        context: "newlyAddedMangas",
+        sort: 'ID_DESC',
+      },
+      key: 'newlyAddedMangas'
+    }
+  ];
 
   constructor(private readonly apiService: ApiService, private readonly router: Router) { }
 
   ngOnInit() {
-    let trendingAnimesVariables = {
-      page: 1,
-      perPage: 20,
-      isAdult: false,
-      type: 'ANIME',
-      context: "trendingAnimes",
-      sort: 'TRENDING_DESC',
-    };
+    this.loadAllData();
+  }
 
-    let nextSeasonAnimesVariables = {
-      page: 1,
-      perPage: 20,
-      season: "WINTER",
-      seasonYear: 2026,
-      isAdult: false
-    };
-
-    let trendingMangasVariables = {
-      page: 1,
-      perPage: 20,
-      isAdult: false,
-      type: 'MANGA',
-      context: "trendingMangas",
-      sort: 'TRENDING_DESC',
-    };
-
-    let newlyAddedAnimesVariables = {
-      page: 1,
-      perPage: 20,
-      isAdult: false,
-      type: 'ANIME',
-      context: "newlyAddedAnimes",
-      sort: 'ID_DESC',
-    };
-
-    let newlyAddedMangasVariables = {
-      page: 1,
-      perPage: 20,
-      isAdult: false,
-      type: 'MANGA',
-      context: "newlyAddedMangas",
-      sort: 'ID_DESC',
-    };
-
-    this.apiService.fetchBasicData(GET_TRENDING_MEDIA, trendingAnimesVariables).subscribe({
-      next: ({ data, loading, errors }) => {
+  private setLoadingState(key: DataSection['key'], loading: boolean) {
+    switch (key) {
+      case 'trendingAnimes':
         this.trendingAnimesLoading = loading;
-        if (errors) {
-          this.error = errors[0];
-        } else {
-          this.trendingAnimes = data?.Page.media;
-        }
-      },
-      error: (err) => {
-        this.error = err;
-        this.trendingAnimesLoading = false;
-      }
-    });
-
-    this.apiService.fetchBasicData(GET_NEXT_SEASON_ANIMES, nextSeasonAnimesVariables).subscribe({
-      next: ({ data, loading, errors }) => {
+        break;
+      case 'nextSeasonAnimes':
         this.nextSeasonAnimesLoading = loading;
-        if (errors) {
-          this.error = errors[0];
-        } else {
-          this.nextSeasonAnimes = data?.Page.media;
-        }
-      },
-      error: (err) => {
-        this.error = err;
-        this.nextSeasonAnimesLoading = false;
-      }
-    });
-
-    this.apiService.fetchBasicData(GET_TRENDING_MEDIA, trendingMangasVariables).subscribe({
-      next: ({ data, loading, errors }) => {
+        break;
+      case 'trendingMangas':
         this.trendingMangasLoading = loading;
-        if (errors) {
-          this.error = errors[0];
-        } else {
-          this.trendingMangas = data?.Page.media;
-        }
-      },
-      error: (err) => {
-        this.error = err;
-        this.trendingMangasLoading = false;
-      }
-    });
-
-    this.apiService.fetchBasicData(GET_NEWLY_ADDED_MEDIA, newlyAddedAnimesVariables).subscribe({
-      next: ({ data, loading, errors }) => {
+        break;
+      case 'newlyAddedAnimes':
         this.newlyAddedAnimesLoading = loading;
-        if (errors) {
-          this.error = errors[0];
-        } else {
-          this.newlyAddedAnimes = data?.Page.media;
-        }
-      },
-      error: (err) => {
-        this.error = err;
-        this.newlyAddedAnimesLoading = false;
-      }
+        break;
+      case 'newlyAddedMangas':
+        this.newlyAddedMangasLoading = loading;
+        break;
+    }
+  }
+
+  private setData(key: DataSection['key'], data: BasicMedia[] | null | undefined) {
+    switch (key) {
+      case 'trendingAnimes':
+        this.trendingAnimes = data;
+        break;
+      case 'nextSeasonAnimes':
+        this.nextSeasonAnimes = data;
+        break;
+      case 'trendingMangas':
+        this.trendingMangas = data;
+        break;
+      case 'newlyAddedAnimes':
+        this.newlyAddedAnimes = data;
+        break;
+      case 'newlyAddedMangas':
+        this.newlyAddedMangas = data;
+        break;
+    }
+  }
+
+  private loadAllData() {
+    // Create an object of observables for forkJoin
+    const requests: { [key: string]: any } = {};
+
+    this.dataSections.forEach(section => {
+      this.setLoadingState(section.key, true);
+      // Wait for loading to be false before taking the result
+      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables).pipe(
+        filter(result => !result.loading),
+        take(1)
+      );
     });
 
-    this.apiService.fetchBasicData(GET_NEWLY_ADDED_MEDIA, newlyAddedMangasVariables).subscribe({
-      next: ({ data, loading, errors }) => {
-        this.newlyAddedMangasLoading = loading;
-        if (errors) {
-          this.error = errors[0];
-        } else {
-          this.newlyAddedMangas = data?.Page.media;
-        }
+    forkJoin(requests).subscribe({
+      next: (results: any) => {
+        // Process all results
+        this.dataSections.forEach(section => {
+          const result = results[section.key];
+
+          console.log(`Loading ${section.key}:`, {
+            hasErrors: !!result.errors,
+            hasData: !!result.data,
+            loading: result.loading,
+            mediaCount: result.data?.Page?.media?.length
+          });
+
+          if (result.errors) {
+            this.error = result.errors[0];
+          } else {
+            this.setData(section.key, result.data?.Page.media);
+          }
+
+          // Always set loading to false after processing, as forkJoin completes when all are done
+          this.setLoadingState(section.key, false);
+        });
       },
       error: (err) => {
+        console.error('Error loading data:', err);
         this.error = err;
-        this.newlyAddedMangasLoading = false;
+        // Set all loading states to false on error
+        this.dataSections.forEach(section => {
+          this.setLoadingState(section.key, false);
+        });
       }
     });
   }
 
   goToDetails(id: number, type: 'ANIME' | 'MANGA') {
     this.router.navigate(['media', type.toLowerCase(), id])
+  }
+
+  refresh(event: any) {
+    // Create an object of observables for forkJoin
+    const requests: { [key: string]: any } = {};
+
+    this.dataSections.forEach(section => {
+      this.setLoadingState(section.key, true);
+      // Wait for loading to be false before taking the result
+      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables).pipe(
+        filter(result => !result.loading),
+        take(1)
+      );
+    });
+
+    forkJoin(requests).subscribe({
+      next: (results: any) => {
+        // Process all results
+        this.dataSections.forEach(section => {
+          const result = results[section.key];
+
+          if (result.errors) {
+            this.error = result.errors[0];
+          } else {
+            this.setData(section.key, result.data?.Page.media);
+          }
+
+          // Always set loading to false after processing, as forkJoin completes when all are done
+          this.setLoadingState(section.key, false);
+        });
+
+        // Complete the refresher after all data is loaded
+        event.target.complete();
+      },
+      error: (err) => {
+        this.error = err;
+        // Set all loading states to false on error
+        this.dataSections.forEach(section => {
+          this.setLoadingState(section.key, false);
+        });
+
+        // Complete the refresher even on error
+        event.target.complete();
+      }
+    });
   }
 }

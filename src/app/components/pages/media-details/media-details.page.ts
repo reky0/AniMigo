@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CoverImageComponent } from "@components/atoms/cover-image/cover-image.component";
@@ -12,22 +12,22 @@ import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.compon
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
-import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar, IonModal, IonSpinner } from '@ionic/angular/standalone';
+import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar, IonModal, IonSpinner, IonChip, IonBadge } from '@ionic/angular/standalone';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 import { Title } from '@angular/platform-browser';
-import { take } from 'rxjs';
+import { take, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile-tab',
   templateUrl: './media-details.page.html',
   styleUrls: ['./media-details.page.scss'],
   standalone: true,
-  imports: [IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe],
+  imports: [IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe, IonChip, IonBadge],
 })
-export class MediaDetailsPageComponent implements OnInit {
+export class MediaDetailsPageComponent implements OnDestroy {
 
   constructor(
     private readonly apiService: ApiService,
@@ -40,20 +40,31 @@ export class MediaDetailsPageComponent implements OnInit {
   data: DetailedMedia | null | undefined = null;
   selectedTab: string = 'info';
   isTogglingFavorite: boolean = false;
+  private dataSubscription?: Subscription;
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.loadMediaData();
+  }
+
+  private loadMediaData() {
     const id = this.route.snapshot.paramMap.get("id");
     const type = this.route.snapshot.paramMap.get("type");
 
     console.log("MEDIA ID: " + Number(id));
     console.log("MEDIA TYPE: " + type);
 
+    // Reset state when loading new data
+    this.loading = true;
+    this.error = null;
+    this.data = null;
+
     let variables = {
       id: Number(id),
       type: type?.toUpperCase()
     };
 
-    this.apiService.fetchDetailedData(GET_MEDIA_BY_ID, variables).subscribe({
+    this.dataSubscription?.unsubscribe();
+    this.dataSubscription = this.apiService.fetchDetailedData(GET_MEDIA_BY_ID, variables).subscribe({
       next: ({ data, loading, errors }) => {
         this.loading = loading;
         if (errors) {
@@ -61,7 +72,12 @@ export class MediaDetailsPageComponent implements OnInit {
         } else {
           this.data = data?.Media;
 
-          this.titleService.setTitle(`${this.data?.title.romaji} (${this.data?.title.english}) · AniMigo`);
+          // Set title after data is loaded
+          if (data?.Media) {
+            const title = `${data.Media.title.romaji}${data.Media.title.english ? ` (${data.Media.title.english})` : ''} · AniMigo`;
+            console.log("Setting title to:", title);
+            this.titleService.setTitle(title);
+          }
         }
       },
       error: (err) => {
@@ -69,6 +85,10 @@ export class MediaDetailsPageComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.dataSubscription?.unsubscribe();
   }
 
   toSentenceCase = toSentenceCase;
