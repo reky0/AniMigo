@@ -7,14 +7,151 @@
 }
 
 <ion-content>
+  <!-- Full Screen Search Overlay -->
+  <div class="search-overlay" [class.active]="isSearchActive" [class.has-header]="platformService.isHybrid()">
+    <ion-grid class="search-container">
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-no-padding">
+          <ion-searchbar
+            #searchBar
+            class="ion-padding"
+            placeholder="Search for an anime, manga, character..."
+            animated
+            color="light"
+            [value]="searchQuery"
+            (ionInput)="onSearchInput($event)"
+            (ionFocus)="activateSearch()"
+            (ionCancel)="deactivateSearch()"
+            (keydown.enter)="onEnterPress()"
+            (keydown.escape)="deactivateSearch()"
+            [showCancelButton]="'always'"
+          ></ion-searchbar>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="filter-chips-container">
+        <ion-row>
+          <ion-col>
+            <ion-chip
+              [outline]="category !== 'anime'"
+              color="primary"
+              class="filter-chip ion-color-secondary"
+              [class.active]="category === 'anime'"
+              (click)="category = 'anime'; performSearch()"
+              >
+              <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
+              Anime
+            </ion-chip>
+          </ion-col>
+          <ion-col>
+            <ion-chip
+              [outline]="category !== 'manga'"
+              color="primary"
+              class="filter-chip ion-color-secondary"
+              [class.active]="category === 'manga'"
+              (click)="category = 'manga'; performSearch()"
+              >
+              <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
+              Manga
+            </ion-chip>
+          </ion-col>
+          <ion-col>
+            <ion-chip
+              [outline]="category !== 'characters'"
+              color="primary"
+              class="filter-chip ion-color-secondary"
+              [class.active]="category === 'characters'"
+              (click)="category = 'characters'; performSearch()"
+              >
+              <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
+              Characters
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </ion-row>
+
+      <ion-row class="search-results">
+        @if (searchQuery.length === 0 && results.length === 0) {
+          <ion-col class="empty-state">
+            <ion-icon name="search-outline"></ion-icon>
+            <p>Start typing to search</p>
+            <p class="hint">Type at least 3 characters and press Enter</p>
+          </ion-col>
+        } @else if (searchQuery.length < 3 && results.length === 0) {
+          <ion-col class="empty-state">
+            <ion-icon name="text-outline"></ion-icon>
+            <p>Type at least {{ 3 - searchQuery.length }} more character{{ (3 - searchQuery.length) > 1 ? 's' : '' }}</p>
+          </ion-col>
+        } @else if (isSearching) {
+          <ion-col class="empty-state">
+            <ion-spinner name="crescent"></ion-spinner>
+            <p>Searching...</p>
+          </ion-col>
+        } @else if (results.length === 0) {
+          <ion-col class="empty-state">
+            <ion-icon name="ban-outline"></ion-icon>
+            <p>No results found</p>
+            <p class="hint">Try a different search term</p>
+          </ion-col>
+        } @else {
+          <!-- Search results will appear here -->
+          <ion-row>
+            <ion-col>
+              <ion-card-subtitle class="results-info">Searching for "{{ storedQuery }}"</ion-card-subtitle>
+            </ion-col>
+          </ion-row>
+          <ion-row class="results-content">
+            <ion-col>
+              <ion-row>
+                <!-- Add your search results items here -->
+                @for (result of results; track result.id) {
+                  @if (category === 'anime' || category === 'manga') {
+                    <ion-col size="12" sizeMd="6" sizeLg="4">
+                      <app-media-list-item
+                        [media]="result"
+                        [isFavourite]="result.isFavourite"
+                        (click)="goToDetails({id: result.id, type: result.type, isAdult: result.isAdult})"
+                        />
+                    </ion-col>
+                  } @else if (category === 'characters') {
+                    <ion-col size="4" sizeMd="2" sizeLg="1">
+                      <app-person-item
+                        [name]="result.name.full ?? result.name.native"
+                        [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
+                        [fallbackImage]="result.image.large"
+                        />
+                        <!-- (click)="openModal('character', result.id)" -->
+                      </ion-col>
+                  }
+                }
+              </ion-row>
+
+              <ion-infinite-scroll
+                threshold="100px"
+                (ionInfinite)="onIonInfinite($event)"
+              >
+                <ion-infinite-scroll-content
+                  loadingSpinner="crescent"
+                />
+              </ion-infinite-scroll>
+            </ion-col>
+          </ion-row>
+        }
+      </ion-row>
+    </ion-grid>
+  </div>
+
   <ion-grid>
     <ion-row>
-      <ion-col>
-        <ion-searchbar
-          placeholder="Search for an anime, manga, character..."
-          animated
-          color="light"
+      <ion-col class="ion-no-padding">
+        <div class="searchbar-trigger" (click)="activateSearch()">
+          <ion-searchbar
+            placeholder="Search for an anime, manga, character..."
+            animated
+            color="light"
+            readonly
           ></ion-searchbar>
+        </div>
       </ion-col>
     </ion-row>
 

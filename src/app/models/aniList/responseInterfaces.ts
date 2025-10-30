@@ -599,3 +599,13 @@ export interface MediaListCollectionResponse {
 // Re-export Mutation Interfaces
 // ============================================
 export * from './mutationInterfaces';
+
+
+export interface SearchResponse {
+  Page: {
+    pageInfo: PageInfo;
+    media?: BasicMedia[];
+    characters?: Character[];
+    // staff?: StaffConnection;
+  };
+}

@@ -1,0 +1,169 @@
+// Full Screen Search Overlay
+.search-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: var(--ion-background-color);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  display: flex;
+  flex-direction: column;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  // When there's an existing header in hybrid mode, position below it
+  &.has-header {
+    // Account for header height (~56px) + safe area
+    top: calc(56px + var(--ion-safe-area-top, 0));
+
+    .search-container {
+      padding-top: 0;
+    }
+  }
+}
+
+.search-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  // Only add safe area padding when there's no header
+  padding-top: var(--ion-safe-area-top, 0);
+
+  // Remove padding when header exists (it already handles safe area)
+  .search-overlay.has-header & {
+    padding-top: 0;
+  }
+}
+
+// Search Bar Styling
+.search-overlay ion-searchbar {
+  padding: 10px 5px;
+  --background: var(--ion-color-light);
+  --box-shadow: none;
+}
+
+.filter-chip {
+  border-radius: 10px;
+
+  ion-icon {
+    display: none;
+  }
+
+  &.active ion-icon {
+    display: block;
+  }
+}
+
+// Search Results Section
+.search-results {
+  overflow-y: auto;
+  padding: 16px;
+}
+
+// Empty State
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: var(--ion-color-medium);
+  text-align: center;
+
+  ion-icon {
+    font-size: 80px;
+    opacity: 0.3;
+    margin-bottom: 16px;
+  }
+
+  ion-spinner {
+    font-size: 48px;
+    margin-bottom: 16px;
+    --color: var(--ion-color-primary);
+  }
+
+  p {
+    font-size: 16px;
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  .hint {
+    font-size: 14px;
+    margin-top: 8px;
+    opacity: 0.5;
+  }
+}
+
+// Results Content
+.results-content {
+  animation: fadeIn 0.3s ease;
+}
+
+.results-info {
+  font-size: 14px;
+  color: var(--ion-color-medium);
+  margin: 0 0 16px 0;
+  padding: 0 8px;
+  height: 10px;
+}
+
+// Fade In Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Smooth scrolling
+.search-results {
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 3px;
+    opacity: 0.5;
+  }
+}
+
+ion-searchbar {
+  --border-radius: 20px;
+  padding: 5px;
+}
+
+.searchbar-trigger {
+  cursor: pointer;
+  position: relative;
+
+  ion-searchbar {
+    --border-radius: 20px;
+    padding: 5px;
+    pointer-events: none; // Prevent searchbar from capturing clicks
+  }
+}

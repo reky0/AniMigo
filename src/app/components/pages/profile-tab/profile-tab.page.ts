@@ -342,7 +342,6 @@ export class ProfileTabPage implements OnInit {
     if (data.isAdult && !this.userData?.options?.displayAdultContent) {
       this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
     } else {
-
       this.closeModal();
 
       setTimeout(() => {

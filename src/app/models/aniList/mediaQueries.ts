@@ -457,6 +457,64 @@ export const GET_TOP_MEDIA = gql`
   }
 `;
 
+export const SEARCH_MEDIA = gql`
+  query SearchAnime($page: Int!, $search: String!, $type: MediaType!, $isAdult: Boolean = false) {
+    Page(page: $page) {
+      pageInfo {
+        currentPage
+        hasNextPage
+        perPage
+        total
+      }
+      media(search: $search, type: $type, isAdult: $isAdult) {
+        id
+        title {
+          romaji
+          english
+          native
+        }
+        coverImage {
+          large
+          medium
+        }
+        averageScore
+        isFavourite
+        type
+        format
+        startDate {
+          year
+        }
+      }
+    }
+  }
+`;
+
+export const SEARCH_CHARACTER = gql`
+  query SearchCharacter($page: Int!, $search: String!) {
+    Page(page: $page) {
+      pageInfo {
+        currentPage
+        hasNextPage
+        perPage
+        total
+      }
+      characters(search: $search) {
+        id
+        name {
+          full
+          native
+        }
+        image {
+          large
+          medium
+        }
+        isFavourite
+      }
+    }
+  }
+`;
+
+
 // ============================================
 // User Queries
 // ============================================

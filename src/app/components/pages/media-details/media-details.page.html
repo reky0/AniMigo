@@ -217,7 +217,7 @@
   <ion-modal [isOpen]="showModal" (didDismiss)="showModal = false">
     <ng-template>
       <ion-content (click)="closeModal()" class="image-modal ion-padding">
-        <ion-img [src]="selectedImg" class="full-image" />
+        <ion-img [src]="selectedImg" class="full-image" (ionError)="onImageError()" />
       </ion-content>
     </ng-template>
   </ion-modal>

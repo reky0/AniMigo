@@ -10,7 +10,8 @@ import {
   ViewerResponse,
   MediaListCollectionResponse,
   FavoriteType,
-  FavoriteToggleResult
+  FavoriteToggleResult,
+  SearchResponse
 } from 'src/app/models/aniList/responseInterfaces';
 import {
   TOGGLE_FAVORITE_MEDIA,
@@ -200,6 +201,39 @@ export class ApiService {
       catchError(err => {
         if (showToast) {
           const errorMsg = this.formatNetworkError(err, 'Network error loading airing schedules');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  search(query: any, variables: Object, showToast = true, filterAdult = true): Observable<{
+    data: SearchResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    const queryRef = this.apollo.watchQuery<SearchResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only',
+    });
+
+    return queryRef.valueChanges.pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load search results');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading search results');
           this.showErrorToast(errorMsg);
         }
         return throwError(() => err);
