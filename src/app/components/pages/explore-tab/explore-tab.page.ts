@@ -21,6 +21,7 @@ import { PersonItemComponent } from "@components/molecules/person-item/person-it
 })
 export class ExploreTabPage implements OnInit {
   @ViewChild('searchBar') searchBar!: IonSearchbar;
+  @ViewChild('resultsContent') resultsContent!: IonContent;
 
   isSearchActive = false;
   searchQuery = '';
@@ -37,6 +38,8 @@ export class ExploreTabPage implements OnInit {
   actualAnimePage = 1;
   actualMangaPage = 1;
   actualCharacterPage = 1;
+
+  hasNextPage = true;
 
   constructor(
     readonly platformService: PlatformService,
@@ -90,6 +93,51 @@ export class ExploreTabPage implements OnInit {
     return this.searchQuery.trim().length >= 3;
   }
 
+  triggerContentAnimation() {
+    setTimeout(() => {
+      this.resultsContent?.scrollToTop(300);
+    }, 10);
+  }
+
+  changeCategory(newCategory: 'anime' | 'manga' | 'characters') {
+    const isNewCategory = this.category !== newCategory;
+    const isNewQuery = this.searchQuery !== this.storedQuery;
+
+    let hasDataStored = false;
+
+    switch (newCategory) {
+      case 'anime':
+        console.log('stored anime: ', this.storedAnimes);
+
+        hasDataStored = this.storedAnimes.length > 0;
+        break;
+      case 'manga':
+        console.log('stored manga: ', this.storedMangas);
+
+        hasDataStored = this.storedMangas.length > 0;
+        break;
+      case 'characters':
+        console.log('stored characters: ', this.storedCharacters);
+
+        hasDataStored = this.storedCharacters.length > 0;
+        break;
+    }
+
+    console.log('is new category: ', isNewCategory);
+    console.log('is new query: ', isNewQuery);
+    console.log('has data stored: ', hasDataStored);
+
+
+    if (!isNewCategory && !isNewQuery) {
+      console.log('blocking duplicate query');
+
+      return;
+    }
+
+    this.category = newCategory;
+    this.performSearch((isNewCategory || isNewQuery) && !hasDataStored);
+  }
+
   onIonInfinite(event: any) {
     console.log('Infinite scroll triggered');
 
@@ -102,12 +150,17 @@ export class ExploreTabPage implements OnInit {
       this.actualCharacterPage += 1;
     }
 
+    console.log("loading more ", this.category);
+
+
     // Perform search with loadingMore flag
     this.performSearch(false, true, event);
   }
 
   performSearch(newRequest: boolean = false, loadingMore: boolean = false, event: any = null) {
     console.log('search triggered');
+    console.log('is new request: ', newRequest);
+    console.log('is loading more: ', loadingMore);
     console.log('has event: ', event ? true : false);
 
     if (!this.canSearch() || this.isSearching) {
@@ -120,22 +173,39 @@ export class ExploreTabPage implements OnInit {
     if (this.storedAnimes.length > 0 && this.category === 'anime' && (!newRequest && !loadingMore)) {
       // Create new array reference to force Angular change detection
       this.results = [...this.storedAnimes];
+      this.triggerContentAnimation();
       return;
     }
 
     if (this.storedMangas.length > 0 && this.category === 'manga' && (!newRequest && !loadingMore)) {
       // Create new array reference to force Angular change detection
       this.results = [...this.storedMangas];
+      this.triggerContentAnimation();
       return;
     }
 
     if (this.storedCharacters.length > 0 && this.category === 'characters' && (!newRequest && !loadingMore)) {
       // Create new array reference to force Angular change detection
       this.results = [...this.storedCharacters];
+      this.triggerContentAnimation();
       return;
     }
 
-    this.isSearching = true;
+    if (newRequest) {
+      this.isSearching = true;
+      this.actualAnimePage = 1;
+      this.actualMangaPage = 1;
+      this.actualCharacterPage = 1;
+      this.results = [];
+      this.resultIds.clear();
+
+      if (this.searchQuery !== this.storedQuery) {
+        this.storedAnimes = [];
+        this.storedMangas = [];
+        this.storedCharacters = [];
+      }
+    }
+
     this.storedQuery = this.searchQuery;
     console.log('Performing search for:', this.searchQuery, 'Category:', this.category);
 
@@ -159,10 +229,11 @@ export class ExploreTabPage implements OnInit {
     const variables = variablesMap[this.category];
 
     this.apiService.search(query, variables).subscribe({
-      next: ({data, loading ,errors}) => {
+      next: ({data, loading, errors}) => {
         console.log('Search results:', data);
 
         const newResults = data?.Page?.media ?? data?.Page?.characters ?? [];
+        this.hasNextPage = !!data?.Page?.pageInfo?.hasNextPage;
 
         // If loading more, append to existing results. Otherwise, replace.
         if (loadingMore) {
@@ -179,9 +250,15 @@ export class ExploreTabPage implements OnInit {
           this.storedCharacters.push(...data.Page.characters)
         }
 
-        this.isSearching = false;
+        this.isSearching = loading;
+
+        // Trigger animation after new content loads (not for infinite scroll)
+        if (!loadingMore) {
+          this.triggerContentAnimation();
+        }
+
         event?.target?.complete();
-        if (!data?.Page.pageInfo.hasNextPage && event?.target) {
+        if (!this.hasNextPage && event?.target) {
           event.target.disabled = true;
         }
       },

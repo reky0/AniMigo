@@ -37,7 +37,7 @@
               color="primary"
               class="filter-chip ion-color-secondary"
               [class.active]="category === 'anime'"
-              (click)="category = 'anime'; performSearch(searchQuery !== storedQuery)"
+              (click)="changeCategory('anime')"
               >
               <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
               Anime
@@ -49,7 +49,7 @@
               color="primary"
               class="filter-chip ion-color-secondary"
               [class.active]="category === 'manga'"
-              (click)="category = 'manga'; performSearch(searchQuery !== storedQuery)"
+              (click)="changeCategory('manga')"
               >
               <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
               Manga
@@ -61,7 +61,7 @@
               color="primary"
               class="filter-chip ion-color-secondary"
               [class.active]="category === 'characters'"
-              (click)="category = 'characters'; performSearch(searchQuery !== storedQuery)"
+              (click)="changeCategory('characters')"
               >
               <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
               Characters
@@ -95,52 +95,50 @@
           </ion-col>
         } @else {
           <!-- Search results will appear here -->
-          <ion-row>
-            <ion-col>
-              <ion-card-subtitle class="results-info">Searching for "{{ storedQuery }}"</ion-card-subtitle>
-            </ion-col>
-          </ion-row>
-          <ion-row class="results-content">
-            <ion-col>
-              <ion-row>
-                <!-- Add your search results items here -->
-                @for (result of results; track result.id) {
-                  @if (category === 'anime' || category === 'manga') {
-                    <ion-col size="12" sizeMd="6" sizeLg="4">
-                      <app-media-list-item
-                        [media]="result"
-                        [isFavourite]="result.isFavourite"
-                        (click)="goToDetails({id: result.id, type: result.type, isAdult: result.isAdult})"
-                        />
-                    </ion-col>
-                  } @else if (category === 'characters') {
-                    <ion-col size="4" sizeMd="2" sizeLg="1">
-                      <app-person-item
-                        [name]="result.name.full ?? result.name.native"
-                        [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
-                        [fallbackImage]="result.image.large"
-                        />
-                        <!-- (click)="openModal('character', result.id)" -->
-                      </ion-col>
-                  }
-                }
-              </ion-row>
-
-              <ion-infinite-scroll
-                threshold="100px"
-                (ionInfinite)="onIonInfinite($event)"
-              >
-                <ion-infinite-scroll-content
-                  loadingSpinner="crescent"
-                />
-              </ion-infinite-scroll>
-            </ion-col>
-          </ion-row>
+          <ion-col size="12" class="results-wrapper">
+            <ion-card-subtitle class="results-info">Searching for "{{ storedQuery }}"</ion-card-subtitle>
+            <div class="results-content-wrapper">
+              <ion-content #resultsContent class="results-content">
+                <ion-grid>
+                  <ion-row class="ion-padding-bottom">
+                    <!-- Add your search results items here -->
+                    @for (result of results; track result.id) {
+                      @if (category === 'anime' || category === 'manga') {
+                        <ion-col size="12" sizeMd="6" sizeLg="4">
+                          <app-media-list-item
+                            [media]="result"
+                            [isFavourite]="result.isFavourite"
+                            (click)="goToDetails({id: result.id, type: result.type, isAdult: result.isAdult})"
+                            />
+                        </ion-col>
+                      } @else if (category === 'characters') {
+                        <ion-col size="4" sizeMd="2" sizeLg="1">
+                          <app-person-item
+                            [name]="result.name.full ?? result.name.native"
+                            [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
+                            [fallbackImage]="result.image.large"
+                            />
+                            <!-- (click)="openModal('character', result.id)" -->
+                          </ion-col>
+                      }
+                    }
+                  </ion-row>
+                </ion-grid>
+                <ion-infinite-scroll
+                  threshold="0px"
+                  (ionInfinite)="onIonInfinite($event)"
+                  >
+                  <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+                </ion-infinite-scroll>
+              </ion-content>
+            </div>
+          </ion-col>
         }
       </ion-row>
     </ion-grid>
   </div>
 
+  <!-- QUICK ACCESS OPTIONS -->
   <ion-grid>
     <ion-row>
       <ion-col class="ion-no-padding">
