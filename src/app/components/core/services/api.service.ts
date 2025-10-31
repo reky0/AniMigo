@@ -11,13 +11,17 @@ import {
   MediaListCollectionResponse,
   FavoriteType,
   FavoriteToggleResult,
-  SearchResponse
+  SearchResponse,
+  UserSettingsInput,
+  UpdateUserResponse,
+  UpdateUserSettingsResult
 } from 'src/app/models/aniList/responseInterfaces';
 import {
   TOGGLE_FAVORITE_MEDIA,
   TOGGLE_FAVORITE_CHARACTER,
   TOGGLE_FAVORITE_STAFF,
-  TOGGLE_FAVORITE_STUDIO
+  TOGGLE_FAVORITE_STUDIO,
+  UPDATE_USER_SETTINGS
 } from 'src/app/models/aniList/mutations';
 import { ToastController } from '@ionic/angular';
 import { AuthService } from './auth.service';
@@ -225,8 +229,20 @@ export class ApiService {
           const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load search results');
           this.showErrorToast(errorMsg);
         }
+
+        // Filter out adult content if filterAdult is true
+        const filteredData = result.data && filterAdult ? {
+          ...result.data,
+          Page: {
+            ...result.data.Page,
+            media: result.data.Page.media?.filter(
+              media => !media.isAdult
+            )
+          }
+        } : result.data;
+
         return {
-          data: result.data,
+          data: filteredData,
           loading: result.loading,
           errors: result.errors ? result.errors[0] : undefined,
         };
@@ -675,5 +691,114 @@ export class ApiService {
       case 'STUDIO': return 'Studio';
       default: return 'Item';
     }
+  }
+
+  // ============================================
+  // User Settings Methods
+  // ============================================
+
+  /**
+   * Update user settings
+   * @param settings - Object containing settings to update (only include fields you want to change)
+   * @param showToast - Whether to show success/error toasts
+   * @returns Observable with update result including new user data
+   *
+   * @example
+   * // Toggle adult content
+   * updateUserSettings({ displayAdultContent: true })
+   *
+   * @example
+   * // Update multiple settings
+   * updateUserSettings({
+   *   displayAdultContent: false,
+   *   titleLanguage: 'ENGLISH',
+   *   profileColor: 'purple'
+   * })
+   */
+  updateUserSettings(
+    settings: UserSettingsInput,
+    showToast = true
+  ): Observable<UpdateUserSettingsResult> {
+    return this.apollo.mutate<UpdateUserResponse>({
+      mutation: UPDATE_USER_SETTINGS,
+      variables: settings,
+    }).pipe(
+      map((result: any) => {
+        if (showToast) {
+          this.showSettingsSuccessToast();
+        }
+
+        return {
+          success: true,
+          userData: result.data?.UpdateUser
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          this.showSettingsErrorToast(err);
+        }
+        return throwError(() => ({
+          success: false,
+          error: err.message || 'Failed to update settings'
+        }));
+      })
+    );
+  }
+
+  /**
+   * Toggle the displayAdultContent setting
+   * @param showAdultContent - New value for displayAdultContent
+   * @param showToast - Whether to show success/error toasts
+   * @returns Observable with update result
+   */
+  toggleAdultContent(showAdultContent: boolean, showToast = true): Observable<UpdateUserSettingsResult> {
+    return this.updateUserSettings({ displayAdultContent: showAdultContent }, showToast);
+  }
+
+  /**
+   * Toggle the airingNotifications setting
+   * @param enabled - New value for airingNotifications
+   * @param showToast - Whether to show success/error toasts
+   * @returns Observable with update result
+   */
+  toggleAiringNotifications(enabled: boolean, showToast = true): Observable<UpdateUserSettingsResult> {
+    return this.updateUserSettings({ airingNotifications: enabled }, showToast);
+  }
+
+  /**
+   * Show success toast for settings update
+   */
+  private async showSettingsSuccessToast() {
+    const toast = await this.toastController.create({
+      message: 'Settings updated successfully',
+      duration: 2000,
+      position: 'bottom',
+      color: 'success',
+      icon: 'checkmark-circle'
+    });
+
+    await toast.present();
+  }
+
+  /**
+   * Show error toast for settings update
+   */
+  private async showSettingsErrorToast(error: any) {
+    let message = 'Failed to update settings';
+
+    // Check for authentication error
+    if (error.message?.includes('authentication') || error.message?.includes('token') || !this.authService.isAuthenticated()) {
+      message = 'Please log in to update settings';
+    }
+
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger',
+      icon: 'alert-circle'
+    });
+
+    await toast.present();
   }
 }

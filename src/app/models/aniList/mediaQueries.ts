@@ -458,7 +458,7 @@ export const GET_TOP_MEDIA = gql`
 `;
 
 export const SEARCH_MEDIA = gql`
-  query SearchAnime($page: Int!, $search: String!, $type: MediaType!, $isAdult: Boolean = false) {
+  query SearchMedia($page: Int!, $search: String!, $type: MediaType!) {
     Page(page: $page) {
       pageInfo {
         currentPage
@@ -466,7 +466,7 @@ export const SEARCH_MEDIA = gql`
         perPage
         total
       }
-      media(search: $search, type: $type, isAdult: $isAdult) {
+      media(search: $search, type: $type) {
         id
         title {
           romaji

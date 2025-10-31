@@ -3,12 +3,14 @@ import { Capacitor } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
+import { User } from 'src/app/models/aniList/responseInterfaces';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'anilist_access_token';
+  private userData: User | null = null;
 
   constructor(private router: Router) {
     // Set up deep link listener for mobile
@@ -128,10 +130,11 @@ export class AuthService {
   }
 
   /**
-   * Logout - clear token
+   * Logout - clear token and user data
    */
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    this.clearUserData()
     this.router.navigate(['/profile']);
   }
 
@@ -148,5 +151,44 @@ export class AuthService {
       };
     }
     return {};
+  }
+
+  /**
+   * Store user data in memory for shared access across components
+   * This is especially useful for keeping user options (like displayAdultContent) in sync
+   */
+  setUserData(user: User): void {
+    this.userData = user;
+    console.log('User data stored in AuthService:', user);
+  }
+
+  /**
+   * Get stored user data
+   */
+  getUserData(): User | null {
+    return this.userData;
+  }
+
+  /**
+   * Update specific user options without replacing entire user object
+   */
+  updateUserOptions(options: Partial<User['options']>): void {
+    if (this.userData) {
+      this.userData = {
+        ...this.userData,
+        options: {
+          ...this.userData.options,
+          ...options
+        }
+      };
+      console.log('User options updated in AuthService:', this.userData.options);
+    }
+  }
+
+  /**
+   * Clear user data
+   */
+  clearUserData(): void {
+    this.userData = null;
   }
 }

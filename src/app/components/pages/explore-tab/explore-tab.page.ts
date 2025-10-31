@@ -17,6 +17,7 @@ import { ToastController } from '@ionic/angular';
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
+import { AuthService } from '@components/core/services/auth.service';
 
 @Component({
   selector: 'app-explore-tab',
@@ -58,6 +59,7 @@ export class ExploreTabPage implements OnInit {
     readonly platformService: PlatformService,
     private readonly router: Router,
     private readonly apiService: ApiService,
+    private readonly authService: AuthService,
     private readonly toastController: ToastController,
   ) {
     addIcons({ checkmark, searchOutline, textOutline, banOutline, arrowBack, shareSocial, informationCircle, film });
@@ -245,7 +247,7 @@ export class ExploreTabPage implements OnInit {
     const query = queryMap[this.category];
     const variables = variablesMap[this.category];
 
-    this.apiService.search(query, variables).subscribe({
+    this.apiService.search(query, variables, true, this.authService.getUserData()?.options?.displayAdultContent ?? false).subscribe({
       next: ({ data, loading, errors }) => {
         console.log('Search results:', data);
 

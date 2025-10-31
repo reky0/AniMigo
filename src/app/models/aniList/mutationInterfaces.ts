@@ -64,3 +64,36 @@ export interface FavoriteToggleResult {
   favoriteIds: number[];
   error?: string;
 }
+
+// ============================================
+// User Settings Update Interfaces
+// ============================================
+
+export type TitleLanguage = 'ROMAJI' | 'ENGLISH' | 'NATIVE' | 'ROMAJI_STYLISED' | 'ENGLISH_STYLISED' | 'NATIVE_STYLISED';
+export type ProfileColor = 'blue' | 'purple' | 'pink' | 'orange' | 'red' | 'green' | 'gray';
+
+export interface UserSettingsInput {
+  titleLanguage?: TitleLanguage;
+  displayAdultContent?: boolean;
+  airingNotifications?: boolean;
+  profileColor?: ProfileColor;
+}
+
+export interface UpdateUserResponse {
+  UpdateUser: {
+    id: number;
+    name: string;
+    options: {
+      titleLanguage?: string | null;
+      displayAdultContent?: boolean;
+      airingNotifications?: boolean;
+      profileColor?: string | null;
+    };
+  };
+}
+
+export interface UpdateUserSettingsResult {
+  success: boolean;
+  userData?: UpdateUserResponse['UpdateUser'];
+  error?: string;
+}

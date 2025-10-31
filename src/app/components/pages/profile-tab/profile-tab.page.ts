@@ -106,6 +106,8 @@ export class ProfileTabPage implements OnInit {
       next: (result) => {
         if (result.data?.Viewer) {
           const userId = result.data.Viewer.id;
+          // Store user data in AuthService for shared access
+          this.authService.setUserData(result.data.Viewer);
           console.log('User ID:', userId);
 
           // Now fetch full profile data with favorites
@@ -127,7 +129,14 @@ export class ProfileTabPage implements OnInit {
     this.apiService.fetchUserProfileData(GET_USER_PROFILE_DATA, { userId }).subscribe({
       next: (result) => {
         if (result.data?.User) {
-          this.userData = result.data.User;
+          // Get the latest user options from AuthService
+          const sharedUserData = this.authService.getUserData();
+
+          // Merge full profile data with fresh options from AuthService
+          this.userData = {
+            ...result.data.User,
+            options: sharedUserData?.options || result.data.User.options
+          };
           console.log('Full user data loaded:', this.userData);
           console.log('Anime statistics:', this.userData.statistics?.anime);
           console.log('Status breakdown:', this.userData.statistics?.anime?.statuses);
@@ -339,7 +348,7 @@ export class ProfileTabPage implements OnInit {
   }
 
   goToDetails(data: { id: number, type: string, isAdult: boolean | null | undefined }) {
-    if (data.isAdult && !this.userData?.options?.displayAdultContent) {
+    if (data.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
       this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
     } else {
       this.closeModal();

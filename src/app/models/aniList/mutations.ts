@@ -77,3 +77,40 @@ export const TOGGLE_FAVORITE_STUDIO = gql`
     }
   }
 `;
+
+// ============================================
+// User Settings Mutations
+// ============================================
+
+/**
+ * Update user settings
+ * @param titleLanguage - Preferred title language (ROMAJI, ENGLISH, NATIVE, ROMAJI_STYLISED, ENGLISH_STYLISED, NATIVE_STYLISED)
+ * @param displayAdultContent - Whether to display adult content
+ * @param airingNotifications - Whether to receive airing notifications
+ * @param profileColor - Profile color (blue, purple, pink, orange, red, green, gray)
+ * @returns Updated user data
+ */
+export const UPDATE_USER_SETTINGS = gql`
+  mutation UpdateUser(
+    $titleLanguage: UserTitleLanguage
+    $displayAdultContent: Boolean
+    $airingNotifications: Boolean
+    $profileColor: String
+  ) {
+    UpdateUser(
+      titleLanguage: $titleLanguage
+      displayAdultContent: $displayAdultContent
+      airingNotifications: $airingNotifications
+      profileColor: $profileColor
+    ) {
+      id
+      name
+      options {
+        titleLanguage
+        displayAdultContent
+        airingNotifications
+        profileColor
+      }
+    }
+  }
+`;
