@@ -147,9 +147,9 @@
               } @else if (favoriteAnime.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (i of 6 | range; track $index) {
+                    @for (i of 9 | range; track $index) {
                       @if (favoriteAnime[i-1]) {
-                        <ion-col size="4" sizeMd="2">
+                        <ion-col size="4" sizeMd="1.333">
                           <app-catalog-item
                             [title]="favoriteAnime[i-1].title.english || favoriteAnime[i-1].title.romaji"
                             [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
@@ -184,9 +184,9 @@
               } @else if (favoriteManga.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (i of 6 | range; track $index) {
+                    @for (i of 9 | range; track $index) {
                       @if (favoriteManga[i-1]) {
-                        <ion-col size="4" sizeMd="2">
+                        <ion-col size="4" sizeMd="1.333">
                           <app-catalog-item
                             [title]="favoriteManga[i-1].title.english || favoriteManga[i-1].title.romaji"
                             [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
@@ -221,9 +221,9 @@
               } @else if (favoriteCharacters.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (i of 8 | range; track $index) {
+                    @for (i of 9 | range; track $index) {
                       @if (favoriteCharacters[i-1]) {
-                        <ion-col size="4" sizeMd="1.5">
+                        <ion-col size="4" sizeMd="1.333">
                           <app-person-item
                             [name]="favoriteCharacters[i-1].name.full"
                             [image]="favoriteCharacters[i-1].image.large?.replace('medium', 'large') ?? favoriteCharacters[i-1].image.medium"

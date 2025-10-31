@@ -979,7 +979,7 @@ export const GET_USER_PROFILE_DATA = gql`
         }
       }
       favourites {
-        anime(page: 1, perPage: 6) {
+        anime(page: 1, perPage: 9) {
           nodes {
             id
             title {
@@ -998,7 +998,7 @@ export const GET_USER_PROFILE_DATA = gql`
             isAdult
           }
         }
-        manga(page: 1, perPage: 6) {
+        manga(page: 1, perPage: 9) {
           nodes {
             id
             title {
@@ -1017,7 +1017,7 @@ export const GET_USER_PROFILE_DATA = gql`
             isAdult
           }
         }
-        characters(page: 1, perPage: 6) {
+        characters(page: 1, perPage: 9) {
           nodes {
             id
             name {
