@@ -490,20 +490,24 @@
               @switch (favouriteType) {
                 @case ('anime') {
                   @for (anime of favoriteAnime; track $index) {
-                    <app-media-list-item
+                    <ion-col size="12" sizeMd="6">
+                      <app-media-list-item
                       [title]="anime.title.english ?? anime.title.romaji"
                       [media]="anime"
                       (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
                       />
+                    </ion-col>
                   }
                 }
                 @case ('manga') {
                   @for (manga of favoriteManga; track $index) {
-                    <app-media-list-item
-                      [title]="manga.title.english ?? manga.title.romaji"
-                      [media]="manga"
-                      (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
-                      />
+                    <ion-col size="12" sizeMd="6">
+                      <app-media-list-item
+                        [title]="manga.title.english ?? manga.title.romaji"
+                        [media]="manga"
+                        (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
+                        />
+                    </ion-col>
                   }
                 }
                 @case ('characters') {

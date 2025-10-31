@@ -27,6 +27,8 @@ import { ApiService } from '@components/core/services/api.service';
 import { GET_CHARACTER_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { Router } from '@angular/router';
 import { take } from 'rxjs';
+import { AuthService } from '@components/core/services/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-people-tab',
@@ -67,7 +69,12 @@ export class PeopleTabComponent implements OnInit {
   error: any;
   isTogglingFavorite: boolean = false;
 
-  constructor(private apiService: ApiService, private router: Router) {
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private readonly authService: AuthService,
+    private readonly toastController: ToastController
+  ) {
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
   }
@@ -122,11 +129,15 @@ export class PeopleTabComponent implements OnInit {
   }
 
   goToDetails(data: {id: number, type: string, isAdult: boolean}) {
-    this.closeModal();
+    if (data.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+    } else {
+      this.closeModal();
 
-    setTimeout(() => {
-      this.router.navigate(['media', data.type, data.id])
-    }, 100);
+      setTimeout(() => {
+        this.router.navigate(['media', data.type, data.id])
+      }, 100);
+    }
   }
 
   toggleCharacterFavorite() {
@@ -153,5 +164,21 @@ export class PeopleTabComponent implements OnInit {
           this.isTogglingFavorite = false;
         }
       });
+  }
+
+  private async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      animated: true,
+      icon: 'alert-circle',
+      color: 'danger',
+      position: 'bottom',
+      cssClass: 'multiline-toast', // Add custom class
+      swipeGesture: 'vertical'
+    });
+    console.log(message);
+
+    await toast.present();
   }
 }

@@ -63,12 +63,20 @@
     font-size: 12px;
     font-weight: bold;
     border-radius: 10px 0 10px 0;
-    z-index: 1;
+    z-index: 2;
   }
 
   .favourite {
     background-color: var(--ion-color-danger);
     color: white;
+
+    &.hasTag {
+      left: inherit;
+      right: 0;
+
+      border-radius: 0 10px 0 10px;
+      z-index: 1;
+    }
   }
 
   .title {

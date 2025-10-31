@@ -10,6 +10,8 @@ import { AiringSchedule } from 'src/app/models/aniList/responseInterfaces';
 import { takeUntil, take } from 'rxjs/operators';
 import { RangePipe } from "../../../helpers/range.pipe";
 import { Router } from '@angular/router';
+import { AuthService } from '@components/core/services/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-calendar',
@@ -20,8 +22,12 @@ import { Router } from '@angular/router';
 })
 export class CalendarPage implements OnInit, OnDestroy {
 
-  constructor(private readonly apiService: ApiService, private readonly router: Router) {
-  }
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly toastController: ToastController
+  ) { }
 
   now = new Date();
   jsDay = this.now.getDay();
@@ -73,7 +79,7 @@ export class CalendarPage implements OnInit, OnDestroy {
 
     console.log('variables: ', variables);
 
-    this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true).pipe(
+    this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true, this.authService.getUserData()?.options?.displayAdultContent).pipe(
       take(1), // Only take the first emission to avoid multiple updates
       takeUntil(this.cancelRequest$),
       takeUntil(this.destroy$)
@@ -93,9 +99,30 @@ export class CalendarPage implements OnInit, OnDestroy {
     });
   }
 
-  goToDetails(id: number) {
-    this.router.navigate(['/media', 'anime', id]);
+  goToDetails(id: number, isAdult: boolean | null | undefined) {
+    if (isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+    } else {
+      this.router.navigate(['/media', 'anime', id]);
+    }
   }
+
+  private async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      animated: true,
+      icon: 'alert-circle',
+      color: 'danger',
+      position: 'bottom',
+      cssClass: 'multiline-toast', // Add custom class
+      swipeGesture: 'vertical'
+    });
+    console.log(message);
+
+    await toast.present();
+  }
+
 }
 
 export function getWeekdayTimestamps(weekday: number): { from: number; to: number } {

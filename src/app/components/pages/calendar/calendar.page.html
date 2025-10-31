@@ -59,7 +59,7 @@
               [fallbackImage]="schedule.media.coverImage?.large"
               [title]="schedule.media.title.english ?? schedule.media.title.romaji"
               [note]="`Ep ${schedule.episode} airing at ${(schedule.airingAt * 1000) | date:'HH:mm'}`"
-              (click)="goToDetails(schedule.media.id)"
+              (click)="goToDetails(schedule.media.id, schedule.media.isAdult)"
               />
           </ion-col>
         }

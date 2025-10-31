@@ -27,8 +27,9 @@
             <app-media-list-item
               class="media-item ion-activatable"
               [media]="media"
-              (click)="goToDetails(media.id)"
+              (click)="goToDetails(media.id, media.isAdult)"
               [tag]="'#'+($index+1)"
+              [isFavourite]="media.isFavourite"
             />
           </ion-col>
         }

@@ -296,6 +296,11 @@ export class ExploreTabPage implements OnInit {
   }
 
   goToDetails(data: { id: number, type: string, isAdult: boolean }) {
+    if (data.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+      return;
+    }
+
     this.closeModal();
 
     setTimeout(() => {

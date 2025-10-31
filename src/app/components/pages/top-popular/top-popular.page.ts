@@ -10,6 +10,8 @@ import { take } from 'rxjs';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_TOP_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { RangePipe } from "../../../helpers/range.pipe";
+import { AuthService } from '@components/core/services/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-top-popular',
@@ -24,7 +26,9 @@ export class TopPopularPage implements OnInit {
     private readonly apiService: ApiService,
     private readonly route: ActivatedRoute,
     private readonly titleService: Title,
-    private readonly router: Router
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly toastController: ToastController
   ) { }
 
   toSentenceCase = toSentenceCase;
@@ -49,7 +53,12 @@ export class TopPopularPage implements OnInit {
     this.loadMore()
   }
 
-  goToDetails(id: number) {
+  goToDetails(id: number, isAdult: boolean | null | undefined) {
+    if (isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+      return;
+    }
+
     setTimeout(() => {
       this.router.navigate(['media', this.type, id])
     }, 100);
@@ -75,7 +84,6 @@ export class TopPopularPage implements OnInit {
 
     console.log(variables);
 
-
     this.apiService
       .fetchBasicData(GET_TOP_MEDIA, variables)
       .pipe(take(1))
@@ -88,8 +96,10 @@ export class TopPopularPage implements OnInit {
               if (id && !this.mediaIdSet.has(id)) {
                 this.mediaIdSet.add(id);
                 this.mediaEdges.push(e);
+
               }
             }
+            console.log(this.mediaEdges);
 
             const pageInfo = data?.Page?.pageInfo;
             this.page = this.page + 1;
@@ -115,4 +125,19 @@ export class TopPopularPage implements OnInit {
       });
   }
 
+  private async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      animated: true,
+      icon: 'alert-circle',
+      color: 'danger',
+      position: 'bottom',
+      cssClass: 'multiline-toast', // Add custom class
+      swipeGesture: 'vertical'
+    });
+    console.log(message);
+
+    await toast.present();
+  }
 }

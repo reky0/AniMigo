@@ -7,8 +7,10 @@
       />
     @if (tag) {
       <div class="rank-tag"> {{ tag }}</div>
-    } @else if (isFavourite) {
-      <div class="rank-tag favourite"> <ion-icon name="heart" class="heart-icon" /></div>
+    }
+
+    @if (isFavourite) {
+      <div class="rank-tag favourite" [class.hasTag]="tag ? true : false"> <ion-icon name="heart" class="heart-icon" /></div>
     }
   </ion-col>
   <ion-col size="9" class="content-container ion-padding">

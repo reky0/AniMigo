@@ -13,6 +13,8 @@ import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from 'src/app/helpers/range.pipe';
 import { forkJoin } from 'rxjs';
 import { tap, filter, take } from 'rxjs/operators';
+import { AuthService } from '@components/core/services/auth.service';
+import { ToastController } from '@ionic/angular';
 
 interface DataSection {
   data: BasicMedia[] | null | undefined;
@@ -123,7 +125,12 @@ export class HomeTabPage implements OnInit {
     }
   ];
 
-  constructor(private readonly apiService: ApiService, private readonly router: Router) { }
+  constructor(
+    private readonly apiService: ApiService,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+    private readonly toastController: ToastController
+  ) { }
 
   ngOnInit() {
     this.loadAllData();
@@ -216,8 +223,12 @@ export class HomeTabPage implements OnInit {
     });
   }
 
-  goToDetails(id: number, type: 'ANIME' | 'MANGA') {
-    this.router.navigate(['media', type.toLowerCase(), id])
+  goToDetails(id: number, type: 'ANIME' | 'MANGA', isAdult: boolean | null | undefined) {
+    if (isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+    } else {
+      this.router.navigate(['media', type.toLowerCase(), id])
+    }
   }
 
   refresh(event: any) {
@@ -263,5 +274,21 @@ export class HomeTabPage implements OnInit {
         event.target.complete();
       }
     });
+  }
+
+  private async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      animated: true,
+      icon: 'alert-circle',
+      color: 'danger',
+      position: 'bottom',
+      cssClass: 'multiline-toast', // Add custom class
+      swipeGesture: 'vertical'
+    });
+    console.log(message);
+
+    await toast.present();
   }
 }

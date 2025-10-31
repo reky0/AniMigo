@@ -289,6 +289,7 @@ export interface Character {
         seasonYear?: number | null;
         averageScore?: string | null;
         isFavourite?: boolean | null;
+        isAdult?: boolean | null;
       }
     }>
   }

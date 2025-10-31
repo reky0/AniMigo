@@ -380,6 +380,7 @@ export const GET_CHARACTER_MEDIA = gql`
               medium
               large
             }
+            isAdult
             format
             seasonYear
             averageScore
