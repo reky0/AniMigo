@@ -117,8 +117,8 @@
                             [name]="result.name.full ?? result.name.native"
                             [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
                             [fallbackImage]="result.image.large"
+                            (click)="openModal('character', result.id)"
                             />
-                            <!-- (click)="openModal('character', result.id)" -->
                           </ion-col>
                       }
                     }
@@ -288,4 +288,97 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button
+              class="closeModalButton"
+              (click)="closeModal()"
+              >
+              <ion-icon name="arrow-back" />
+            </ion-button>
+          </ion-buttons>
+
+          <ion-buttons slot="end">
+            <ion-button (click)="toggleCharacterFavorite()" [disabled]="isTogglingFavorite">
+              @if (isTogglingFavorite) {
+                <ion-spinner name="dots" slot="icon-only"></ion-spinner>
+              } @else {
+                <ion-icon
+                  slot="icon-only"
+                  [name]="modalData?.isFavourite ? 'heart' : 'heart-outline'"
+                  [color]="modalData?.isFavourite ? 'danger' : 'medium'">
+                </ion-icon>
+              }
+            </ion-button>
+
+            <ion-button>
+              <ion-icon slot="icon-only" name="share-social"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-segment
+                  [value]="modalSelectedTab"
+                  (ionChange)="onSegmentChange($event)"
+                  mode="md"
+                  class="tab-segment">
+
+                  <ion-segment-button value="info" layout="icon-top">
+                    <ion-icon name="information-circle"></ion-icon>
+                  </ion-segment-button>
+
+                  <ion-segment-button value="media" layout="icon-top">
+                    <ion-icon name="film"></ion-icon>
+                  </ion-segment-button>
+
+                  <!-- @if (modalData?.voiceActingRoles) {
+                    <ion-segment-button value="va" layout="icon-top">
+                      <ion-icon name="mic"></ion-icon>
+                    </ion-segment-button>
+                  } -->
+                </ion-segment>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-no-padding">
+        <ion-grid>
+          <ion-row class="tabsContainer">
+            @if (!modalDataLoading) {
+              @switch (modalSelectedTab) {
+                @case ('info') {
+                  <app-people-info-tab [data]="modalData" [loading]="modalDataLoading" />
+                }
+                @case ('media') {
+                  <app-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
+                }
+                @case ('va') {
+                  <app-people-va-tab [data]="modalData" [loading]="modalDataLoading" />
+                }
+              }
+            } <!-- @else {
+              <ion-col>
+                @for (i of 7 | range; track i) {
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-skeleton-text class="skeleton" animated/>
+                    </ion-col>
+                  </ion-row>
+                }
+              </ion-col>
+            } -->
+          </ion-row>
+        </ion-grid>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

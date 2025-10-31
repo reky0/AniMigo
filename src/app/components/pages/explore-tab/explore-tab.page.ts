@@ -9,15 +9,21 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { searchOutline, textOutline, checkmark, banOutline, arrowBack, shareSocial, informationCircle, film } from 'ionicons/icons';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
-import { SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
+import { GET_CHARACTER_BY_ID, SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
+import { Character } from 'src/app/models/aniList/responseInterfaces';
+import { take } from 'rxjs';
+import { ToastController } from '@ionic/angular';
+import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
+import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
+import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
 
 @Component({
   selector: 'app-explore-tab',
   templateUrl: './explore-tab.page.html',
   styleUrls: ['./explore-tab.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScroll, IonSegmentButton, IonSegment, IonButton, IonButtons, IonModal, IonCardSubtitle, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonSearchbar, IonRow, IonCol, InfoChipComponent, IonIcon, IonSpinner, MediaListItemComponent, IonChip, PersonItemComponent, IonInfiniteScrollContent]
+  imports: [IonInfiniteScroll, IonSegmentButton, IonSegment, IonButton, IonButtons, IonModal, IonCardSubtitle, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonSearchbar, IonRow, IonCol, InfoChipComponent, IonIcon, IonSpinner, MediaListItemComponent, IonChip, PersonItemComponent, IonInfiniteScrollContent, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent]
 })
 export class ExploreTabPage implements OnInit {
   @ViewChild('searchBar') searchBar!: IonSearchbar;
@@ -40,13 +46,24 @@ export class ExploreTabPage implements OnInit {
   actualCharacterPage = 1;
 
   hasNextPage = true;
+  isModalOpen: boolean;
+  modalSelectedTab: string; // info | media | va
+  modalData: Character | undefined;
+  modalDataLoading: boolean = false;
+  error: any
+  isTogglingFavorite: boolean = false;
+
 
   constructor(
     readonly platformService: PlatformService,
     private readonly router: Router,
-    private readonly apiService: ApiService
+    private readonly apiService: ApiService,
+    private readonly toastController: ToastController,
   ) {
-    addIcons({checkmark,searchOutline,textOutline,banOutline,arrowBack,shareSocial,informationCircle,film});
+    addIcons({ checkmark, searchOutline, textOutline, banOutline, arrowBack, shareSocial, informationCircle, film });
+
+    this.isModalOpen = false;
+    this.modalSelectedTab = 'info';
   }
 
   ngOnInit() {
@@ -217,10 +234,10 @@ export class ExploreTabPage implements OnInit {
       // 'studios': SEARCH_MEDIA, // TODO: Replace with SEARCH_STUDIOS when available
     };
 
-    const variablesMap: Record<typeof this.category, {page: number, search: string, type?: string}> = {
-      'anime': {page: this.actualAnimePage, search: this.searchQuery, type: 'ANIME'},
-      'manga': {page: this.actualMangaPage, search: this.searchQuery, type: 'MANGA'},
-      'characters': {page: this.actualCharacterPage, search: this.searchQuery},
+    const variablesMap: Record<typeof this.category, { page: number, search: string, type?: string }> = {
+      'anime': { page: this.actualAnimePage, search: this.searchQuery, type: 'ANIME' },
+      'manga': { page: this.actualMangaPage, search: this.searchQuery, type: 'MANGA' },
+      'characters': { page: this.actualCharacterPage, search: this.searchQuery },
       // 'staff': {page: this.actualPage, search: this.searchQuery, type: 'STAFF'}, // TODO: Replace with SEARCH_STAFF when available
       // 'studios': {page: this.actualPage, search: this.searchQuery, type: 'STUDIO'}, // TODO: Replace with SEARCH_STUDIOS when available
     };
@@ -229,7 +246,7 @@ export class ExploreTabPage implements OnInit {
     const variables = variablesMap[this.category];
 
     this.apiService.search(query, variables).subscribe({
-      next: ({data, loading, errors}) => {
+      next: ({ data, loading, errors }) => {
         console.log('Search results:', data);
 
         const newResults = data?.Page?.media ?? data?.Page?.characters ?? [];
@@ -276,11 +293,100 @@ export class ExploreTabPage implements OnInit {
     this.router.navigate([target]);
   }
 
-  goToDetails(data: {id: number, type: string, isAdult: boolean}) {
-    // this.closeModal();
+  goToDetails(data: { id: number, type: string, isAdult: boolean }) {
+    this.closeModal();
 
     setTimeout(() => {
       this.router.navigate(['media', data.type.toLowerCase(), data.id])
     }, 100);
+  }
+
+  openModal(type: 'staff' | 'character' | 'va', id: number) {
+    console.log('open modal');
+
+    let variables = {
+      id: id
+    }
+
+    console.log(variables);
+
+    switch (type) {
+      case ('staff'):
+        break;
+      case ('character'):
+        this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
+          next: ({ data, loading, errors }) => {
+            this.modalDataLoading = loading;
+            if (errors) {
+              this.error = errors[0];
+            } else {
+              this.modalData = data?.Character;
+              console.log(this.modalData);
+              this.isModalOpen = true;
+              // console.log(this.data?.description);
+            }
+          },
+          error: (err) => {
+            this.error = err;
+            this.modalDataLoading = false;
+          }
+        });
+        break;
+      case ('va'):
+        break;
+    }
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.modalSelectedTab = 'info';
+  }
+
+  onSegmentChange(event: any) {
+    this.modalSelectedTab = event.detail.value as string;
+
+    console.log('Modal tab changed to: ' + this.modalSelectedTab);
+  }
+
+  toggleCharacterFavorite() {
+    if (!this.modalData?.id || this.isTogglingFavorite) return;
+
+    this.isTogglingFavorite = true;
+
+    this.apiService.toggleFavoriteCharacter(this.modalData.id)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.isTogglingFavorite = false;
+          if (result.success && this.modalData) {
+            // Update local state by creating a new object
+            console.log('fav operation success');
+
+            this.modalData = {
+              ...this.modalData,
+              isFavourite: result.isFavorite
+            };
+          }
+        },
+        error: () => {
+          this.isTogglingFavorite = false;
+        }
+      });
+  }
+
+  private async showErrorToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 3000,
+      animated: true,
+      icon: 'alert-circle',
+      color: 'danger',
+      position: 'bottom',
+      cssClass: 'multiline-toast', // Add custom class
+      swipeGesture: 'vertical'
+    });
+    console.log(message);
+
+    await toast.present();
   }
 }
