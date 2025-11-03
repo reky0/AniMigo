@@ -15,6 +15,7 @@ import { forkJoin } from 'rxjs';
 import { tap, filter, take } from 'rxjs/operators';
 import { AuthService } from '@components/core/services/auth.service';
 import { ToastController } from '@ionic/angular';
+import { getNextSeason } from 'src/app/helpers/utils';
 
 interface DataSection {
   data: BasicMedia[] | null | undefined;
@@ -61,7 +62,6 @@ export class HomeTabPage implements OnInit {
       variables: {
         page: 1,
         perPage: 20,
-        isAdult: false,
         type: 'ANIME',
         context: "trendingAnimes",
         sort: 'TRENDING_DESC',
@@ -72,13 +72,15 @@ export class HomeTabPage implements OnInit {
       data: null,
       loading: true,
       query: GET_NEXT_SEASON_ANIMES,
-      variables: {
-        page: 1,
-        perPage: 20,
-        season: "WINTER",
-        seasonYear: 2026,
-        isAdult: false
-      },
+      variables: (() => {
+        const nextSeason = getNextSeason();
+        return {
+          page: 1,
+          perPage: 20,
+          season: nextSeason.season,
+          seasonYear: nextSeason.year,
+        };
+      })(),
       key: 'nextSeasonAnimes'
     },
     {
@@ -88,7 +90,6 @@ export class HomeTabPage implements OnInit {
       variables: {
         page: 1,
         perPage: 20,
-        isAdult: false,
         type: 'MANGA',
         context: "trendingMangas",
         sort: 'TRENDING_DESC',
@@ -102,7 +103,6 @@ export class HomeTabPage implements OnInit {
       variables: {
         page: 1,
         perPage: 20,
-        isAdult: false,
         type: 'ANIME',
         context: "newlyAddedAnimes",
         sort: 'ID_DESC',
@@ -116,7 +116,6 @@ export class HomeTabPage implements OnInit {
       variables: {
         page: 1,
         perPage: 20,
-        isAdult: false,
         type: 'MANGA',
         context: "newlyAddedMangas",
         sort: 'ID_DESC',
@@ -183,7 +182,7 @@ export class HomeTabPage implements OnInit {
     this.dataSections.forEach(section => {
       this.setLoadingState(section.key, true);
       // Wait for loading to be false before taking the result
-      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables).pipe(
+      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent ?? false).pipe(
         filter(result => !result.loading),
         take(1)
       );

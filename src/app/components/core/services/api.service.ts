@@ -36,7 +36,7 @@ export class ApiService {
     private readonly authService: AuthService
   ) { }
 
-  fetchBasicData(query: any, variables: Object, showToast = true): Observable<{
+  fetchBasicData(query: any, variables: Object, filterAdult: boolean = true, showToast = true): Observable<{
     data: BasicMediaResponse | null;
     loading: boolean;
     errors?: any;
@@ -53,8 +53,20 @@ export class ApiService {
           const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load media data');
           this.showErrorToast(errorMsg);
         }
+
+        // Filter out adult content if filterAdult is true
+        const filteredData = result.data && filterAdult ? {
+          ...result.data,
+          Page: {
+            ...result.data.Page,
+            airingSchedules: result.data.Page.media.filter(
+              media => !media.isAdult
+            )
+          }
+        } : result.data;
+
         return {
-          data: result.data,
+          data: filteredData,
           loading: result.loading,
           errors: result.errors ? result.errors[0] : undefined,
         };

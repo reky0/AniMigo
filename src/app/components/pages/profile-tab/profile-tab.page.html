@@ -145,7 +145,7 @@
               @if (loading && !userData) {
                 <div class="loading-placeholder">Loading favorites...</div>
               } @else if (favoriteAnime.length > 0) {
-                <ion-grid class="favorites-grid">
+                <ion-grid class="favorites-grid ion-margin-bottom">
                   <ion-row>
                     @for (i of 9 | range; track $index) {
                       @if (favoriteAnime[i-1]) {
@@ -182,7 +182,7 @@
               @if (loading && !userData) {
                 <div class="loading-placeholder">Loading favorites...</div>
               } @else if (favoriteManga.length > 0) {
-                <ion-grid class="favorites-grid">
+                <ion-grid class="favorites-grid ion-margin-bottom">
                   <ion-row>
                     @for (i of 9 | range; track $index) {
                       @if (favoriteManga[i-1]) {
@@ -492,10 +492,10 @@
                   @for (anime of favoriteAnime; track $index) {
                     <ion-col size="12" sizeMd="6">
                       <app-media-list-item
-                      [title]="anime.title.english ?? anime.title.romaji"
-                      [media]="anime"
-                      (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
-                      />
+                        [title]="anime.title.english ?? anime.title.romaji"
+                        [media]="anime"
+                        (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
+                        />
                     </ion-col>
                   }
                 }

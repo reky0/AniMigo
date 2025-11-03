@@ -1,11 +1,11 @@
 <ion-header translucent>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button defaultHref="/explore"/>
-      </ion-buttons>
-      <ion-title>Top 100 {{ toSentenceCase(type) }}</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"/>
+    </ion-buttons>
+    <ion-title>{{ pageTitle }}</ion-title>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-grid>
@@ -16,7 +16,7 @@
             <ion-skeleton-text
               class="skeleton ion-margin-bottom"
               animated
-              ></ion-skeleton-text>
+            ></ion-skeleton-text>
           </ion-col>
         }
       </ion-row>
@@ -37,7 +37,7 @@
       <ion-infinite-scroll
         (ionInfinite)="loadMore($event)"
         threshold="0px"
-        >
+      >
         <ion-infinite-scroll-content loadingSpinner="bubbles"/>
       </ion-infinite-scroll>
     }
