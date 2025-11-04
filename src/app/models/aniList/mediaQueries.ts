@@ -1,8 +1,18 @@
 import { gql } from "apollo-angular";
 
-export const GET_TRENDING_MEDIA = gql`
-  query TrendingMedia($page: Int = 1, $perPage: Int = 10, $type: MediaType!, $context: String!) {
-    Page(page: $page, perPage: $perPage) @connection (key: "trendingMedia", filter: ["context"]) {
+export const GET_MEDIA_LIST = gql`
+  query MediaList(
+    $page: Int = 1,
+    $perPage: Int = 20,
+    $type: MediaType!,
+    $sort: [MediaSort],
+    $season: MediaSeason,
+    $seasonYear: Int,
+    $format: MediaFormat,
+    $status: MediaStatus,
+    $context: String
+  ) {
+    Page(page: $page, perPage: $perPage) @connection (key: "mediaList", filter: ["context", "sort"]) {
       pageInfo {
         currentPage
         hasNextPage
@@ -11,73 +21,11 @@ export const GET_TRENDING_MEDIA = gql`
       }
       media(
         type: $type,
-        sort: TRENDING_DESC,
-      ) {
-        id
-        title {
-          romaji
-          english
-          native
-        }
-        coverImage {
-          medium
-          large
-        }
-        averageScore
-        type
-        isFavourite
-        isAdult
-      }
-    }
-  }
-`;
-
-export const GET_NEXT_SEASON_ANIMES = gql`
-  query NextSeasonAnime($page: Int = 1, $perPage: Int = 20, $season: MediaSeason, $seasonYear: Int) {
-    Page(page: $page, perPage: $perPage) {
-      pageInfo {
-        currentPage
-        hasNextPage
-        total
-        perPage
-      }
-      media(
-        type: ANIME,
+        sort: $sort,
         season: $season,
         seasonYear: $seasonYear,
-        sort: POPULARITY_DESC,
-      ) {
-        id
-        title {
-          romaji
-          english
-          native
-        }
-        coverImage {
-          medium
-          large
-        }
-        seasonYear
-        type
-        isFavourite
-        isAdult
-      }
-    }
-  }
-`;
-
-export const GET_NEWLY_ADDED_MEDIA = gql`
-  query ($page: Int = 1, $perPage: Int = 20, $type: MediaType!, $context: String!) {
-    Page(page: $page, perPage: $perPage) @connection (key: "newlyAddedMedia", filter: ["context"]) {
-      pageInfo {
-        currentPage
-        hasNextPage
-        total
-        perPage
-      }
-      media(
-        type: $type,
-        sort: ID_DESC,
+        format: $format,
+        status: $status
       ) {
         id
         title {
@@ -90,7 +38,12 @@ export const GET_NEWLY_ADDED_MEDIA = gql`
           large
         }
         averageScore
+        seasonYear
+        startDate {
+          year
+        }
         type
+        format
         isFavourite
         isAdult
       }
@@ -414,40 +367,6 @@ export const GET_AIRING_SCHEDULES = gql`
         episode
         airingAt
         timeUntilAiring
-      }
-    }
-  }
-`;
-
-export const GET_TOP_MEDIA = gql`
-  query ($page: Int = 1, $perPage: Int = 25, $type: MediaType!, $format: MediaFormat, $sort: [MediaSort], $isAdult: Boolean = false) {
-    Page(page: $page, perPage: $perPage) {
-      pageInfo {
-        currentPage
-        hasNextPage
-        total
-        perPage
-      }
-      media(type: $type, format: $format, sort: $sort, isAdult: $isAdult) {
-        id
-        title {
-          romaji
-          english
-          native
-        }
-        coverImage {
-          medium
-          large
-        }
-        averageScore
-        seasonYear
-        startDate {
-          year
-        }
-        type
-        isAdult
-        format
-        isFavourite
       }
     }
   }

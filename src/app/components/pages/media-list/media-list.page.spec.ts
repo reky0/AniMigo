@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TopMediaPage } from './top-media.page';
+import { MediaListPage } from './media-list.page';
 
-describe('TopMediaPage', () => {
-  let component: TopMediaPage;
-  let fixture: ComponentFixture<TopMediaPage>;
+describe('MediaListPage', () => {
+  let component: MediaListPage;
+  let fixture: ComponentFixture<MediaListPage>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TopMediaPage);
+    fixture = TestBed.createComponent(MediaListPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

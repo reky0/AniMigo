@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { TopMediaConfig } from './models/top-media-config.interface';
+import { MediaListConfig } from './models/media-list-config.interface';
 
 export const routes: Routes = [
   {
@@ -17,7 +17,7 @@ export const routes: Routes = [
   },
   {
     path: ':type/top-100',
-    loadComponent: () => import('./components/pages/top-media/top-media.page').then( m => m.TopMediaPage),
+    loadComponent: () => import('./components/pages/media-list/media-list.page').then( m => m.MediaListPage),
     data: {
       config: {
         titlePrefix: 'Top 100',
@@ -25,19 +25,19 @@ export const routes: Routes = [
         maxItems: 100,
         typeSource: 'route',
         defaultHref: '/explore'
-      } as TopMediaConfig
+      } as MediaListConfig
     }
   },
   {
     path: ':type/top-popular',
-    loadComponent: () => import('./components/pages/top-media/top-media.page').then( m => m.TopMediaPage),
+    loadComponent: () => import('./components/pages/media-list/media-list.page').then( m => m.MediaListPage),
     data: {
       config: {
         titlePrefix: 'Top Popular',
         sortType: ['POPULARITY_DESC'],
         typeSource: 'route',
         defaultHref: '/explore'
-      } as TopMediaConfig
+      } as MediaListConfig
     }
   },
   {
@@ -52,7 +52,7 @@ export const routes: Routes = [
   },
   {
     path: 'anime/top-movies',
-    loadComponent: () => import('./components/pages/top-media/top-media.page').then( m => m.TopMediaPage),
+    loadComponent: () => import('./components/pages/media-list/media-list.page').then( m => m.MediaListPage),
     data: {
       config: {
         titlePrefix: 'Top Movies',
@@ -61,7 +61,48 @@ export const routes: Routes = [
         typeSource: 'fixed',
         fixedType: 'anime',
         defaultHref: '/explore'
-      } as TopMediaConfig
+      } as MediaListConfig
+    }
+  },
+  {
+    path: ':type/upcoming',
+    loadComponent: () => import('./components/pages/media-list/media-list.page').then( m => m.MediaListPage),
+    data: {
+      config: {
+        titlePrefix: 'Upcoming',
+        typeSource: 'route',
+        sortType: ['POPULARITY_DESC'],
+        status: 'NOT_YET_RELEASED',
+        defaultHref: '/explore'
+      } as MediaListConfig
+    }
+  },
+  {
+    path: 'anime/airing',
+    loadComponent: () => import('./components/pages/media-list/media-list.page').then( m => m.MediaListPage),
+    data: {
+      config: {
+        titlePrefix: 'Airing',
+        typeSource: 'fixed',
+        fixedType: 'anime',
+        sortType: ['POPULARITY_DESC'],
+        status: 'RELEASING',
+        defaultHref: '/explore'
+      } as MediaListConfig
+    }
+  },
+  {
+    path: 'manga/publishing',
+    loadComponent: () => import('./components/pages/media-list/media-list.page').then( m => m.MediaListPage),
+    data: {
+      config: {
+        titlePrefix: 'Publishing',
+        typeSource: 'fixed',
+        fixedType: 'manga',
+        sortType: ['POPULARITY_DESC'],
+        status: 'RELEASING',
+        defaultHref: '/explore'
+      } as MediaListConfig
     }
   },
 ];

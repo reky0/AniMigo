@@ -8,7 +8,7 @@ import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, 
 
 import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api.service';
-import { GET_NEWLY_ADDED_MEDIA, GET_NEXT_SEASON_ANIMES, GET_TRENDING_MEDIA } from 'src/app/models/aniList/mediaQueries';
+import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from 'src/app/helpers/range.pipe';
 import { forkJoin } from 'rxjs';
@@ -58,25 +58,27 @@ export class HomeTabPage implements OnInit {
     {
       data: null,
       loading: true,
-      query: GET_TRENDING_MEDIA,
+      query: GET_MEDIA_LIST,
       variables: {
         page: 1,
         perPage: 20,
         type: 'ANIME',
         context: "trendingAnimes",
-        sort: 'TRENDING_DESC',
+        sort: ['TRENDING_DESC'],
       },
       key: 'trendingAnimes'
     },
     {
       data: null,
       loading: true,
-      query: GET_NEXT_SEASON_ANIMES,
+      query: GET_MEDIA_LIST,
       variables: (() => {
         const nextSeason = getNextSeason();
         return {
           page: 1,
           perPage: 20,
+          type: 'ANIME',
+          sort: ['POPULARITY_DESC'],
           season: nextSeason.season,
           seasonYear: nextSeason.year,
         };
@@ -86,39 +88,39 @@ export class HomeTabPage implements OnInit {
     {
       data: null,
       loading: true,
-      query: GET_TRENDING_MEDIA,
+      query: GET_MEDIA_LIST,
       variables: {
         page: 1,
         perPage: 20,
         type: 'MANGA',
         context: "trendingMangas",
-        sort: 'TRENDING_DESC',
+        sort: ['TRENDING_DESC'],
       },
       key: 'trendingMangas'
     },
     {
       data: null,
       loading: true,
-      query: GET_NEWLY_ADDED_MEDIA,
+      query: GET_MEDIA_LIST,
       variables: {
         page: 1,
         perPage: 20,
         type: 'ANIME',
         context: "newlyAddedAnimes",
-        sort: 'ID_DESC',
+        sort: ['ID_DESC'],
       },
       key: 'newlyAddedAnimes'
     },
     {
       data: null,
       loading: true,
-      query: GET_NEWLY_ADDED_MEDIA,
+      query: GET_MEDIA_LIST,
       variables: {
         page: 1,
         perPage: 20,
         type: 'MANGA',
         context: "newlyAddedMangas",
-        sort: 'ID_DESC',
+        sort: ['ID_DESC'],
       },
       key: 'newlyAddedMangas'
     }
@@ -182,7 +184,7 @@ export class HomeTabPage implements OnInit {
     this.dataSections.forEach(section => {
       this.setLoadingState(section.key, true);
       // Wait for loading to be false before taking the result
-      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent ?? false).pipe(
+      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent).pipe(
         filter(result => !result.loading),
         take(1)
       );
@@ -237,7 +239,7 @@ export class HomeTabPage implements OnInit {
     this.dataSections.forEach(section => {
       this.setLoadingState(section.key, true);
       // Wait for loading to be false before taking the result
-      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables).pipe(
+      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent).pipe(
         filter(result => !result.loading),
         take(1)
       );

@@ -36,7 +36,7 @@ export class ApiService {
     private readonly authService: AuthService
   ) { }
 
-  fetchBasicData(query: any, variables: Object, filterAdult: boolean = true, showToast = true): Observable<{
+  fetchBasicData(query: any, variables: Object, displayAdultContent: boolean = false, showToast = true): Observable<{
     data: BasicMediaResponse | null;
     loading: boolean;
     errors?: any;
@@ -54,12 +54,12 @@ export class ApiService {
           this.showErrorToast(errorMsg);
         }
 
-        // Filter out adult content if filterAdult is true
-        const filteredData = result.data && filterAdult ? {
+        // Filter out adult content if displayAdultContent is false
+        const filteredData = result.data && !displayAdultContent ? {
           ...result.data,
           Page: {
             ...result.data.Page,
-            airingSchedules: result.data.Page.media.filter(
+            media: result.data.Page.media.filter(
               media => !media.isAdult
             )
           }

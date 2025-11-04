@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonSkeletonText, IonToolbar, IonTitle } from '@ionic/angular/standalone';
-import { GET_TOP_MEDIA } from 'src/app/models/aniList/mediaQueries';
+import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { take } from 'rxjs';
 import { ApiService } from '@components/core/services/api.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,12 +12,12 @@ import { ToastController } from '@ionic/angular';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { RangePipe } from "../../../helpers/range.pipe";
-import { TopMediaConfig } from 'src/app/models/top-media-config.interface';
+import { MediaListConfig } from 'src/app/models/media-list-config.interface';
 
 @Component({
-  selector: 'app-top-media',
-  templateUrl: './top-media.page.html',
-  styleUrls: ['./top-media.page.scss'],
+  selector: 'app-media-list',
+  templateUrl: './media-list.page.html',
+  styleUrls: ['./media-list.page.scss'],
   standalone: true,
   imports: [
     IonTitle, IonRow, IonContent, IonHeader, IonToolbar,
@@ -27,7 +27,7 @@ import { TopMediaConfig } from 'src/app/models/top-media-config.interface';
     RangePipe, IonSkeletonText
   ],
 })
-export class TopMediaPage implements OnInit {
+export class MediaListPage implements OnInit {
 
   toSentenceCase = toSentenceCase;
 
@@ -43,7 +43,7 @@ export class TopMediaPage implements OnInit {
   loading: boolean = true;
   error: any;
 
-  config!: TopMediaConfig;
+  config!: MediaListConfig;
   pageTitle: string = '';
   defaultHref: string = '/explore';
 
@@ -58,7 +58,7 @@ export class TopMediaPage implements OnInit {
 
   ngOnInit() {
     // Get configuration from route data
-    this.config = this.route.snapshot.data['config'] as TopMediaConfig;
+    this.config = this.route.snapshot.data['config'] as MediaListConfig;
 
     // Determine type based on configuration
     if (this.config.typeSource === 'fixed') {
@@ -119,12 +119,26 @@ export class TopMediaPage implements OnInit {
 
     this.loadingMore = true;
 
+    // Create a unique context for Apollo cache differentiation
+    const contextParts = [
+      this.config.titlePrefix.replace(/\s+/g, ''),
+      this.type,
+      this.config.sortType?.[0] || 'default'
+    ];
+    if (this.config.format) {
+      contextParts.push(this.config.format);
+    }
+    if (this.config.status) {
+      contextParts.push(this.config.status);
+    }
+    const context = contextParts.join('_');
+
     const variables: any = {
       type: this.type?.toUpperCase(),
       page: this.page,
       sort: this.config.sortType,
       perPage: this.perPage,
-      isAdult: false
+      context: context
     };
 
     // Add format if specified in config
@@ -132,10 +146,16 @@ export class TopMediaPage implements OnInit {
       variables.format = this.config.format;
     }
 
+    // Add status if specified in config
+    if (this.config.status) {
+      variables.status = this.config.status;
+    }
+
     console.log(variables);
 
+    // Use search method which has network-only fetch policy for proper pagination
     this.apiService
-      .fetchBasicData(GET_TOP_MEDIA, variables)
+      .search(GET_MEDIA_LIST, variables, true, !this.authService.getUserData()?.options?.displayAdultContent)
       .pipe(take(1))
       .subscribe({
         next: ({ data, errors }) => {

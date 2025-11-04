@@ -1,12 +1,16 @@
 {
-  "name": "AniMigo",
+  "name": "@reky0/animigo",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "reky0",
+  "homepage": "https://github.com/reky0/AniMigo",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:android": "ionic capacitor run android",
+    "start:android:live": "ionic capacitor run android -l --external",
     "build": "ng build",
+    "build:android": "ionic capacitor build android",
+    "open:android": "ionic capacitor open android",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
