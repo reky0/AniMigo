@@ -1,0 +1,18 @@
+# Check for console.log statements in staged files
+echo "🔍 Checking for console.log statements..."
+
+# Get all staged changes and check for console.log
+# This looks for lines starting with + (added) that contain console.log followed by (
+# but excludes lines where console.log is in a comment (after //)
+if git diff --cached --diff-filter=ACM | grep -E '^\+' | grep -v '//' | grep -q 'console\.log('; then
+  echo "❌ Error: console.log statements found in staged changes."
+  echo ""
+  echo "Files with console.log:"
+  git diff --cached --diff-filter=ACM | grep -E '^\+.*console\.log\(' | head -5
+  echo ""
+  echo "Please remove console.log statements before committing."
+  echo "If you need to keep them for debugging, use console.warn, console.error, or console.debug instead."
+  exit 1
+fi
+
+echo "✅ No console.log statements found. Proceeding with commit..."
