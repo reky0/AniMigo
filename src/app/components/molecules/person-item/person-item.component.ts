@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { IonCol, IonGrid, IonImg, IonLabel, IonNote, IonRow, IonSkeletonText } from "@ionic/angular/standalone";
 import { toSentenceCase } from 'src/app/helpers/utils';
@@ -9,7 +9,7 @@ import { toSentenceCase } from 'src/app/helpers/utils';
   styleUrls: ['./person-item.component.scss'],
   imports: [IonNote, IonLabel, IonRow, IonImg, IonGrid, IonCol, CollapsibleComponent, IonSkeletonText],
 })
-export class PersonItemComponent  implements OnInit {
+export class PersonItemComponent {
   @Input() loading: boolean = false;
   @Input() image: string | null | undefined = "";
   @Input() fallbackImage: string | null | undefined = "";
@@ -19,8 +19,6 @@ export class PersonItemComponent  implements OnInit {
   toSentenceCase = toSentenceCase;
 
   constructor() { }
-
-  ngOnInit() {}
 
   onImageError() {
     if (this.image !== this.fallbackImage) {

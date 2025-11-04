@@ -25,7 +25,6 @@ export class AuthCallbackPage implements OnInit {
     const success = this.authService.handleCallback();
 
     if (success) {
-      console.log('Authentication successful!');
       // Redirect to profile or home page
       setTimeout(() => {
         this.router.navigate(['/profile']);

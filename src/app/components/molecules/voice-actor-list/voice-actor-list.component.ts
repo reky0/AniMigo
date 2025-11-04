@@ -1,8 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IonCol, IonGrid, IonRow, IonText } from "@ionic/angular/standalone";
+import { Component, Input } from '@angular/core';
+import { IonicModule } from "@ionic/angular";
 import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
 import { PersonItemComponent } from "../person-item/person-item.component";
-import { IonicModule } from "@ionic/angular";
 
 @Component({
   selector: 'app-voice-actor-list',
@@ -11,12 +10,8 @@ import { IonicModule } from "@ionic/angular";
   imports: [PersonItemComponent, IonicModule],
 })
 
-export class VoiceActorListComponent  implements OnInit {
+export class VoiceActorListComponent  {
   @Input() data: Array<VoiceActor> | undefined;
 
   constructor() { }
-
-  ngOnInit() {
-    console.log("voice actors: " + this.data);
-  }
 }

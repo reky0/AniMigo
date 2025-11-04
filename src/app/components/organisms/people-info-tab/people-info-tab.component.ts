@@ -26,8 +26,6 @@ export class PeopleInfoTabComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    console.log(this.data);
-
     if (this.data) {
       if (this.data.dateOfBirth && this.data.dateOfBirth.day && this.data.dateOfBirth.month) {
         this.birthdate = new Date(this.data.dateOfBirth.year ?? new Date().getFullYear(), this.data.dateOfBirth.month - 1, this.data.dateOfBirth.day)

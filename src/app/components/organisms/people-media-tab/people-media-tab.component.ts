@@ -32,8 +32,6 @@ export class PeopleMediaTabComponent implements OnInit {
   constructor(private readonly apiService: ApiService) { }
 
   ngOnInit() {
-    console.log(this.data);
-
     // Start from page 0 so first loadMore fetches page 1
     this.currentPage = 0;
     this.hasNextPage = true;
@@ -48,8 +46,6 @@ export class PeopleMediaTabComponent implements OnInit {
 
   // TODO: Add same functionality for staff and voice actors too
   async loadMore(event: any) {
-    console.log("loadMore triggered.");
-
     if (this.loadingMore || !this.hasNextPage || !this.data?.id) {
       event?.target?.complete();
       return;
@@ -75,9 +71,6 @@ export class PeopleMediaTabComponent implements OnInit {
               if (id && !this.mediaIdSet.has(id)) {
                 this.mediaIdSet.add(id);
                 this.mediaEdges.push(e);
-
-                console.log(this.mediaEdges);
-
               }
             }
 

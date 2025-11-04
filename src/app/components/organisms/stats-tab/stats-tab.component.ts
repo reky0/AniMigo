@@ -57,14 +57,12 @@ export class StatsTabComponent implements OnInit {
 
         this.coloredScores.push(coloredScore);
       }
-      console.log(this.coloredScores);
 
       for (let i = 0; i < this.data.stats.statusDistribution.length; i++) {
         let coloredStatus: StatusStat = { ...this.data.stats.statusDistribution[i], color: statusColors[i][0], textColor: statusColors[i][1] }
 
         this.coloredStatus.push(coloredStatus);
       }
-      console.log(this.coloredStatus);
 
       this.totalStatus = this.data?.stats.statusDistribution.reduce((sum, item) => sum + item.amount, 0)
       this.maxScoreAmount = Math.max(...this.data.stats.scoreDistribution.map(item => item.amount))

@@ -66,18 +66,11 @@ export class CalendarPage implements OnInit, OnDestroy {
     this.loading = true;
     this.airingSchedules = undefined;
 
-    console.log('loading:', this.loading);
-    console.log(this.airingSchedules);
-
-
     const ts = getWeekdayTimestamps(this.weekdayNumber);
-    console.log('timestamps:', ts);
     const variables = {
       from: ts.from,
       to: ts.to
     };
-
-    console.log('variables: ', variables);
 
     this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true, this.authService.getUserData()?.options?.displayAdultContent).pipe(
       take(1), // Only take the first emission to avoid multiple updates
@@ -85,12 +78,9 @@ export class CalendarPage implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe({
       next: (result) => {
-        console.log('result');
-
         this.airingSchedules = result.data?.Page.airingSchedules;
         this.loadedData[this.weekdayNumber] = this.airingSchedules || null;
         this.loading = result.loading;
-        console.log('Airing schedules:', this.airingSchedules);
       },
       error: (error) => {
         console.error('Error fetching airing schedules:', error);
@@ -118,7 +108,6 @@ export class CalendarPage implements OnInit, OnDestroy {
       cssClass: 'multiline-toast', // Add custom class
       swipeGesture: 'vertical'
     });
-    console.log(message);
 
     await toast.present();
   }

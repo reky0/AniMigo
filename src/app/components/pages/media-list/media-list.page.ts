@@ -103,7 +103,6 @@ export class MediaListPage implements OnInit {
   async loadMore(event?: any) {
     if (this.loadingMore || !this.hasNextPage) {
       event?.target?.complete();
-      console.log('end');
       return;
     }
 
@@ -113,7 +112,6 @@ export class MediaListPage implements OnInit {
       if (event) {
         event.target.disabled = true;
       }
-      console.log('end');
       return;
     }
 
@@ -151,8 +149,6 @@ export class MediaListPage implements OnInit {
       variables.status = this.config.status;
     }
 
-    console.log(variables);
-
     // Use search method which has network-only fetch policy for proper pagination
     this.apiService
       .search(GET_MEDIA_LIST, variables, true, !this.authService.getUserData()?.options?.displayAdultContent)
@@ -168,13 +164,10 @@ export class MediaListPage implements OnInit {
                 this.mediaEdges.push(e);
               }
             }
-            console.log(this.mediaEdges);
 
             const pageInfo = data?.Page?.pageInfo;
             this.page = this.page + 1;
             this.hasNextPage = !!pageInfo?.hasNextPage;
-          } else {
-            console.log('error');
           }
 
           this.loadingMore = false;
@@ -192,7 +185,6 @@ export class MediaListPage implements OnInit {
         error: () => {
           this.loadingMore = false;
           event?.target?.complete();
-          console.log('end');
         }
       });
   }
@@ -208,7 +200,6 @@ export class MediaListPage implements OnInit {
       cssClass: 'multiline-toast',
       swipeGesture: 'vertical'
     });
-    console.log(message);
 
     await toast.present();
   }

@@ -1,22 +1,21 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonContent, IonButton, IonIcon, IonGrid, IonCol, IonRow, IonCard, IonCardContent, IonAvatar, IonBadge, IonList, IonItem, IonLabel, IonProgressBar, IonSkeletonText, IonButtons, IonText, IonImg, IonCardTitle, IonTitle, IonCardSubtitle, IonModal, IonHeader, IonToolbar, IonSpinner, IonSegmentButton } from '@ionic/angular/standalone';
-import { AuthService } from '@components/core/services/auth.service';
-import { ApiService } from '@components/core/services/api.service';
-import { addIcons } from 'ionicons';
-import { logInOutline, logOutOutline, checkmarkCircleOutline, closeCircleOutline, settingsOutline, calendarOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, createOutline, playCircleOutline, pauseCircleOutline, bookmarkOutline, shieldCheckmarkOutline, keyOutline, linkOutline, arrowBack, shareSocial, informationCircle, film } from 'ionicons/icons';
-import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
-import { Character, User } from 'src/app/models/aniList/responseInterfaces';
-import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
-import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
-import { take } from 'rxjs';
-import { IonSegment } from "@ionic/angular/standalone";
+import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
+import { ApiService } from '@components/core/services/api.service';
+import { AuthService } from '@components/core/services/auth.service';
+import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
+import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
+import { ToastController } from '@ionic/angular';
+import { IonAvatar, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { arrowBack, bookmarkOutline, calendarOutline, checkmarkCircle, checkmarkCircleOutline, chevronForwardOutline, closeCircleOutline, film, informationCircle, keyOutline, linkOutline, logInOutline, logOutOutline, pauseCircleOutline, playCircle, playCircleOutline, settingsOutline, shareSocial, shieldCheckmarkOutline, star } from 'ionicons/icons';
+import { take } from 'rxjs';
+import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
+import { Character, User } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
@@ -24,7 +23,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, PersonItemComponent, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe]
+  imports: [IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
@@ -89,12 +88,10 @@ export class ProfileTabPage implements OnInit {
 
   refreshToken() {
     this.token = this.authService.getToken();
-    console.log('Token refreshed:', this.token ? 'Found' : 'Not found');
   }
 
   loadUserData() {
     if (!this.isAuthenticated) {
-      console.log('User not authenticated, skipping data fetch');
       return;
     }
 
@@ -108,7 +105,6 @@ export class ProfileTabPage implements OnInit {
           const userId = result.data.Viewer.id;
           // Store user data in AuthService for shared access
           this.authService.setUserData(result.data.Viewer);
-          console.log('User ID:', userId);
 
           // Now fetch full profile data with favorites
           this.loadFullProfileData(userId);
@@ -137,10 +133,6 @@ export class ProfileTabPage implements OnInit {
             ...result.data.User,
             options: sharedUserData?.options || result.data.User.options
           };
-          console.log('Full user data loaded:', this.userData);
-          console.log('Anime statistics:', this.userData.statistics?.anime);
-          console.log('Status breakdown:', this.userData.statistics?.anime?.statuses);
-          console.log('Favorite anime:', this.favoriteAnime);
 
           // Fetch accurate status counts for both anime and manga
           this.loadStatusCounts(userId);
@@ -158,8 +150,6 @@ export class ProfileTabPage implements OnInit {
   loadStatusCounts(userId: number) {
     this.apiService.fetchUserMediaList(GET_USER_STATUS_COUNTS, { userId }).subscribe({
       next: (result: any) => {
-        console.log('Raw status counts response:', result);
-
         // Count entries for anime statuses
         this.actualAnimeStatusCounts = {
           watching: this.countEntries(result.data?.animeCurrent),
@@ -177,12 +167,6 @@ export class ProfileTabPage implements OnInit {
           dropped: this.countEntries(result.data?.mangaDropped),
           planToRead: this.countEntries(result.data?.mangaPlanning)
         };
-
-        console.log('Actual anime status counts:', this.actualAnimeStatusCounts);
-        console.log('Sum of anime counts:', Object.values(this.actualAnimeStatusCounts).reduce((a: number, b: number) => a + b, 0));
-        console.log('Actual manga status counts:', this.actualMangaStatusCounts);
-        console.log('Sum of manga counts:', Object.values(this.actualMangaStatusCounts).reduce((a: number, b: number) => a + b, 0));
-
       },
       error: (err) => {
         console.error('Error loading status counts:', err);
@@ -198,7 +182,6 @@ export class ProfileTabPage implements OnInit {
   }
 
   login() {
-    console.log('Initiating AniList login...');
     this.authService.login();
   }
 
@@ -364,8 +347,6 @@ export class ProfileTabPage implements OnInit {
       id: id
     }
 
-    console.log(variables);
-
     switch (type) {
       case ('staff'):
         break;
@@ -377,9 +358,7 @@ export class ProfileTabPage implements OnInit {
               this.error = errors[0];
             } else {
               this.modalData = data?.Character;
-              console.log(this.modalData);
               this.isModalOpen = true;
-              // console.log(this.data?.description);
             }
           },
           error: (err) => {
@@ -463,8 +442,6 @@ export class ProfileTabPage implements OnInit {
                 }
               }
             };
-
-            console.log('Appended favourites (no duplicates):', this.userData.favourites);
           }
         }
       },
@@ -485,8 +462,6 @@ export class ProfileTabPage implements OnInit {
 
   onSegmentChange(event: any) {
     this.modalSelectedTab = event.detail.value as string;
-
-    console.log('Modal tab changed to: ' + this.modalSelectedTab);
   }
 
   toggleCharacterFavorite() {
@@ -501,8 +476,6 @@ export class ProfileTabPage implements OnInit {
           this.isTogglingFavorite = false;
           if (result.success && this.modalData) {
             // Update local state by creating a new object
-            console.log('fav operation success');
-
             this.modalData = {
               ...this.modalData,
               isFavourite: result.isFavorite
@@ -526,7 +499,6 @@ export class ProfileTabPage implements OnInit {
       cssClass: 'multiline-toast', // Add custom class
       swipeGesture: 'vertical'
     });
-    console.log(message);
 
     await toast.present();
   }

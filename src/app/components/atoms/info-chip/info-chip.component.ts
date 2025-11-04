@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
 
-import { IonChip, IonCol, IonGrid, IonImg, IonNote, IonRow, IonSkeletonText, IonText, IonTitle, IonIcon } from "@ionic/angular/standalone";
+import { IonChip, IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRow, IonSkeletonText, IonText, IonTitle } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-info-chip',
@@ -9,7 +9,7 @@ import { IonChip, IonCol, IonGrid, IonImg, IonNote, IonRow, IonSkeletonText, Ion
   styleUrls: ['./info-chip.component.scss'],
   imports: [IonIcon, IonSkeletonText, IonImg, IonCol, IonRow, IonText, IonNote, IonChip, IonTitle, IonGrid]
 })
-export class InfoChipComponent extends LoadingStateComponent implements OnInit {
+export class InfoChipComponent extends LoadingStateComponent {
   @Input() img: string | null | undefined = '';
   @Input() icon: string | null | undefined = '';
   @Input() iconColor: string | null | undefined = '';
@@ -25,8 +25,5 @@ export class InfoChipComponent extends LoadingStateComponent implements OnInit {
 
   constructor() {
     super();
-  }
-
-  ngOnInit() {
   }
 }

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonText } from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-manga-tab',
@@ -10,11 +10,7 @@ import { IonContent, IonHeader, IonTitle, IonToolbar, IonText } from '@ionic/ang
   standalone: true,
   imports: [IonText, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
-export class MangaTabPage implements OnInit {
+export class MangaTabPage {
 
   constructor() { }
-
-  ngOnInit() {
-  }
-
 }

@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonBackButton, IonGrid, IonRow, IonCol, IonCardSubtitle, IonIcon, IonText, IonRippleEffect, IonCard, IonToggle } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { AuthService } from '@components/core/services/auth.service';
-import { User } from 'src/app/models/aniList/responseInterfaces';
 import { ApiService } from '@components/core/services/api.service';
+import { AuthService } from '@components/core/services/auth.service';
+import { IonBackButton, IonButtons, IonCardSubtitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonRow, IonText, IonTitle, IonToggle, IonToolbar } from '@ionic/angular/standalone';
 import { GET_CURRENT_USER } from 'src/app/models/aniList/mediaQueries';
+import { User } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
-  imports: [IonToggle, IonCard, IonRippleEffect, IonText, IonIcon, IonButton, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCardSubtitle]
+  imports: [IonToggle, IonText, IonIcon, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonBackButton, IonGrid, IonRow, IonCol, IonCardSubtitle]
 })
 export class SettingsPage implements OnInit {
 
@@ -46,12 +46,10 @@ export class SettingsPage implements OnInit {
 
   refreshToken() {
     this.token = this.authService.getToken();
-    console.log('Token refreshed:', this.token ? 'Found' : 'Not found');
   }
 
   loadUserData() {
     if (!this.authService.isAuthenticated()) {
-      console.log('User not authenticated, skipping data fetch');
       return;
     }
 
@@ -65,7 +63,6 @@ export class SettingsPage implements OnInit {
           this.userData = result.data.Viewer;
           // Store in AuthService for shared access
           this.authService.setUserData(result.data.Viewer);
-          console.log('User ID:', this.userData.id);
           this.loading = false;
         } else {
           this.loading = false;
@@ -107,7 +104,6 @@ export class SettingsPage implements OnInit {
               displayAdultContent: result.userData.options.displayAdultContent
             });
           }
-          console.log('Adult content setting updated:', newValue);
         }
         this.updatingSettings = false;
       },

@@ -1,23 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { ApiService } from '@components/core/services/api.service';
+import { AuthService } from '@components/core/services/auth.service';
 import { PlatformService } from '@components/core/services/platform.service';
-import { IonCol, IonContent, IonGrid, IonHeader, IonRow, IonSearchbar, IonTitle, IonToolbar, IonIcon, IonSpinner, IonChip, IonCardSubtitle, IonModal, IonButtons, IonButton, IonSegment, IonSegmentButton, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/angular/standalone';
-import { Router } from '@angular/router';
-import { addIcons } from 'ionicons';
-import { searchOutline, textOutline, checkmark, banOutline, arrowBack, shareSocial, informationCircle, film } from 'ionicons/icons';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
-import { GET_CHARACTER_BY_ID, SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
-import { Character } from 'src/app/models/aniList/responseInterfaces';
-import { take } from 'rxjs';
-import { ToastController } from '@ionic/angular';
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { AuthService } from '@components/core/services/auth.service';
+import { ToastController } from '@ionic/angular';
+import { IonButton, IonButtons, IonCardSubtitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { arrowBack, banOutline, checkmark, film, informationCircle, searchOutline, shareSocial, textOutline } from 'ionicons/icons';
+import { take } from 'rxjs';
+import { GET_CHARACTER_BY_ID, SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
+import { Character } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
   selector: 'app-explore-tab',
@@ -26,7 +26,7 @@ import { AuthService } from '@components/core/services/auth.service';
   standalone: true,
   imports: [IonInfiniteScroll, IonSegmentButton, IonSegment, IonButton, IonButtons, IonModal, IonCardSubtitle, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonSearchbar, IonRow, IonCol, InfoChipComponent, IonIcon, IonSpinner, MediaListItemComponent, IonChip, PersonItemComponent, IonInfiniteScrollContent, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent]
 })
-export class ExploreTabPage implements OnInit {
+export class ExploreTabPage {
   @ViewChild('searchBar') searchBar!: IonSearchbar;
   @ViewChild('resultsContent') resultsContent!: IonContent;
 
@@ -68,9 +68,6 @@ export class ExploreTabPage implements OnInit {
     this.modalSelectedTab = 'info';
   }
 
-  ngOnInit() {
-  }
-
   activateSearch() {
     this.isSearchActive = true;
 
@@ -81,12 +78,10 @@ export class ExploreTabPage implements OnInit {
 
     setTimeout(() => {
       this.searchBar?.setFocus();
-      console.log('open search bar, query: ' + this.searchQuery);
     }, 100);
   }
 
   deactivateSearch() {
-    console.log('deactivate search bar, query: ' + this.searchQuery);
 
     // Only store the query if it's not empty
     // This prevents overwriting a valid stored query with an empty string
@@ -126,30 +121,17 @@ export class ExploreTabPage implements OnInit {
 
     switch (newCategory) {
       case 'anime':
-        console.log('stored anime: ', this.storedAnimes);
-
         hasDataStored = this.storedAnimes.length > 0;
         break;
       case 'manga':
-        console.log('stored manga: ', this.storedMangas);
-
         hasDataStored = this.storedMangas.length > 0;
         break;
       case 'characters':
-        console.log('stored characters: ', this.storedCharacters);
-
         hasDataStored = this.storedCharacters.length > 0;
         break;
     }
 
-    console.log('is new category: ', isNewCategory);
-    console.log('is new query: ', isNewQuery);
-    console.log('has data stored: ', hasDataStored);
-
-
     if (!isNewCategory && !isNewQuery) {
-      console.log('blocking duplicate query');
-
       return;
     }
 
@@ -158,8 +140,6 @@ export class ExploreTabPage implements OnInit {
   }
 
   onIonInfinite(event: any) {
-    console.log('Infinite scroll triggered');
-
     // Increment the page counter for the current category
     if (this.category === 'anime') {
       this.actualAnimePage += 1;
@@ -169,22 +149,12 @@ export class ExploreTabPage implements OnInit {
       this.actualCharacterPage += 1;
     }
 
-    console.log("loading more ", this.category);
-
-
     // Perform search with loadingMore flag
     this.performSearch(false, true, event);
   }
 
   performSearch(newRequest: boolean = false, loadingMore: boolean = false, event: any = null) {
-    console.log('search triggered');
-    console.log('is new request: ', newRequest);
-    console.log('is loading more: ', loadingMore);
-    console.log('has event: ', event ? true : false);
-
     if (!this.canSearch() || this.isSearching) {
-      console.log('end search by cannot search or is searching');
-
       return;
     }
 
@@ -226,7 +196,6 @@ export class ExploreTabPage implements OnInit {
     }
 
     this.storedQuery = this.searchQuery;
-    console.log('Performing search for:', this.searchQuery, 'Category:', this.category);
 
     const queryMap: Record<typeof this.category, typeof SEARCH_MEDIA> = {
       'anime': SEARCH_MEDIA,
@@ -249,8 +218,6 @@ export class ExploreTabPage implements OnInit {
 
     this.apiService.search(query, variables, true, this.authService.getUserData()?.options?.displayAdultContent ?? false).subscribe({
       next: ({ data, loading, errors }) => {
-        console.log('Search results:', data);
-
         const newResults = data?.Page?.media ?? data?.Page?.characters ?? [];
         this.hasNextPage = !!data?.Page?.pageInfo?.hasNextPage;
 
@@ -290,8 +257,6 @@ export class ExploreTabPage implements OnInit {
   }
 
   navigate(target: string) {
-    console.log('Navigate to:', target);
-
     this.router.navigate([target]);
   }
 
@@ -309,13 +274,9 @@ export class ExploreTabPage implements OnInit {
   }
 
   openModal(type: 'staff' | 'character' | 'va', id: number) {
-    console.log('open modal');
-
     let variables = {
       id: id
     }
-
-    console.log(variables);
 
     switch (type) {
       case ('staff'):
@@ -328,9 +289,7 @@ export class ExploreTabPage implements OnInit {
               this.error = errors[0];
             } else {
               this.modalData = data?.Character;
-              console.log(this.modalData);
               this.isModalOpen = true;
-              // console.log(this.data?.description);
             }
           },
           error: (err) => {
@@ -351,8 +310,6 @@ export class ExploreTabPage implements OnInit {
 
   onSegmentChange(event: any) {
     this.modalSelectedTab = event.detail.value as string;
-
-    console.log('Modal tab changed to: ' + this.modalSelectedTab);
   }
 
   toggleCharacterFavorite() {
@@ -367,8 +324,6 @@ export class ExploreTabPage implements OnInit {
           this.isTogglingFavorite = false;
           if (result.success && this.modalData) {
             // Update local state by creating a new object
-            console.log('fav operation success');
-
             this.modalData = {
               ...this.modalData,
               isFavourite: result.isFavorite
@@ -392,7 +347,6 @@ export class ExploreTabPage implements OnInit {
       cssClass: 'multiline-toast', // Add custom class
       swipeGesture: 'vertical'
     });
-    console.log(message);
 
     await toast.present();
   }

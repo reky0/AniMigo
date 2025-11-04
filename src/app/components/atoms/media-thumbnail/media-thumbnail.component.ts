@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { IonCol, IonBackdrop, IonImg, IonIcon, IonRow } from "@ionic/angular/standalone";
+import { Component, Input } from '@angular/core';
+import { IonBackdrop, IonCol, IonIcon, IonImg, IonRow } from "@ionic/angular/standalone";
 import { openUrl } from 'src/app/helpers/utils';
 
 @Component({
@@ -8,7 +8,7 @@ import { openUrl } from 'src/app/helpers/utils';
   styleUrls: ['./media-thumbnail.component.scss'],
   imports: [IonRow, IonIcon, IonImg, IonBackdrop, IonCol],
 })
-export class MediaThumbnailComponent  implements OnInit {
+export class MediaThumbnailComponent {
   @Input() size: number = 7;
   @Input() sizeLg: number = 4;
   @Input() thumbnail: string | undefined | null = "";
@@ -17,6 +17,4 @@ export class MediaThumbnailComponent  implements OnInit {
   openUrl = openUrl;
 
   constructor() { }
-
-  ngOnInit() {}
 }

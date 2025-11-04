@@ -464,7 +464,6 @@ export class ApiService {
       position: 'bottom',
       cssClass: 'multiline-toast', // Add custom class
     });
-    console.log(message);
 
     await toast.present();
   }

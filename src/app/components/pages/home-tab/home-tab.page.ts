@@ -196,13 +196,6 @@ export class HomeTabPage implements OnInit {
         this.dataSections.forEach(section => {
           const result = results[section.key];
 
-          console.log(`Loading ${section.key}:`, {
-            hasErrors: !!result.errors,
-            hasData: !!result.data,
-            loading: result.loading,
-            mediaCount: result.data?.Page?.media?.length
-          });
-
           if (result.errors) {
             this.error = result.errors[0];
           } else {
@@ -288,7 +281,6 @@ export class HomeTabPage implements OnInit {
       cssClass: 'multiline-toast', // Add custom class
       swipeGesture: 'vertical'
     });
-    console.log(message);
 
     await toast.present();
   }

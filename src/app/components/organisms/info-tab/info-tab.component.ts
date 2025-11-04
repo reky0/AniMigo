@@ -54,8 +54,6 @@ export class InfoTabComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log(this.data);
-
     this.mainStudios = this.data?.studios?.edges.filter(studio => studio.isMain);
     this.otherStudios = this.data?.studios?.edges.filter(studio => !studio.isMain);
 
@@ -72,10 +70,6 @@ export class InfoTabComponent implements OnInit {
       this.streamingSites = this.data.externalLinks?.filter(link => link.type === 'STREAMING')
       this.externalLinks = this.data.externalLinks?.filter(link => link.type !== 'STREAMING')
     }
-
-    console.log(this.mainStudios);
-    console.log(this.otherStudios);
-    console.log(this.streamingSites);
   }
 }
 

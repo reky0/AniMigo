@@ -1,7 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
-import { IonImg, IonText, IonRow, IonIcon, IonSkeletonText, IonCol, IonGrid, IonNote } from "@ionic/angular/standalone";
-import { IonicModule } from "@ionic/angular";
+import { IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-catalog-item',
@@ -9,7 +8,7 @@ import { IonicModule } from "@ionic/angular";
   styleUrls: ['./catalog-item.component.scss'],
   imports: [IonNote, IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid],
 })
-export class CatalogItemComponent extends LoadingStateComponent implements OnInit {
+export class CatalogItemComponent extends LoadingStateComponent {
   @Input() image: string | null | undefined = null;
   @Input() fallbackImage: string | null | undefined = null;
   @Input() title: string | null | undefined = null;
@@ -21,8 +20,6 @@ export class CatalogItemComponent extends LoadingStateComponent implements OnIni
   constructor() {
     super();
   }
-
-  ngOnInit() { }
 
   onImageError() {
     if (this.image !== this.fallbackImage) {

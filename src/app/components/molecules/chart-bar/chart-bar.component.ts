@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IonicModule } from "@ionic/angular";
 
 @Component({
@@ -7,7 +7,7 @@ import { IonicModule } from "@ionic/angular";
   styleUrls: ['./chart-bar.component.scss'],
   imports: [IonicModule],
 })
-export class ChartBarComponent implements OnInit {
+export class ChartBarComponent {
   @Input() legend: string | undefined;
   @Input() color: string | undefined;
   @Input() value: number = -1;
@@ -20,9 +20,4 @@ export class ChartBarComponent implements OnInit {
   }
 
   constructor() { }
-
-  ngOnInit() {
-    // console.log(this.legend);
-  }
-
 }

@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
-import { IonIcon, IonText, IonItem, IonSkeletonText } from "@ionic/angular/standalone";
+import { IonIcon, IonItem, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'app-meta-item',
@@ -8,7 +8,7 @@ import { IonIcon, IonText, IonItem, IonSkeletonText } from "@ionic/angular/stand
   styleUrls: ['./meta-item.component.scss'],
   imports: [IonSkeletonText, IonItem, IonIcon, IonText],
 })
-export class MetaItemComponent extends LoadingStateComponent implements OnInit {
+export class MetaItemComponent extends LoadingStateComponent {
   @Input() icon: string = "";
   @Input() text: string | null | undefined = "";
   @Input() nolines: any;
@@ -16,7 +16,4 @@ export class MetaItemComponent extends LoadingStateComponent implements OnInit {
   constructor() {
     super()
   }
-
-  ngOnInit() {}
-
 }

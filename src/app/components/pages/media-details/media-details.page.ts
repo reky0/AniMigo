@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CoverImageComponent } from "@components/atoms/cover-image/cover-image.component";
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
@@ -12,20 +13,19 @@ import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.compon
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
-import { IonBackButton, IonBackdrop, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonText, IonToolbar, IonModal, IonSpinner, IonChip, IonBadge, IonInfiniteScroll } from '@ionic/angular/standalone';
+import { IonBackButton, IonBackdrop, IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonModal, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonToolbar } from '@ionic/angular/standalone';
+import { Subscription, take } from 'rxjs';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
-import { Title } from '@angular/platform-browser';
-import { take, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile-tab',
   templateUrl: './media-details.page.html',
   styleUrls: ['./media-details.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScroll, IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe, IonChip, IonBadge],
+  imports: [IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe, IonBadge],
 })
 export class MediaDetailsPageComponent implements OnDestroy {
 
@@ -50,9 +50,6 @@ export class MediaDetailsPageComponent implements OnDestroy {
     const id = this.route.snapshot.paramMap.get("id");
     const type = this.route.snapshot.paramMap.get("type");
 
-    console.log("MEDIA ID: " + Number(id));
-    console.log("MEDIA TYPE: " + type);
-
     // Reset state when loading new data
     this.loading = true;
     this.error = null;
@@ -75,7 +72,6 @@ export class MediaDetailsPageComponent implements OnDestroy {
           // Set title after data is loaded
           if (data?.Media) {
             const title = `${data.Media.title.romaji}${data.Media.title.english ? ` (${data.Media.title.english})` : ''} · AniMigo`;
-            console.log("Setting title to:", title);
             this.titleService.setTitle(title);
           }
         }
@@ -102,8 +98,6 @@ export class MediaDetailsPageComponent implements OnDestroy {
 
   onSegmentChange(event: any) {
     this.selectedTab = event.detail.value as string;
-
-    console.log('Tab changed to: ' + this.selectedTab);
   }
 
   selectedImg: string = '';
@@ -134,8 +128,6 @@ export class MediaDetailsPageComponent implements OnDestroy {
           this.isTogglingFavorite = false;
           if (result.success && this.data) {
             // Update local state by creating a new object
-            console.log('fav operation success');
-
             this.data = {
               ...this.data,
               isFavourite: result.isFavorite

@@ -83,7 +83,7 @@
                 @if (loading && !userData) {
                   <div class="loading-placeholder">Loading statistics...</div>
                 } @else {
-                  @if (totalAnime != 0 || totalManga != 0 || watchTime != '0d 0h' || chaptersRead != 0) {
+                  @if (totalAnime !== 0 || totalManga !== 0 || watchTime !== '0d 0h' || chaptersRead !== 0) {
                     <ion-grid class="ion-no-padding">
                       <ion-row>
                         <ion-col size="6" sizeMd="3">
@@ -224,7 +224,7 @@
                     @for (i of 9 | range; track $index) {
                       @if (favoriteCharacters[i-1]) {
                         <ion-col size="4" sizeMd="1.333">
-                          <app-person-item
+                          <app-character-item
                             [name]="favoriteCharacters[i-1].name.full"
                             [image]="favoriteCharacters[i-1].image.large?.replace('medium', 'large') ?? favoriteCharacters[i-1].image.medium"
                             [fallbackImage]="favoriteCharacters[i-1].image.large"
@@ -513,7 +513,7 @@
                 @case ('characters') {
                   @for (character of favoriteCharacters; track $index) {
                     <ion-col size="4" sizeMd="3">
-                      <app-person-item
+                      <app-character-item
                         [name]="character.name.full"
                         [image]="character.image.large?.replace('medium', 'large') ?? character.image.medium"
                         [fallbackImage]="character.image.large"

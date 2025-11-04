@@ -24,8 +24,6 @@ export class AuthService {
    */
   private setupDeepLinkListener(): void {
     App.addListener('appUrlOpen', (event: URLOpenListenerEvent) => {
-      console.log('App opened with URL:', event.url);
-
       // Check if this is our auth callback
       if (event.url.startsWith('animigo://auth/callback')) {
         this.handleDeepLinkCallback(event.url);
@@ -37,8 +35,6 @@ export class AuthService {
    * Handle deep link callback (mobile)
    */
   private handleDeepLinkCallback(url: string): void {
-    console.log('Handling deep link callback:', url);
-
     // Extract token from URL fragment
     // Format: animigo://auth/callback#access_token=...&token_type=Bearer&expires_in=...
     const hashIndex = url.indexOf('#');
@@ -55,7 +51,6 @@ export class AuthService {
 
     if (accessToken) {
       this.setToken(accessToken);
-      console.log('Token saved from deep link. Expires in:', expiresIn, 'seconds');
       this.router.navigate(['/profile']);
     } else {
       console.error('No access token found in deep link');
@@ -83,9 +78,6 @@ export class AuthService {
     const clientId = this.getClientId();
     const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientId}&response_type=token`;
 
-    console.log('Redirecting to:', authUrl);
-    console.log('Client ID:', clientId);
-
     window.location.href = authUrl;
   }
 
@@ -101,7 +93,6 @@ export class AuthService {
 
     if (accessToken) {
       this.setToken(accessToken);
-      console.log('Token saved. Expires in:', expiresIn, 'seconds');
       return true;
     }
 
@@ -159,7 +150,6 @@ export class AuthService {
    */
   setUserData(user: User): void {
     this.userData = user;
-    console.log('User data stored in AuthService:', user);
   }
 
   /**
@@ -181,7 +171,6 @@ export class AuthService {
           ...options
         }
       };
-      console.log('User options updated in AuthService:', this.userData.options);
     }
   }
 

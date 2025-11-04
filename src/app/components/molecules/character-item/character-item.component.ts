@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { PlatformService } from '@components/core/services/platform.service';
 import { IonicModule, ModalController, PopoverController } from '@ionic/angular';
 import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
@@ -11,7 +11,7 @@ import { VoiceActorListComponent } from '../voice-actor-list/voice-actor-list.co
   styleUrls: ['./character-item.component.scss'],
   imports: [PersonItemComponent, IonicModule],
 })
-export class CharacterItemComponent extends PersonItemComponent implements OnInit {
+export class CharacterItemComponent extends PersonItemComponent {
   @Input() voiceActors: Array<VoiceActor> | null | undefined = null;
 
   platformService: PlatformService;
@@ -25,16 +25,8 @@ export class CharacterItemComponent extends PersonItemComponent implements OnIni
     this.platformService = platformService;
   }
 
-  override ngOnInit() {}
-
   async openModal() {
-    console.log("=== MODAL START ===");
-    console.log("Voice actors data:", this.voiceActors);
-    console.log("ModalController exists:", !!this.modalController);
-
     try {
-      console.log("About to create modal...");
-
       const modal = await this.modalController.create({
         component: VoiceActorListComponent,
         componentProps: {
@@ -51,10 +43,8 @@ export class CharacterItemComponent extends PersonItemComponent implements OnIni
         throw err;
       });
 
-      console.log("Modal created successfully:", modal);
 
       await modal.present();
-      console.log("Modal presented");
     } catch (error) {
       console.error("=== MODAL ERROR ===", error);
       console.error("Error type:", typeof error);
@@ -64,8 +54,6 @@ export class CharacterItemComponent extends PersonItemComponent implements OnIni
   }
 
   async presentPopover(ev: any) {
-    console.log("Popover triggered.");
-
     const popover = await this.popoverController.create({
       component: VoiceActorListComponent,
       componentProps: {
