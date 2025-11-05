@@ -4,18 +4,18 @@ import { FormsModule } from '@angular/forms';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { PlatformService } from '@components/core/services/platform.service';
 import { SectionHeaderComponent } from "@components/molecules/section-header/section-header.component";
-import { IonCol, IonContent, IonHeader, IonList, IonTitle, IonToolbar, IonGrid, IonRow, IonRefresherContent, IonRefresher } from '@ionic/angular/standalone';
+import { IonCol, IonContent, IonGrid, IonHeader, IonList, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 
 import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api.service';
+import { AuthService } from '@components/core/services/auth.service';
+import { ToastService } from '@components/core/services/toast.service';
+import { forkJoin } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { RangePipe } from 'src/app/helpers/range.pipe';
+import { getNextSeason } from 'src/app/helpers/utils';
 import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
-import { RangePipe } from 'src/app/helpers/range.pipe';
-import { forkJoin } from 'rxjs';
-import { tap, filter, take } from 'rxjs/operators';
-import { AuthService } from '@components/core/services/auth.service';
-import { ToastController } from '@ionic/angular';
-import { getNextSeason } from 'src/app/helpers/utils';
 
 interface DataSection {
   data: BasicMedia[] | null | undefined;
@@ -26,7 +26,7 @@ interface DataSection {
 }
 
 @Component({
-  selector: 'app-home-tab',
+  selector: 'am-home-tab',
   templateUrl: './home-tab.page.html',
   styleUrls: ['./home-tab.page.scss'],
   standalone: true,
@@ -130,10 +130,11 @@ export class HomeTabPage implements OnInit {
     private readonly apiService: ApiService,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly toastController: ToastController
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {
+    this.toastService.setTabBarVisibility(this.platformService.isHybrid());
     this.loadAllData();
   }
 
@@ -271,17 +272,7 @@ export class HomeTabPage implements OnInit {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast', // Add custom class
-      swipeGesture: 'vertical'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }

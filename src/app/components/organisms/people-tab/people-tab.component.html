@@ -8,15 +8,15 @@
         <ion-col>
           <ion-row>
             <ion-col>
-              <app-section-title title="Staff" />
+              <am-section-title title="Staff" />
             </ion-col>
           </ion-row>
           @if (!loading) {
-            <app-collapsible [thresholdHeight]="250">
+            <am-collapsible [thresholdHeight]="250">
               <ion-row>
                 @for (staff of data.staff?.edges; track $index) {
                   <ion-col size="4" sizeLg="2">
-                    <app-person-item
+                    <am-person-item
                       (click)="openModal('staff', staff.node.id)"
                       [image]="staff.node.image.medium"
                       [name]="staff.node.name.full"
@@ -25,12 +25,12 @@
                   </ion-col>
                 }
               </ion-row>
-            </app-collapsible>
+            </am-collapsible>
           } @else {
             <ion-row>
               @for (i of 7 | range; track i) {
                 <ion-col size="4" sizeLg="2">
-                  <app-person-item
+                  <am-person-item
                     [loading]="true"
                     />
                 </ion-col>
@@ -45,15 +45,15 @@
         <ion-col>
           <ion-row>
             <ion-col>
-              <app-section-title title="Characters" />
+              <am-section-title title="Characters" />
             </ion-col>
           </ion-row>
           @if (!loading) {
-            <app-collapsible [thresholdHeight]="230">
+            <am-collapsible [thresholdHeight]="230">
               <ion-row>
                 @for (character of data.characters?.edges; track $index) {
                   <ion-col size="4" sizeLg="2">
-                    <app-character-item
+                    <am-character-item
                       (click)="openModal('character', character.node.id)"
                       [image]="character.node.image.large"
                       [name]="character.node.name.full"
@@ -63,12 +63,12 @@
                   </ion-col>
                 }
               </ion-row>
-            </app-collapsible>
+            </am-collapsible>
           } @else {
             <ion-row>
               @for (i of 7 | range; track $index) {
                 <ion-col size="4" sizeLg="2">
-                  <app-character-item
+                  <am-character-item
                     [loading]="true"
                   />
                 </ion-col>
@@ -147,13 +147,13 @@
           @if (!loading) {
             @switch (modalSelectedTab) {
               @case ('info') {
-                <app-people-info-tab [data]="modalData" [loading]="loading" />
+                <am-people-info-tab [data]="modalData" [loading]="loading" />
               }
               @case ('media') {
-                <app-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
+                <am-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
               }
               @case ('va') {
-                <app-people-va-tab [data]="modalData" [loading]="loading" />
+                <am-people-va-tab [data]="modalData" [loading]="loading" />
               }
             }
           } <!-- @else {

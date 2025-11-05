@@ -4,7 +4,7 @@ import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
 import { PersonItemComponent } from "../person-item/person-item.component";
 
 @Component({
-  selector: 'app-voice-actor-list',
+  selector: 'am-voice-actor-list',
   templateUrl: './voice-actor-list.component.html',
   styleUrls: ['./voice-actor-list.component.scss'],
   imports: [PersonItemComponent, IonicModule],

@@ -1,0 +1,23 @@
+<div class="toast-container" [class.tab-bar-hidden]="!isTabBarVisible">
+  @if (toasts.length > 0) {
+    @for (toast of toasts; track toast.id) {
+      <div class="toast toast-{{ toast.type }}">
+        <div class="toast-content">
+          <ion-icon
+            [name]="getIcon(toast.type)"
+            class="toast-icon"
+          ></ion-icon>
+          <div class="toast-message">{{ toast.message }}</div>
+          <ion-button
+            fill="clear"
+            size="small"
+            class="toast-close"
+            (click)="dismiss(toast.id)"
+          >
+            <ion-icon slot="icon-only" name="close"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    }
+  }
+</div>

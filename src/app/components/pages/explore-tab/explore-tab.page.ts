@@ -5,13 +5,13 @@ import { Router } from '@angular/router';
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
+import { ToastService } from '@components/core/services/toast.service';
 import { PlatformService } from '@components/core/services/platform.service';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { ToastController } from '@ionic/angular';
 import { IonButton, IonButtons, IonCardSubtitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBack, banOutline, checkmark, film, informationCircle, searchOutline, shareSocial, textOutline } from 'ionicons/icons';
@@ -20,7 +20,7 @@ import { GET_CHARACTER_BY_ID, SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/mod
 import { Character } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
-  selector: 'app-explore-tab',
+  selector: 'am-explore-tab',
   templateUrl: './explore-tab.page.html',
   styleUrls: ['./explore-tab.page.scss'],
   standalone: true,
@@ -60,12 +60,13 @@ export class ExploreTabPage {
     private readonly router: Router,
     private readonly apiService: ApiService,
     private readonly authService: AuthService,
-    private readonly toastController: ToastController,
+    private readonly toastService: ToastService,
   ) {
     addIcons({ checkmark, searchOutline, textOutline, banOutline, arrowBack, shareSocial, informationCircle, film });
 
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
+    this.toastService.setTabBarVisibility(this.platformService.isHybrid());
   }
 
   activateSearch() {
@@ -337,17 +338,7 @@ export class ExploreTabPage {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast', // Add custom class
-      swipeGesture: 'vertical'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }

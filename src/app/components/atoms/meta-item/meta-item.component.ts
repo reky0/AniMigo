@@ -3,7 +3,7 @@ import { LoadingStateComponent } from '@components/core/loading-state/loading-st
 import { IonIcon, IonItem, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 
 @Component({
-  selector: 'app-meta-item',
+  selector: 'am-meta-item',
   templateUrl: './meta-item.component.html',
   styleUrls: ['./meta-item.component.scss'],
   imports: [IonSkeletonText, IonItem, IonIcon, IonText],

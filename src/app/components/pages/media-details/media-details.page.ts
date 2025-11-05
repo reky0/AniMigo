@@ -8,6 +8,7 @@ import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.compone
 import { MetaItemComponent } from "@components/atoms/meta-item/meta-item.component";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
 import { ApiService } from '@components/core/services/api.service';
+import { ToastService } from '@components/core/services/toast.service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.component";
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
@@ -21,7 +22,7 @@ import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
-  selector: 'app-profile-tab',
+  selector: 'am-profile-tab',
   templateUrl: './media-details.page.html',
   styleUrls: ['./media-details.page.scss'],
   standalone: true,
@@ -32,7 +33,8 @@ export class MediaDetailsPageComponent implements OnDestroy {
   constructor(
     private readonly apiService: ApiService,
     private readonly route: ActivatedRoute,
-    private readonly titleService: Title
+    private readonly titleService: Title,
+    private readonly toastService: ToastService
   ) { }
 
   loading = true;
@@ -43,6 +45,7 @@ export class MediaDetailsPageComponent implements OnDestroy {
   private dataSubscription?: Subscription;
 
   ionViewWillEnter() {
+    this.toastService.setTabBarVisibility(false);
     this.loadMediaData();
   }
 

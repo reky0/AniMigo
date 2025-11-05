@@ -24,7 +24,7 @@
       <ion-row>
         @for (media of mediaEdges; track $index) {
           <ion-col size="12" sizeMd="6" sizeLg="3">
-            <app-media-list-item
+            <am-media-list-item
               class="media-item ion-activatable"
               [media]="media"
               (click)="goToDetails(media.id, media.isAdult)"

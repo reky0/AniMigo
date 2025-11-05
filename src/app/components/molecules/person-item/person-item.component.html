@@ -22,9 +22,9 @@
           @if (loading) {
             <ion-skeleton-text class="note-loading" animated/>
           } @else {
-            <app-collapsible [thresholdHeight]="80">
+            <am-collapsible [thresholdHeight]="80">
               <ion-note>{{ toSentenceCase(note) }}</ion-note>
-            </app-collapsible>
+            </am-collapsible>
           }
         </ion-col>
       </ion-row>

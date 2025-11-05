@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-people-va-tab',
+  selector: 'am-people-va-tab',
   templateUrl: './people-va-tab.component.html',
   styleUrls: ['./people-va-tab.component.scss'],
 })

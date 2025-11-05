@@ -4,7 +4,7 @@ import { LoadingStateComponent } from '@components/core/loading-state/loading-st
 import { IonChip, IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRow, IonSkeletonText, IonText, IonTitle } from "@ionic/angular/standalone";
 
 @Component({
-  selector: 'app-info-chip',
+  selector: 'am-info-chip',
   templateUrl: './info-chip.component.html',
   styleUrls: ['./info-chip.component.scss'],
   imports: [IonIcon, IonSkeletonText, IonImg, IonCol, IonRow, IonText, IonNote, IonChip, IonTitle, IonGrid]

@@ -1,0 +1,124 @@
+.toast-container {
+  position: fixed;
+  top: 56px; // Below tab bar on desktop/tablet
+  left: 0;
+  right: 0;
+  z-index: 99999;
+  pointer-events: none;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (max-width: 767px) {
+    top: auto;
+    bottom: 56px; // Height of ion-tab-bar (typically 50px + padding)
+    flex-direction: column-reverse; // Stack from bottom to top
+  }
+
+  // When tab bar is not visible, no bottom offset needed
+  &.tab-bar-hidden {
+    @media (max-width: 767px) {
+      bottom: 0;
+    }
+  }
+}
+
+.toast {
+  pointer-events: auto;
+  background: var(--ion-background-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  padding: 16px;
+  animation: slideIn 0.3s ease-out;
+  border-left: 4px solid;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .toast {
+    animation: slideInFromBottom 0.3s ease-out;
+  }
+}
+
+.toast-success {
+  border-left-color: var(--ion-color-success);
+}
+
+.toast-error {
+  border-left-color: var(--ion-color-danger);
+}
+
+.toast-warning {
+  border-left-color: var(--ion-color-warning);
+}
+
+.toast-info {
+  border-left-color: var(--ion-color-primary);
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.toast-success .toast-icon {
+  color: var(--ion-color-success);
+}
+
+.toast-error .toast-icon {
+  color: var(--ion-color-danger);
+}
+
+.toast-warning .toast-icon {
+  color: var(--ion-color-warning);
+}
+
+.toast-info .toast-icon {
+  color: var(--ion-color-primary);
+}
+
+.toast-message {
+  flex: 1;
+  color: var(--ion-text-color);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.toast-close {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  margin: 0;
+
+  ion-icon {
+    color: var(--ion-color-medium);
+    font-size: 20px;
+  }
+}

@@ -113,7 +113,7 @@
                       </ion-row>
                     </ion-grid>
                   } @else {
-                    <p class="empty-state">No statistics available. @if (isAuthenticated) { Most stats refresh after 24h. }</p>
+                    <p class="empty-state">No statistics available. @if (isAuthenticated) { <br> Most stats refresh after 24h. }</p>
                   }
                 }
               </ion-card-content>
@@ -150,7 +150,7 @@
                     @for (i of 9 | range; track $index) {
                       @if (favoriteAnime[i-1]) {
                         <ion-col size="4" sizeMd="1.333">
-                          <app-catalog-item
+                          <am-catalog-item
                             [title]="favoriteAnime[i-1].title.english || favoriteAnime[i-1].title.romaji"
                             [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
                             [fallbackImage]="favoriteAnime[i-1].coverImage.large"
@@ -164,7 +164,7 @@
               } @else {
                 <ion-card>
                   <ion-card-content>
-                    <p class="empty-state">No favorite animes yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                    <p class="empty-state">No favorite animes yet. @if (isAuthenticated) { <br> Add favorites on <a href="https://anilist.co/" target="_blank">AniList!</a> }</p>
                   </ion-card-content>
                 </ion-card>
               }
@@ -187,7 +187,7 @@
                     @for (i of 9 | range; track $index) {
                       @if (favoriteManga[i-1]) {
                         <ion-col size="4" sizeMd="1.333">
-                          <app-catalog-item
+                          <am-catalog-item
                             [title]="favoriteManga[i-1].title.english || favoriteManga[i-1].title.romaji"
                             [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
                             [fallbackImage]="favoriteManga[i-1].coverImage.large"
@@ -201,7 +201,7 @@
               } @else {
                 <ion-card>
                   <ion-card-content>
-                    <p class="empty-state">No favorite mangas yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                    <p class="empty-state">No favorite mangas yet. @if (isAuthenticated) { <br> Add favorites on <a href="https://anilist.co/" target="_blank">AniList!</a> }</p>
                   </ion-card-content>
                 </ion-card>
               }
@@ -224,7 +224,7 @@
                     @for (i of 9 | range; track $index) {
                       @if (favoriteCharacters[i-1]) {
                         <ion-col size="4" sizeMd="1.333">
-                          <app-character-item
+                          <am-character-item
                             [name]="favoriteCharacters[i-1].name.full"
                             [image]="favoriteCharacters[i-1].image.large?.replace('medium', 'large') ?? favoriteCharacters[i-1].image.medium"
                             [fallbackImage]="favoriteCharacters[i-1].image.large"
@@ -238,7 +238,7 @@
               } @else {
                 <ion-card>
                   <ion-card-content>
-                    <p class="empty-state">No favorite characters yet. @if (isAuthenticated) { Add favorites on AniList! }</p>
+                    <p class="empty-state">No favorite characters yet. @if (isAuthenticated) { <br> Add favorites on <a href="https://anilist.co/" target="_blank">AniList!</a> }</p>
                   </ion-card-content>
                 </ion-card>
               }
@@ -443,13 +443,13 @@
             @if (!loading) {
               @switch (modalSelectedTab) {
                 @case ('info') {
-                  <app-people-info-tab [data]="modalData" [loading]="loading" />
+                  <am-people-info-tab [data]="modalData" [loading]="loading" />
                 }
                 @case ('media') {
-                  <app-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
+                  <am-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
                 }
                 @case ('va') {
-                  <app-people-va-tab [data]="modalData" [loading]="loading" />
+                  <am-people-va-tab [data]="modalData" [loading]="loading" />
                 }
               }
             } <!-- @else {
@@ -491,7 +491,7 @@
                 @case ('anime') {
                   @for (anime of favoriteAnime; track $index) {
                     <ion-col size="12" sizeMd="6">
-                      <app-media-list-item
+                      <am-media-list-item
                         [title]="anime.title.english ?? anime.title.romaji"
                         [media]="anime"
                         (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
@@ -502,7 +502,7 @@
                 @case ('manga') {
                   @for (manga of favoriteManga; track $index) {
                     <ion-col size="12" sizeMd="6">
-                      <app-media-list-item
+                      <am-media-list-item
                         [title]="manga.title.english ?? manga.title.romaji"
                         [media]="manga"
                         (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
@@ -513,7 +513,7 @@
                 @case ('characters') {
                   @for (character of favoriteCharacters; track $index) {
                     <ion-col size="4" sizeMd="3">
-                      <app-character-item
+                      <am-character-item
                         [name]="character.name.full"
                         [image]="character.image.large?.replace('medium', 'large') ?? character.image.medium"
                         [fallbackImage]="character.image.large"

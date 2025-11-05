@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { IonicModule } from "@ionic/angular";
 
 @Component({
-  selector: 'app-chart-bar',
+  selector: 'am-chart-bar',
   templateUrl: './chart-bar.component.html',
   styleUrls: ['./chart-bar.component.scss'],
   imports: [IonicModule],

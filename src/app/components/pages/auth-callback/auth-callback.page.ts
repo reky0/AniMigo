@@ -1,11 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { IonSpinner, IonContent } from '@ionic/angular/standalone';
+import { IonContent, IonSpinner } from '@ionic/angular/standalone';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  selector: 'app-auth-callback',
+  selector: 'am-auth-callback',
   templateUrl: './auth-callback.page.html',
   styleUrls: ['./auth-callback.page.scss'],
   standalone: true,

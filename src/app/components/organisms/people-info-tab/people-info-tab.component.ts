@@ -6,7 +6,7 @@ import { marked } from 'marked';
 import { Character } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
-  selector: 'app-people-info-tab',
+  selector: 'am-people-info-tab',
   templateUrl: './people-info-tab.component.html',
   styleUrls: ['./people-info-tab.component.scss'],
   imports: [

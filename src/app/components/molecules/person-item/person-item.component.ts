@@ -4,7 +4,7 @@ import { IonCol, IonGrid, IonImg, IonLabel, IonNote, IonRow, IonSkeletonText } f
 import { toSentenceCase } from 'src/app/helpers/utils';
 
 @Component({
-  selector: 'app-person-item',
+  selector: 'am-person-item',
   templateUrl: './person-item.component.html',
   styleUrls: ['./person-item.component.scss'],
   imports: [IonNote, IonLabel, IonRow, IonImg, IonGrid, IonCol, CollapsibleComponent, IonSkeletonText],

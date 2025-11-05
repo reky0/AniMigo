@@ -1,7 +1,7 @@
 <ion-grid class="main ion-padding-top" role="feed">
   @if (data) {
     @for (media of mediaEdges; track $index) {
-      <app-media-list-item
+      <am-media-list-item
         [media]="media.node"
         [isFavourite]="media.node.isFavourite"
         (click)="triggerNavigationEvent(media.node.type, media.node.id, media.node.isAdult)"

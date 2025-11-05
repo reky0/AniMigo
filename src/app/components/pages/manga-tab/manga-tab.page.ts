@@ -1,16 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '@components/core/services/toast.service';
+import { PlatformService } from '@components/core/services/platform.service';
 import { IonContent, IonHeader, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-manga-tab',
+  selector: 'am-manga-tab',
   templateUrl: './manga-tab.page.html',
   styleUrls: ['./manga-tab.page.scss'],
   standalone: true,
   imports: [IonText, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
-export class MangaTabPage {
+export class MangaTabPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private readonly toastService: ToastService,
+    private readonly platformService: PlatformService
+  ) { }
+
+  ngOnInit() {
+    this.toastService.setTabBarVisibility(this.platformService.isHybrid());
+  }
 }

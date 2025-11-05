@@ -1,13 +1,13 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { Router } from '@angular/router';
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
 import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
+import { ToastService } from '@components/core/services/toast.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
-import { ToastController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -32,7 +32,7 @@ import { PeopleMediaTabComponent } from "../people-media-tab/people-media-tab.co
 import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
 
 @Component({
-  selector: 'app-people-tab',
+  selector: 'am-people-tab',
   templateUrl: './people-tab.component.html',
   styleUrls: ['./people-tab.component.scss'],
   imports: [IonButton,
@@ -59,7 +59,7 @@ import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
     PeopleVATabComponent
   ],
 })
-export class PeopleTabComponent {
+export class PeopleTabComponent implements OnInit{
   @Input() data: DetailedMedia | null | undefined = undefined;
   @Input() loading: boolean = true;
   @ViewChild(IonModal) modal!: IonModal;
@@ -74,10 +74,14 @@ export class PeopleTabComponent {
     private apiService: ApiService,
     private router: Router,
     private readonly authService: AuthService,
-    private readonly toastController: ToastController
+    private readonly toastService: ToastService
   ) {
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
+  }
+
+  ngOnInit(): void {
+    this.toastService.setTabBarVisibility(false);
   }
 
   openModal(type: 'staff' | 'character' | 'va', id: number) {
@@ -156,17 +160,7 @@ export class PeopleTabComponent {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast', // Add custom class
-      swipeGesture: 'vertical'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }

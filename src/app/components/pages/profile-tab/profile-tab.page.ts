@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
+import { ToastService } from '@components/core/services/toast.service';
+import { PlatformService } from '@components/core/services/platform.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { ToastController } from '@ionic/angular';
 import { IonAvatar, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowBack, bookmarkOutline, calendarOutline, checkmarkCircle, checkmarkCircleOutline, chevronForwardOutline, closeCircleOutline, film, informationCircle, keyOutline, linkOutline, logInOutline, logOutOutline, pauseCircleOutline, playCircle, playCircleOutline, settingsOutline, shareSocial, shieldCheckmarkOutline, star } from 'ionicons/icons';
@@ -19,7 +20,7 @@ import { Character, User } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
-  selector: 'app-profile-tab',
+  selector: 'am-profile-tab',
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
@@ -61,7 +62,8 @@ export class ProfileTabPage implements OnInit {
     public authService: AuthService,
     private apiService: ApiService,
     private router: Router,
-    private readonly toastController: ToastController,
+    private readonly toastService: ToastService,
+    private readonly platformService: PlatformService
   ) {
     addIcons({ logInOutline, settingsOutline, calendarOutline, playCircleOutline, checkmarkCircleOutline, pauseCircleOutline, closeCircleOutline, bookmarkOutline, arrowBack, shareSocial, informationCircle, film, logOutOutline, chevronForwardOutline, playCircle, star, checkmarkCircle, shieldCheckmarkOutline, keyOutline, linkOutline });
 
@@ -71,6 +73,7 @@ export class ProfileTabPage implements OnInit {
   }
 
   ngOnInit() {
+    this.toastService.setTabBarVisibility(this.platformService.isHybrid());
     this.refreshToken();
     this.loadUserData();
   }
@@ -489,18 +492,8 @@ export class ProfileTabPage implements OnInit {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast', // Add custom class
-      swipeGesture: 'vertical'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }
 

@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { SectionTitleComponent } from "@components/atoms/section-title/section-title.component";
+import { ChartBarComponent } from "@components/molecules/chart-bar/chart-bar.component";
 import { IonCol, IonGrid, IonRow, IonText, IonTitle } from "@ionic/angular/standalone";
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { DetailedMedia, ScoreStat, StatusStat } from 'src/app/models/aniList/responseInterfaces';
-import { ChartBarComponent } from "@components/molecules/chart-bar/chart-bar.component";
-import { IonicModule } from "@ionic/angular";
 
 @Component({
-  selector: 'app-stats-tab',
+  selector: 'am-stats-tab',
   templateUrl: './stats-tab.component.html',
   styleUrls: ['./stats-tab.component.scss'],
   imports: [IonGrid, IonRow, IonCol, IonText, SectionTitleComponent, InfoChipComponent, ChartBarComponent, IonTitle],

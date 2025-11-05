@@ -3,7 +3,7 @@ import { LoadingStateComponent } from '@components/core/loading-state/loading-st
 import { IonImg, IonSkeletonText } from "@ionic/angular/standalone";
 
 @Component({
-  selector: 'app-cover-image',
+  selector: 'am-cover-image',
   templateUrl: './cover-image.component.html',
   styleUrls: ['./cover-image.component.scss'],
   imports: [IonSkeletonText, IonImg],

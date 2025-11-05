@@ -4,13 +4,13 @@
     @if (data.rankings && data.rankings.length > 0) {
       <ion-row>
         <ion-col>
-          <app-section-title title="Rankings" class="ion-margin" />
+          <am-section-title title="Rankings" class="ion-margin" />
         </ion-col>
       </ion-row>
       @for (ranking of data.rankings; track $index) {
         <ion-row>
           <ion-col size="12">
-            <app-info-chip
+            <am-info-chip
               class="chip"
               [icon]="ranking.type === 'RATED' ? 'star-outline' : 'heart-outline'"
               [iconColor]="ranking.type === 'RATED' ? 'gold' : 'crimson'"
@@ -27,7 +27,7 @@
       @if (data.stats.statusDistribution) {
         <ion-row>
           <ion-col>
-            <app-section-title title="Status distribution" class="ion-margin" />
+            <am-section-title title="Status distribution" class="ion-margin" />
           </ion-col>
         </ion-row>
         <ion-row>
@@ -36,7 +36,7 @@
               <ion-row>
                 @for (status of coloredStatus; track $index) {
                   <ion-col size="4">
-                    <app-info-chip
+                    <am-info-chip
                       [info]="status.amount.toLocaleString()"
                       [note]="toSentenceCase(status.status)"
                       type="text"
@@ -75,14 +75,14 @@
       @if (data.stats.scoreDistribution) {
         <ion-row>
           <ion-col>
-            <app-section-title title="Score distribution"  />
+            <am-section-title title="Score distribution"  />
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col size="12">
             <ion-grid>
               @for (score of coloredScores; track $index){
-                <app-chart-bar
+                <am-chart-bar
                   [legend]="score.score.toString()"
                   [highest]="maxScoreAmount"
                   [value]="score.amount"

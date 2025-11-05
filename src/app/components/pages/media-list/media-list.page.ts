@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonSkeletonText, IonToolbar, IonTitle } from '@ionic/angular/standalone';
-import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
-import { take } from 'rxjs';
-import { ApiService } from '@components/core/services/api.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
-import { ToastController } from '@ionic/angular';
-import { toSentenceCase } from 'src/app/helpers/utils';
+import { ToastService } from '@components/core/services/toast.service';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
-import { RangePipe } from "../../../helpers/range.pipe";
+import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { take } from 'rxjs';
+import { toSentenceCase } from 'src/app/helpers/utils';
+import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { MediaListConfig } from 'src/app/models/media-list-config.interface';
+import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
-  selector: 'app-media-list',
+  selector: 'am-media-list',
   templateUrl: './media-list.page.html',
   styleUrls: ['./media-list.page.scss'],
   standalone: true,
@@ -53,10 +53,12 @@ export class MediaListPage implements OnInit {
     private readonly titleService: Title,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly toastController: ToastController
+    private readonly toastService: ToastService
   ) { }
 
   ngOnInit() {
+    this.toastService.setTabBarVisibility(false);
+
     // Get configuration from route data
     this.config = this.route.snapshot.data['config'] as MediaListConfig;
 
@@ -190,17 +192,7 @@ export class MediaListPage implements OnInit {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast',
-      swipeGesture: 'vertical'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }

@@ -8,7 +8,7 @@ import { formatDate, getLangCode, openUrl, toSentenceCase } from 'src/app/helper
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
-  selector: 'app-info-tab',
+  selector: 'am-info-tab',
   templateUrl: './info-tab.component.html',
   styleUrls: ['./info-tab.component.scss'],
   imports: [IonGrid, IonRow, IonNote, IonCol, IonText, IonCardSubtitle, IonCardTitle, InfoChipComponent, MediaThumbnailComponent, CollapsibleComponent, IonSkeletonText, RangePipe]

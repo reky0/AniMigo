@@ -3,7 +3,7 @@ import { SectionTitleComponent } from "@components/atoms/section-title/section-t
 import { IonItem } from "@ionic/angular/standalone";
 
 @Component({
-  selector: 'app-section-header',
+  selector: 'am-section-header',
   templateUrl: './section-header.component.html',
   styleUrls: ['./section-header.component.scss'],
   imports: [IonItem, SectionTitleComponent],

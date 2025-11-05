@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IonicModule } from "@ionic/angular";
-import { toSentenceCase } from 'src/app/helpers/utils';
-import { Character } from 'src/app/models/aniList/responseInterfaces';
 import { ApiService } from '@components/core/services/api.service';
-import { GET_CHARACTER_MEDIA } from 'src/app/models/aniList/mediaQueries';
-import { take } from 'rxjs';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
+import { IonicModule } from "@ionic/angular";
+import { take } from 'rxjs';
+import { toSentenceCase } from 'src/app/helpers/utils';
+import { GET_CHARACTER_MEDIA } from 'src/app/models/aniList/mediaQueries';
+import { Character } from 'src/app/models/aniList/responseInterfaces';
 @Component({
-  selector: 'app-people-media-tab',
+  selector: 'am-people-media-tab',
   templateUrl: './people-media-tab.component.html',
   styleUrls: ['./people-media-tab.component.scss'],
   imports: [IonicModule, MediaListItemComponent],

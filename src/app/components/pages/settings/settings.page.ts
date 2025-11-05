@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
+import { ToastService } from '@components/core/services/toast.service';
 import { IonBackButton, IonButtons, IonCardSubtitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonRow, IonText, IonTitle, IonToggle, IonToolbar } from '@ionic/angular/standalone';
 import { GET_CURRENT_USER } from 'src/app/models/aniList/mediaQueries';
 import { User } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
-  selector: 'app-settings',
+  selector: 'am-settings',
   templateUrl: './settings.page.html',
   styleUrls: ['./settings.page.scss'],
   standalone: true,
@@ -26,10 +27,12 @@ export class SettingsPage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
+    this.toastService.setTabBarVisibility(false);
     this.refreshToken();
     this.loadUserData();
   }

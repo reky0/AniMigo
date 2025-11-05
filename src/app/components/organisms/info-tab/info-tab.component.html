@@ -91,7 +91,7 @@
             <ion-note>Synonyms</ion-note>
           </ion-col>
           <ion-col size="8" class="ion-no-padding">
-            <app-collapsible [thresholdHeight]="100">
+            <am-collapsible [thresholdHeight]="100">
               <ion-row>
                 @for (synonym of data.synonyms; track $index){
                   <ion-col size="12">
@@ -99,7 +99,7 @@
                   </ion-col>
                 }
               </ion-row>
-            </app-collapsible>
+            </am-collapsible>
           </ion-col>
         </ion-row>
       }
@@ -113,7 +113,7 @@
             <ion-row>
               @for (studio of mainStudios; track $index) {
                 <ion-col size="6" sizeLg="3">
-                  <app-info-chip type="text" outline [info]="studio.node.name" />
+                  <am-info-chip type="text" outline [info]="studio.node.name" />
                 </ion-col>
               }
             </ion-row>
@@ -130,7 +130,7 @@
             <ion-row>
               @for (studio of otherStudios; track $index) {
                 <ion-col size="6" sizeLg="3">
-                  <app-info-chip type="text" outline [info]="studio.node.name"></app-info-chip>
+                  <am-info-chip type="text" outline [info]="studio.node.name"></am-info-chip>
                 </ion-col>
               }
             </ion-row>
@@ -141,36 +141,36 @@
       @if (data.tags && data.tags.length > 0) {
         <ion-card-title class="ion-margin-top ion-margin-bottom">Tags</ion-card-title>
 
-        <app-collapsible [thresholdHeight]="100">
+        <am-collapsible [thresholdHeight]="100">
           <ion-row>
             @for (tag of data.tags; track $index) {
               <ion-col size="6" sizeLg="3">
-                <app-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" />
+                <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" />
               </ion-col>
             }
           </ion-row>
-        </app-collapsible>
+        </am-collapsible>
       }
 
       @if (data.trailer && trailerURL) {
         <ion-card-title class="ion-margin-top ion-margin-bottom">Trailer</ion-card-title>
 
-        <app-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeLg]="5"></app-media-thumbnail>
+        <am-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeLg]="5"></am-media-thumbnail>
       }
 
       @if (data.streamingEpisodes && data.streamingEpisodes.length > 0) {
         <ion-card-title class="ion-margin-top ion-margin-bottom">Episodes</ion-card-title>
 
-        <app-collapsible [thresholdHeight]="100">
+        <am-collapsible [thresholdHeight]="100">
           <ion-row>
             @for (episode of data.streamingEpisodes; track $index) {
               <ion-col size="4" sizeLg="3">
-                <app-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></app-media-thumbnail>
+                <am-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></am-media-thumbnail>
                 <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
               </ion-col>
             }
           </ion-row>
-        </app-collapsible>
+        </am-collapsible>
       }
 
       @if (streamingSites && streamingSites.length > 0) {
@@ -179,7 +179,7 @@
         <ion-row>
           @for (site of streamingSites; track $index) {
             <ion-col size="6" sizeLg="4">
-              <app-info-chip
+              <am-info-chip
                 [img]="site?.icon"
                 [note]="site.site"
                 outline
@@ -195,11 +195,11 @@
       @if (externalLinks && externalLinks.length > 0) {
         <ion-card-title class="ion-margin-top ion-margin-bottom">External links</ion-card-title>
 
-        <app-collapsible [thresholdHeight]="150">
+        <am-collapsible [thresholdHeight]="150">
           <ion-row>
             @for (link of externalLinks; track $index) {
               <ion-col size="6" sizeLg="4">
-                <app-info-chip type="text"
+                <am-info-chip type="text"
                   [img]="link?.icon"
                   [info]="link.site"
                   [note]="getLangCode(link.language)"
@@ -211,7 +211,7 @@
               </ion-col>
             }
           </ion-row>
-        </app-collapsible>
+        </am-collapsible>
       }
     }
   }

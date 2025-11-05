@@ -6,7 +6,7 @@ import { PersonItemComponent } from '../person-item/person-item.component';
 import { VoiceActorListComponent } from '../voice-actor-list/voice-actor-list.component';
 
 @Component({
-  selector: 'app-character-item',
+  selector: 'am-character-item',
   templateUrl: './character-item.component.html',
   styleUrls: ['./character-item.component.scss'],
   imports: [PersonItemComponent, IonicModule],

@@ -3,7 +3,7 @@ import { LoadingStateComponent } from '@components/core/loading-state/loading-st
 import { IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 
 @Component({
-  selector: 'app-catalog-item',
+  selector: 'am-catalog-item',
   templateUrl: './catalog-item.component.html',
   styleUrls: ['./catalog-item.component.scss'],
   imports: [IonNote, IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid],

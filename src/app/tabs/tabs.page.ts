@@ -1,9 +1,9 @@
 import { Component, EnvironmentInjector, inject, OnInit } from '@angular/core';
-import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel } from '@ionic/angular/standalone';
+import { IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs } from '@ionic/angular/standalone';
 import { PlatformService } from '../components/core/services/platform.service';
 
 @Component({
-  selector: 'app-tabs',
+  selector: 'am-tabs',
   templateUrl: 'tabs.page.html',
   styleUrls: ['tabs.page.scss'],
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],

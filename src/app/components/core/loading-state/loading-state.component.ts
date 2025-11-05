@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-loading-state',
+  selector: 'am-loading-state',
   template: '',
   styleUrls: [],
   standalone: true,

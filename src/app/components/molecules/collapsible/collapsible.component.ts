@@ -1,8 +1,8 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, input, signal, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, signal, ViewChild } from '@angular/core';
 import { IonButton, IonIcon } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-collapsible',
+  selector: 'am-collapsible',
   standalone: true,
   templateUrl: './collapsible.component.html',
   styleUrls: ['./collapsible.component.scss'],

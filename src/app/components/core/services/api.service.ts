@@ -2,29 +2,29 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { catchError, map, Observable, take, throwError } from 'rxjs';
 import {
-  BasicMediaResponse,
-  CharacterResponse,
-  DetailedMediaResponse,
-  AiringSchedulesResponse,
-  UserResponse,
-  ViewerResponse,
-  MediaListCollectionResponse,
-  FavoriteType,
-  FavoriteToggleResult,
-  SearchResponse,
-  UserSettingsInput,
-  UpdateUserResponse,
-  UpdateUserSettingsResult
-} from 'src/app/models/aniList/responseInterfaces';
-import {
-  TOGGLE_FAVORITE_MEDIA,
   TOGGLE_FAVORITE_CHARACTER,
+  TOGGLE_FAVORITE_MEDIA,
   TOGGLE_FAVORITE_STAFF,
   TOGGLE_FAVORITE_STUDIO,
   UPDATE_USER_SETTINGS
 } from 'src/app/models/aniList/mutations';
-import { ToastController } from '@ionic/angular';
+import {
+  AiringSchedulesResponse,
+  BasicMediaResponse,
+  CharacterResponse,
+  DetailedMediaResponse,
+  FavoriteToggleResult,
+  FavoriteType,
+  MediaListCollectionResponse,
+  SearchResponse,
+  UpdateUserResponse,
+  UpdateUserSettingsResult,
+  UserResponse,
+  UserSettingsInput,
+  ViewerResponse
+} from 'src/app/models/aniList/responseInterfaces';
 import { AuthService } from './auth.service';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,9 +32,9 @@ import { AuthService } from './auth.service';
 export class ApiService {
   constructor(
     private readonly apollo: Apollo,
-    private readonly toastController: ToastController,
-    private readonly authService: AuthService
-  ) { }
+    private readonly authService: AuthService,
+    private readonly toastService: ToastService
+  ) {}
 
   fetchBasicData(query: any, variables: Object, displayAdultContent: boolean = false, showToast = true): Observable<{
     data: BasicMediaResponse | null;
@@ -455,17 +455,8 @@ export class ApiService {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 5000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast', // Add custom class
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 
   private formatGraphQLError(error: any, friendlyMessage: string): string {
@@ -656,15 +647,8 @@ export class ApiService {
     const action = isFavorite ? 'added to' : 'removed from';
     const message = `${entityName} ${action} favorites`;
 
-    const toast = await this.toastController.create({
-      message,
-      duration: 2000,
-      position: 'bottom',
-      color: 'success',
-      icon: isFavorite ? 'heart' : 'heart-dislike'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.success(message);
   }
 
   /**
@@ -679,15 +663,8 @@ export class ApiService {
       message = 'Please log in to manage favorites';
     }
 
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      position: 'bottom',
-      color: 'danger',
-      icon: 'alert-circle'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 
   /**
@@ -780,15 +757,8 @@ export class ApiService {
    * Show success toast for settings update
    */
   private async showSettingsSuccessToast() {
-    const toast = await this.toastController.create({
-      message: 'Settings updated successfully',
-      duration: 2000,
-      position: 'bottom',
-      color: 'success',
-      icon: 'checkmark-circle'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.success('Settings updated successfully');
   }
 
   /**
@@ -802,14 +772,7 @@ export class ApiService {
       message = 'Please log in to update settings';
     }
 
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      position: 'bottom',
-      color: 'danger',
-      icon: 'alert-circle'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }

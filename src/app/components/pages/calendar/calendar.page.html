@@ -47,13 +47,13 @@
       @if (loading) {
         @for (i of 16 | range; track i) {
           <ion-col size="4" sizeMd="3" sizeLg="1.5" class="catalogItemContainer">
-            <app-catalog-item [loading]="true"></app-catalog-item>
+            <am-catalog-item [loading]="true"></am-catalog-item>
           </ion-col>
         }
       } @else {
         @for (schedule of airingSchedules; track $index) {
           <ion-col size="4" sizeMd="3" sizeLg="1.5">
-            <app-catalog-item
+            <am-catalog-item
               class="catalogItemContainer"
               [image]="schedule.media.coverImage?.large?.replace('medium', 'large') ?? schedule.media.coverImage?.medium"
               [fallbackImage]="schedule.media.coverImage?.large"

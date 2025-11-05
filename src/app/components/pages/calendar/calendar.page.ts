@@ -1,20 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CatalogItemComponent } from "@components/atoms/catalog-item/catalog-item.component";
 import { ApiService } from '@components/core/services/api.service';
-import { IonBackButton, IonCol, IonContent, IonGrid, IonHeader, IonRow, IonTitle, IonToolbar, IonSegment, IonSegmentButton, IonText } from '@ionic/angular/standalone';
+import { AuthService } from '@components/core/services/auth.service';
+import { ToastService } from '@components/core/services/toast.service';
+import { IonBackButton, IonCol, IonContent, IonGrid, IonHeader, IonRow, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { GET_AIRING_SCHEDULES } from 'src/app/models/aniList/mediaQueries';
 import { AiringSchedule } from 'src/app/models/aniList/responseInterfaces';
-import { takeUntil, take } from 'rxjs/operators';
 import { RangePipe } from "../../../helpers/range.pipe";
-import { Router } from '@angular/router';
-import { AuthService } from '@components/core/services/auth.service';
-import { ToastController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-calendar',
+  selector: 'am-calendar',
   templateUrl: './calendar.page.html',
   styleUrls: ['./calendar.page.scss'],
   standalone: true,
@@ -26,7 +26,7 @@ export class CalendarPage implements OnInit, OnDestroy {
     private readonly apiService: ApiService,
     private readonly router: Router,
     private readonly authService: AuthService,
-    private readonly toastController: ToastController
+    private readonly toastService: ToastService
   ) { }
 
   now = new Date();
@@ -42,6 +42,7 @@ export class CalendarPage implements OnInit, OnDestroy {
   loadedData: Array<AiringSchedule[] | null> = [null, null, null, null, null, null, null, null];
 
   ngOnInit() {
+    this.toastService.setTabBarVisibility(false);
     this.fetchAiringSchedules(this.weekdayNumber);
   }
 
@@ -98,18 +99,8 @@ export class CalendarPage implements OnInit, OnDestroy {
   }
 
   private async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      animated: true,
-      icon: 'alert-circle',
-      color: 'danger',
-      position: 'bottom',
-      cssClass: 'multiline-toast', // Add custom class
-      swipeGesture: 'vertical'
-    });
-
-    await toast.present();
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 
 }
