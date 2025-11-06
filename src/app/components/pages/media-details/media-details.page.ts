@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, NgZone, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -34,7 +34,8 @@ export class MediaDetailsPageComponent implements OnDestroy {
     private readonly apiService: ApiService,
     private readonly route: ActivatedRoute,
     private readonly titleService: Title,
-    private readonly toastService: ToastService
+    private readonly toastService: ToastService,
+    private readonly ngZone: NgZone
   ) { }
 
   loading = true;
@@ -128,17 +129,21 @@ export class MediaDetailsPageComponent implements OnDestroy {
       .pipe(take(1))
       .subscribe({
         next: (result) => {
-          this.isTogglingFavorite = false;
-          if (result.success && this.data) {
-            // Update local state by creating a new object
-            this.data = {
-              ...this.data,
-              isFavourite: result.isFavorite
-            };
-          }
+          this.ngZone.run(() => {
+            this.isTogglingFavorite = false;
+            if (result.success && this.data) {
+              // Update local state by creating a new object
+              this.data = {
+                ...this.data,
+                isFavourite: result.isFavorite
+              };
+            }
+          });
         },
         error: () => {
-          this.isTogglingFavorite = false;
+          this.ngZone.run(() => {
+            this.isTogglingFavorite = false;
+          });
         }
       });
   }

@@ -200,7 +200,7 @@ export class HomeTabPage implements OnInit {
           if (result.errors) {
             this.error = result.errors[0];
           } else {
-            this.setData(section.key, result.data?.Page.media);
+            this.setData(section.key, result.data.Page.media);
           }
 
           // Always set loading to false after processing, as forkJoin completes when all are done

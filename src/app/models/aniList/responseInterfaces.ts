@@ -56,6 +56,7 @@ export interface Studio {
   id: number;
   name: string;
   isAnimationStudio: boolean;
+  isFavourite?: boolean | null;
 }
 
 export interface GenreConnection {
@@ -73,6 +74,7 @@ export interface VoiceActor {
     medium: string
     large?: string | null;
   }
+  isFavourite?: boolean | null;
 }
 
 export interface CharacterConnection {
@@ -89,6 +91,7 @@ export interface CharacterConnection {
         medium: string
         large?: string | null;
       };
+      isFavourite?: boolean | null;
     };
     voiceActors: Array<VoiceActor>;
   }>;
@@ -108,6 +111,7 @@ export interface StaffConnection {
         medium?: string | null;
         large?: string | null;
       };
+      isFavourite?: boolean | null;
     };
   }>;
 }
@@ -516,6 +520,7 @@ export interface FavouriteCharacters {
       large?: string | null;
       medium: string;
     };
+    isFavourite?: boolean | null;
   }>;
 }
 
@@ -530,6 +535,7 @@ export interface FavouriteStaff {
       large?: string | null;
       medium?: string | null;
     };
+    isFavourite?: boolean | null;
   }>;
 }
 

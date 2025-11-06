@@ -120,6 +120,7 @@ export const GET_MEDIA_BY_ID = gql`
             image {
               medium
             }
+            isFavourite
           }
         }
       }
@@ -199,6 +200,7 @@ export const GET_MEDIA_BY_ID = gql`
               large
               medium
             }
+            isFavourite
           }
           voiceActors {
             id
@@ -211,6 +213,7 @@ export const GET_MEDIA_BY_ID = gql`
               large
               medium
             }
+            isFavourite
           }
         }
       }

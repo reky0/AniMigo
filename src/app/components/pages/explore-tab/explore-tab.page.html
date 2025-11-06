@@ -117,6 +117,7 @@
                             [name]="result.name.full ?? result.name.native"
                             [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
                             [fallbackImage]="result.image.large"
+                            [isFavourite]="result.isFavourite"
                             (click)="openModal('character', result.id)"
                             />
                           </ion-col>

@@ -17,6 +17,10 @@ ion-grid {
     border-radius: 100%;
   }
 
+  .img.fav::part(image) {
+    border: 3px solid var(--ion-color-danger);
+  }
+
   .note-loading {
     width: 50%;
   }

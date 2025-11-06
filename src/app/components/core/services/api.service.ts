@@ -54,6 +54,8 @@ export class ApiService {
           this.showErrorToast(errorMsg);
         }
 
+        // console.log(result.data.Page.media);
+
         // Filter out adult content if displayAdultContent is false
         const filteredData = result.data && !displayAdultContent ? {
           ...result.data,

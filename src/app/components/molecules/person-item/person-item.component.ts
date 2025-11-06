@@ -15,6 +15,7 @@ export class PersonItemComponent {
   @Input() fallbackImage: string | null | undefined = "";
   @Input() name: string = "";
   @Input() note: string = "";
+  @Input() isFavourite: boolean | null | undefined = false;
 
   toSentenceCase = toSentenceCase;
 
