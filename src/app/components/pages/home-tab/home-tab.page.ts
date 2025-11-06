@@ -226,6 +226,10 @@ export class HomeTabPage implements OnInit {
     }
   }
 
+  navigate(target: string) {
+    this.router.navigate([target]);
+  }
+
   refresh(event: any) {
     // Create an object of observables for forkJoin
     const requests: { [key: string]: any } = {};

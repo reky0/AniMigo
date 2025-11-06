@@ -1,0 +1,595 @@
+// ========================================
+// DETECTIVE GAME - FILM NOIR THEME
+// ========================================
+
+// Main Content Styling
+ion-content.detective-game {
+  --background: radial-gradient(ellipse at center, #2a2a2a 0%, #1a1a1a 50%, #0a0a0a 100%);
+  animation: filmFlicker 3s infinite;
+
+  // Film grain overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.03) 2px, rgba(255, 255, 255, 0.03) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255, 255, 255, 0.02) 2px, rgba(255, 255, 255, 0.02) 4px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+    animation: filmGrain 0.2s infinite;
+  }
+
+  // Vignette effect
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.95), inset 0 0 60px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+// ========================================
+// WELCOME SCREEN
+// ========================================
+
+.welcome-screen {
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+}
+
+.welcome-row {
+  min-height: 100vh;
+}
+
+// Title Styling
+.title-404-wrapper {
+  margin-bottom: 2rem;
+  font-family: 'Courier New', monospace;
+  filter: contrast(1.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.title-404-large, .title-404-dash, .title-404-small {
+  color: #e8e8e8;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.3);
+  margin: 0;
+  line-height: 1;
+}
+
+.title-404-large {
+  font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 12px;
+}
+
+.title-404-dash {
+  font-size: 2.5rem;
+}
+
+.title-404-small {
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}
+
+// Detective Card
+.detective-card {
+  background: linear-gradient(135deg, rgba(40, 40, 40, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
+  border: 3px double rgba(200, 200, 200, 0.4);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 0 50px rgba(0, 0, 0, 0.5);
+
+  ion-card-title {
+    font-family: 'Courier New', monospace;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #e8e8e8;
+  }
+}
+
+.detective-img {
+  width: 100%;
+}
+
+.game-title {
+  ion-col #text {
+    color:red
+  }
+}
+
+.game-subtitle {
+  font-family: Georgia, serif;
+  font-style: italic;
+}
+
+// Buttons
+.primary-btn {
+  --background: linear-gradient(180deg, #3a3a3a 0%, #1a1a1a 100%);
+  --background-hover: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  --color: #e8e8e8;
+  --border-width: 2px;
+  --border-color: rgba(200, 200, 200, 0.5);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  width: 100%;
+}
+
+.secondary-btn {
+  --border-color: rgba(180, 180, 180, 0.6);
+  --color: #c0c0c0;
+  --border-width: 2px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  width: 100%;
+}
+
+// ========================================
+// GAME SCREEN
+// ========================================
+
+.game-screen {
+  min-height: 100vh;
+  position: relative;
+  z-index: 2;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.scene-title {
+  color: #b8b8b8;
+  font-size: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.2);
+  font-family: 'Courier New', monospace;
+  border-bottom: 3px double rgba(200, 200, 200, 0.4);
+  padding-bottom: 0.5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+// Narration Card
+.narration-card {
+  background: linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(15, 15, 15, 0.98) 100%);
+  border-left: 6px solid rgba(180, 180, 180, 0.6);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(0, 0, 0, 0.6);
+
+  ion-card-content {
+    font-family: Georgia, serif;
+  }
+}
+
+.narration-text {
+  color: #b8b8b8;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin: 0;
+  white-space: pre-line;
+  font-style: italic;
+}
+
+// Dialogue Card
+.dialogue-card {
+  background: linear-gradient(135deg, rgba(40, 40, 40, 0.95) 0%, rgba(20, 20, 20, 0.98) 100%);
+  border: 3px double rgba(180, 180, 180, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9), inset 0 0 40px rgba(0, 0, 0, 0.7);
+  animation: popIn 0.4s ease-out;
+
+  ion-card-content {
+    font-family: Georgia, serif;
+  }
+}
+
+.dialogue-text {
+  color: #d8d8d8;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.speaker-name {
+  color: #d8d8d8;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+}
+
+// Choices Card wrapper (keeps width aligned with narration card without adding visual chrome)
+.choices-card {
+  background: none;
+
+  box-shadow: none;
+  border: none;
+
+
+  ion-card-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  ion-item, ion-item::part(native) {
+    background: none;
+  }
+}
+
+.choices-container {
+  background: transparent;
+}
+
+// Choice Buttons
+.choice-item {
+  --background: transparent;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  width: 100%;
+
+  overflow: visible;
+}
+
+.choice-btn {
+  --background: linear-gradient(180deg, rgba(50, 50, 50, 0.9) 0%, rgba(25, 25, 25, 0.95) 100%);
+  --background-hover: linear-gradient(180deg, rgba(70, 70, 70, 0.95) 0%, rgba(40, 40, 40, 1) 100%);
+  --border-color: rgba(180, 180, 180, 0.5);
+  --border-width: 2px;
+  --color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  letter-spacing: 1px;
+  width: 100%;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  transition: all 0.1s ease;
+  justify-content: center;
+
+  &:hover {
+    padding-bottom: 5px;
+    transition: .1s ease;
+
+    .choice-arrow {
+      opacity: 1;
+    }
+  }
+}
+
+.choice-arrow {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  position: absolute;
+  left: 12px;
+  margin: 0 !important;
+}
+
+.ending-btn {
+  --background: linear-gradient(180deg, rgba(60, 60, 60, 0.95) 0%, rgba(30, 30, 30, 1) 100%);
+  --border-color: rgba(200, 200, 200, 0.7);
+  --border-width: 3px;
+}
+
+.ending-badge {
+  font-size: 1.2rem;
+  padding: 0.8rem 1.5rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  animation: pulse 2s infinite;
+  display: block;
+  margin: 2rem auto;
+}
+
+
+
+
+// ========================================
+// ANIMATIONS
+// ========================================
+
+@keyframes filmGrain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-1px, -1px); }
+  20% { transform: translate(1px, 0px); }
+  30% { transform: translate(0px, 1px); }
+  40% { transform: translate(-1px, 0px); }
+  50% { transform: translate(1px, 1px); }
+  60% { transform: translate(0px, -1px); }
+  70% { transform: translate(-1px, 1px); }
+  80% { transform: translate(1px, -1px); }
+  90% { transform: translate(0px, 0px); }
+}
+
+@keyframes filmFlicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.98; }
+  75% { opacity: 0.96; }
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.95); }
+  50% { transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+// ========================================
+// RESPONSIVE DESIGN
+// ========================================
+
+@media (max-width: 768px) {
+  ion-content.detective-game {
+    &::before, &::after {
+      position: fixed;
+    }
+  }
+
+  .title-404-wrapper {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .title-404-large {
+    font-size: 3rem;
+    letter-spacing: 8px;
+  }
+
+  .title-404-dash {
+    font-size: 1.5rem;
+  }
+
+  .title-404-small {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+  }
+
+  .scene-title {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title-404-wrapper {
+    gap: 0.2rem;
+  }
+
+  .title-404-large {
+    font-size: 2.5rem;
+    letter-spacing: 6px;
+  }
+
+  .title-404-dash {
+    font-size: 1.2rem;
+  }
+
+  .title-404-small {
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .scene-title {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
+}
+
+// ========================================
+// SECRET ENDING - GLITCH EFFECTS
+// ========================================
+
+// Glitch text effect for secret ending
+.glitch-text {
+  position: relative;
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  letter-spacing: 2px;
+  animation: glitchColor 0.3s infinite;
+
+  &::before,
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+  }
+
+  &::before {
+    animation: glitchBefore 0.4s infinite;
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-2px, -2px);
+    opacity: 0.8;
+  }
+
+  &::after {
+    animation: glitchAfter 0.4s infinite;
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+    opacity: 0.8;
+  }
+}
+
+// Secret ending scene styling
+.secret-ending-scene {
+  .scene-title {
+    color: #00ff00;
+    text-shadow:
+      0 0 10px rgba(0, 255, 0, 0.8),
+      0 0 20px rgba(0, 255, 0, 0.5),
+      0 0 30px rgba(0, 255, 0, 0.3),
+      2px 2px 0px rgba(0, 0, 0, 0.8);
+    animation: glitchFlicker 0.5s infinite;
+  }
+
+  .narration-card {
+    background: linear-gradient(135deg, rgba(0, 20, 0, 0.95) 0%, rgba(0, 10, 0, 0.98) 100%);
+    border-left: 6px solid rgba(0, 255, 0, 0.6);
+    box-shadow:
+      0 6px 20px rgba(0, 255, 0, 0.3),
+      inset 0 0 30px rgba(0, 0, 0, 0.8);
+  }
+
+  .narration-text {
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-style: normal;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    animation: typing 1s steps(40, end), staticNoise 0.1s infinite;
+  }
+
+  .dialogue-card {
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.98) 0%, rgba(10, 10, 10, 0.99) 100%);
+    border: 3px double rgba(0, 255, 0, 0.5);
+    box-shadow:
+      0 10px 30px rgba(0, 255, 0, 0.2),
+      inset 0 0 40px rgba(0, 0, 0, 0.9);
+    animation: staticFlicker 0.2s infinite;
+  }
+
+  .dialogue-text {
+    color: #d0d0d0;
+    text-shadow: 0 0 3px rgba(0, 255, 0, 0.3);
+  }
+
+  .speaker-name {
+    color: #00ff00;
+    text-shadow:
+      0 0 10px rgba(0, 255, 0, 0.8),
+      2px 2px 0px rgba(0, 0, 0, 0.9);
+  }
+
+  .choice-btn {
+    --background: linear-gradient(180deg, rgba(0, 30, 0, 0.9) 0%, rgba(0, 15, 0, 0.95) 100%);
+    --border-color: rgba(0, 255, 0, 0.6);
+    --color: #00ff00;
+    text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+
+    &:hover {
+      --background: linear-gradient(180deg, rgba(0, 40, 0, 0.95) 0%, rgba(0, 20, 0, 1) 100%);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+  }
+}
+
+// Matrix-style code rain effect (subtle)
+.code-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.1;
+
+  &::before {
+    content: '01010101010101010101010101010101';
+    position: absolute;
+    color: #00ff00;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    animation: codeRainFall 10s linear infinite;
+  }
+}
+
+// Static/noise effect
+.static-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.05;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0, 255, 0, 0.1) 1px, rgba(0, 255, 0, 0.1) 2px);
+  animation: staticScroll 0.1s infinite;
+}
+
+// Glitch Animations
+@keyframes glitchColor {
+  0%, 90%, 100% { color: #00ff00; }
+  20% { color: #00ffff; }
+  40% { color: #ff00ff; }
+  60% { color: #ffff00; }
+  80% { color: #00ff00; }
+}
+
+@keyframes glitchBefore {
+  0%, 100% { transform: translate(-2px, -2px); opacity: 0.8; }
+  25% { transform: translate(2px, 2px); opacity: 0.7; }
+  50% { transform: translate(-3px, 3px); opacity: 0.6; }
+  75% { transform: translate(3px, -3px); opacity: 0.7; }
+}
+
+@keyframes glitchAfter {
+  0%, 100% { transform: translate(2px, 2px); opacity: 0.8; }
+  25% { transform: translate(-2px, -2px); opacity: 0.7; }
+  50% { transform: translate(3px, -3px); opacity: 0.6; }
+  75% { transform: translate(-3px, 3px); opacity: 0.7; }
+}
+
+@keyframes glitchFlicker {
+  0%, 90%, 100% { opacity: 1; }
+  93% { opacity: 0.7; }
+  96% { opacity: 1; }
+}
+
+@keyframes staticFlicker {
+  0%, 95%, 100% { opacity: 1; }
+  97% { opacity: 0.95; }
+}
+
+@keyframes staticNoise {
+  0%, 100% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.5); }
+  50% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.3), 1px 0 2px rgba(255, 0, 0, 0.2), -1px 0 2px rgba(0, 0, 255, 0.2); }
+}
+
+@keyframes typing {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes codeRainFall {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes staticScroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(2px); }
+}

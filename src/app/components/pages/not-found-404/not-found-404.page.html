@@ -1,0 +1,134 @@
+@if (platformService.isHybrid()) {
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>404</ion-title>
+    </ion-toolbar>
+  </ion-header>
+}
+
+<ion-content [fullscreen]="true" class="detective-game">
+
+  <!-- Welcome Screen -->
+  @if (!gameStarted) {
+    <ion-grid class="ion-no-padding welcome-screen" fixed>
+      <ion-row class="ion-justify-content-center ion-align-items-center welcome-row">
+        <ion-col size="12" size-md="8" size-lg="6">
+
+          <!-- Title -->
+          <ion-text color="light" class="ion-text-center">
+            <div class="title-404-wrapper ion-margin-top">
+              <h1 class="title-404-large">404</h1>
+              <h1 class="title-404-dash">-</h1>
+              <h1 class="title-404-small">Page Not Found</h1>
+            </div>
+          </ion-text>
+
+          <!-- Detective Card -->
+          <ion-card class="detective-card ion-margin">
+            <ion-card-header class="ion-text-center">
+              <ion-card-title class="game-title ion-align-items-center">
+                <ion-row>
+
+                  <ion-col size="12">
+                    The Case of the Missing Page
+                  </ion-col>
+                </ion-row>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content class="ion-text-center">
+              <ion-text color="medium">
+                <p class="game-subtitle">A Detective Animigo Mystery</p>
+              </ion-text>
+            </ion-card-content>
+          </ion-card>
+
+          <!-- Action Buttons -->
+          <ion-list class="choices-card ion-padding" lines="none">
+            <ion-item>
+              <ion-button expand="block" (click)="startGame()" class="primary-btn" size="large">
+                🎮 Start Investigation
+              </ion-button>
+            </ion-item>
+            <ion-item class="ion-margin-top">
+              <ion-button expand="block" fill="outline" (click)="navigate('home')" class="secondary-btn" size="large">
+                🏠 Return Home
+              </ion-button>
+            </ion-item>
+          </ion-list>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  }
+
+  <!-- Game Screen -->
+  @if (gameStarted && currentScene) {
+    <!-- Static overlay for secret ending -->
+    @if (currentScene.isSecretEnding) {
+      <div class="static-overlay"></div>
+    }
+
+    <ion-grid class="ion-no-padding game-screen" [class.secret-ending-scene]="currentScene.isSecretEnding">
+      <ion-row class="ion-justify-content-center">
+        <ion-col size="12" size-md="10" size-lg="8">
+
+          <!-- Scene Title -->
+          @if (currentScene.title) {
+            <ion-text color="light" class="ion-text-center">
+              <h2 class="scene-title ion-padding-horizontal">{{ currentScene.title }}</h2>
+            </ion-text>
+          }
+
+          <!-- Narration Box -->
+          @if (currentScene.narration) {
+            <ion-card class="narration-card ion-margin">
+              <ion-card-content>
+                <p class="narration-text">{{ currentScene.narration }}</p>
+              </ion-card-content>
+            </ion-card>
+          }
+
+          <!-- Dialogue Box -->
+          @if (currentScene.dialogue) {
+            <ion-card class="dialogue-card ion-margin">
+              @if (currentScene.speaker) {
+                <ion-card-header>
+                  <ion-card-subtitle class="speaker-name">
+                    {{ currentScene.speaker }}
+                  </ion-card-subtitle>
+                </ion-card-header>
+              }
+              <ion-card-content>
+                <div class="dialogue-text">{{ currentScene.dialogue }}</div>
+              </ion-card-content>
+            </ion-card>
+          }
+
+          <!-- Choices -->
+          @if (currentScene.choices && currentScene.choices.length > 0) {
+            <ion-card class="choices-card ion-margin">
+              <ion-card-content>
+                <ion-list class="choices-container" lines="none">
+                  @for (choice of currentScene.choices; track choice.text) {
+                    <ion-item class="ion-margin-bottom ion-no-padding choice-item">
+                      <ion-button
+                        expand="block"
+                        (click)="choice.action()"
+                        class="choice-btn"
+                        [class.ending-btn]="currentScene.isEnding"
+                        fill="outline">
+                        <ion-icon slot="start" name="caret-forward" class="choice-arrow"></ion-icon>
+                        {{ choice.text }}
+                      </ion-button>
+                    </ion-item>
+                  }
+                </ion-list>
+              </ion-card-content>
+            </ion-card>
+          }
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  }
+
+</ion-content>

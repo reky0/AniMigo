@@ -105,4 +105,9 @@ export const routes: Routes = [
       } as MediaListConfig
     }
   },
+  // Add this wildcard route at the END
+  {
+    path: '**',
+    loadComponent: () => import('./components/pages/not-found-404/not-found-404.page').then(m => m.NotFound404Page)
+  }
 ];
