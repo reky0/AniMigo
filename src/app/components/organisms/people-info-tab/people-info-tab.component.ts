@@ -3,7 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IonicModule } from "@ionic/angular";
 import { marked } from 'marked';
-import { Character } from 'src/app/models/aniList/responseInterfaces';
+import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
   selector: 'am-people-info-tab',
@@ -16,7 +16,7 @@ import { Character } from 'src/app/models/aniList/responseInterfaces';
 })
 
 export class PeopleInfoTabComponent implements OnInit {
-  @Input() data: Character | undefined;
+  @Input() data: Character | Staff | undefined;
   @Input() loading: boolean = true;
 
   showSpoilerNames = false;
@@ -35,11 +35,17 @@ export class PeopleInfoTabComponent implements OnInit {
 
       if (this.data.description) {
         this.parsedDescription = this.sanitizer.bypassSecurityTrustHtml(marked(this.data.description) as string);
+      } else {
+        this.parsedDescription = this.sanitizer.bypassSecurityTrustHtml("<p>No description available.</p>");
       }
     }
   }
 
   toggleShowSpoilerNames() {
     this.showSpoilerNames = !this.showSpoilerNames;
+  }
+
+  isCharacter(data: Character | Staff | undefined): data is Character {
+    return !!data && 'alternativeSpoiler' in (data as Character).name;
   }
 }

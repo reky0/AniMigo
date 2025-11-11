@@ -368,7 +368,7 @@
                   <am-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
                 }
                 @case ('va') {
-                  <am-people-va-tab [data]="modalData" [loading]="modalDataLoading" />
+                  <am-people-va-tab [data]="modalData" (navigate)="goToDetails($event)" />
                 }
               }
             } <!-- @else {

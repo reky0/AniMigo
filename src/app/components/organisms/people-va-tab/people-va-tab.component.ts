@@ -1,13 +1,107 @@
-import { Component, Input } from '@angular/core';
-
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ApiService } from '@components/core/services/api.service';
+import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
+import { IonicModule } from "@ionic/angular";
+import { take } from 'rxjs';
+import { toSentenceCase } from 'src/app/helpers/utils';
+import { GET_STAFF_VA_CHARACTERS } from 'src/app/models/aniList/mediaQueries';
+import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 @Component({
   selector: 'am-people-va-tab',
   templateUrl: './people-va-tab.component.html',
   styleUrls: ['./people-va-tab.component.scss'],
+  imports: [IonicModule, CharacterItemComponent],
 })
-export class PeopleVATabComponent {
-  @Input() data: any;
-  @Input() loading: boolean = true;
+export class PeopleVATabComponent implements OnInit {
+  @Input() data: Character | Staff | undefined;
+  @Output() navigate = new EventEmitter<{ id: number, type: string, isAdult: boolean }>(); // Emit changes
+  @Output() characterSelected = new EventEmitter<number>(); // Emit character ID to open modal
 
-  constructor() { }
+  toSentenceCase = toSentenceCase;
+
+  // Accumulative state
+  characterEdges: Array<any> = [];
+  private characterIdSet = new Set<number>();
+
+  // Pagination state (read from initial data if present)
+  currentPage = 1;
+  perPage = 25;
+  hasNextPage = true;
+  loadingMore = false;
+
+  constructor(private readonly apiService: ApiService) { }
+
+  ngOnInit() {
+    // Start from page 0 so first loadMore fetches page 1
+    this.currentPage = 0;
+    this.hasNextPage = true;
+
+    // Trigger initial load
+    this.loadMore(null);
+  }
+
+  isCharacter(data: Character | Staff): data is Character {
+    return 'media' in data && 'edges' in (data as Character).media;
+  }
+
+  triggerNavigationEvent(type: 'ANIME' | 'MANGA', id: number, isAdult: boolean | null | undefined) {
+    this.navigate.emit({ type: type.toLowerCase(), id: id, isAdult: isAdult ?? false });
+  }
+
+  onCharacterClick(characterId: number) {
+    this.characterSelected.emit(characterId);
+  }
+
+  // TODO: Add same functionality for staff and voice actors too
+  async loadMore(event: any) {
+
+    if (this.loadingMore || !this.hasNextPage || !this.data?.id) {
+
+      event?.target?.complete();
+      return;
+    }
+
+
+    this.loadingMore = true;
+
+    const variables = {
+      id: this.data.id,
+    };
+
+
+    this.apiService
+      .fetchStaffById(GET_STAFF_VA_CHARACTERS, variables)
+      .pipe(take(1))
+      .subscribe({
+        next: ({ data, errors }) => {
+          if (!errors) {
+
+            const newEdges = data?.Staff?.characters?.edges ?? [];
+            for (const e of newEdges) {
+              const id = e?.node?.id;
+              if (id && !this.characterIdSet.has(id)) {
+                this.characterIdSet.add(id);
+                this.characterEdges.push(e);
+              }
+            }
+
+            const pageInfo = data?.Staff?.staffMedia?.pageInfo;
+            this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
+            this.hasNextPage = !!pageInfo?.hasNextPage;
+
+          }
+
+          this.loadingMore = false;
+          event?.target?.complete();
+          if (!this.hasNextPage && event?.target) {
+            event.target.disabled = true;
+          }
+        },
+        error: () => {
+          this.loadingMore = false;
+          event?.target?.complete();
+        }
+      });
+
+  }
 }

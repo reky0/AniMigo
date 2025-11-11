@@ -13,6 +13,7 @@ export class MediaListItemComponent  implements OnInit {
   @Input() media: any;
   @Input() tag: string | undefined;
   @Input() isFavourite: boolean | null | undefined = false;
+  @Input() role: string | undefined;
 
   coverImg: string = '';
 

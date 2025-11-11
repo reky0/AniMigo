@@ -20,13 +20,14 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
+  IonSkeletonText,
   IonSpinner,
   IonToolbar
 } from "@ionic/angular/standalone";
 import { take } from 'rxjs';
 import { RangePipe } from 'src/app/helpers/range.pipe';
-import { GET_CHARACTER_BY_ID } from 'src/app/models/aniList/mediaQueries';
-import { Character, DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
+import { GET_CHARACTER_BY_ID, GET_STAFF_BY_ID } from 'src/app/models/aniList/mediaQueries';
+import { Character, DetailedMedia, Staff } from 'src/app/models/aniList/responseInterfaces';
 import { PeopleInfoTabComponent } from "../people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "../people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
@@ -35,7 +36,7 @@ import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
   selector: 'am-people-tab',
   templateUrl: './people-tab.component.html',
   styleUrls: ['./people-tab.component.scss'],
-  imports: [IonButton,
+  imports: [IonSkeletonText, IonButton,
     IonButtons,
     IonToolbar,
     IonHeader,
@@ -59,14 +60,14 @@ import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
     PeopleVATabComponent
   ],
 })
-export class PeopleTabComponent implements OnInit{
+export class PeopleTabComponent implements OnInit {
   @Input() data: DetailedMedia | null | undefined = undefined;
   @Input() loading: boolean = true;
   @ViewChild(IonModal) modal!: IonModal;
 
   isModalOpen: boolean;
   modalSelectedTab: string; // info | media | va
-  modalData: Character | undefined;
+  modalData: Character | Staff | undefined;
   error: any;
   isTogglingFavorite: boolean = false;
 
@@ -84,15 +85,24 @@ export class PeopleTabComponent implements OnInit{
     this.toastService.setTabBarVisibility(false);
   }
 
+  isCharacter(data: Character | Staff | undefined): data is Character {
+    if (!data) return false;
+    return 'media' in data && 'edges' in (data as Character).media;
+  }
+
   openModal(type: 'staff' | 'character' | 'va', id: number) {
-    let variables= {
+    // openModal(type: 'staff' | 'character' | 'va', data: any) {
+    let variables = {
       id: id
     }
 
-    switch(type) {
-      case('staff'):
-        break;
-      case('character'):
+    // this.modalData = data;
+    // this.isModalOpen = true;
+
+
+
+    switch (type) {
+      case ('character'):
         this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
           next: ({ data, loading, errors }) => {
             this.loading = loading;
@@ -100,6 +110,7 @@ export class PeopleTabComponent implements OnInit{
               this.error = errors[0];
             } else {
               this.modalData = data?.Character;
+              this.modalSelectedTab = 'info';
               this.isModalOpen = true;
             }
           },
@@ -109,8 +120,25 @@ export class PeopleTabComponent implements OnInit{
           }
         });
         break;
-      case('va'):
+      default:
+        this.apiService.fetchStaffById(GET_STAFF_BY_ID, variables).subscribe({
+          next: ({ data, loading, errors }) => {
+            this.loading = loading;
+            if (errors) {
+              this.error = errors[0];
+            } else {
+              this.modalData = data?.Staff;
+              this.modalSelectedTab = 'info';
+              this.isModalOpen = true;
+            }
+          },
+          error: (err) => {
+            this.error = err;
+            this.loading = false;
+          }
+        });
         break;
+
     }
   }
 
@@ -123,7 +151,7 @@ export class PeopleTabComponent implements OnInit{
     this.modalSelectedTab = event.detail.value as string;
   }
 
-  goToDetails(data: {id: number, type: string, isAdult: boolean}) {
+  goToDetails(data: { id: number, type: string, isAdult: boolean }) {
     if (data.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
       this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
     } else {

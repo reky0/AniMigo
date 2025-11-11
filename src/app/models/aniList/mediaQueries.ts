@@ -278,6 +278,7 @@ export const GET_CHARACTER_BY_ID = gql`
       isFavourite
       media {
         edges {
+          characterRole
           node {
             id
             title {
@@ -292,6 +293,7 @@ export const GET_CHARACTER_BY_ID = gql`
             format
             seasonYear
             averageScore
+            isFavourite
           }
         }
       }
@@ -299,22 +301,35 @@ export const GET_CHARACTER_BY_ID = gql`
   }
 `;
 
-export const GET_CHARACTER_MEDIA = gql`
-  query CharacterMedia($id: Int!) {
-    Character(id: $id) {
+export const GET_STAFF_BY_ID = gql`
+  query GetStaff($id: Int!) {
+    Staff(id: $id)  {
       id
-      media(
-        # page: $page,
-        # perPage: $perPage,
-        sort: POPULARITY_DESC,
-      ) {
-        pageInfo {
-          currentPage
-          hasNextPage
-          perPage
-          total
-        }
+      name {
+        full
+        native
+        alternative
+      }
+      image {
+        large
+        medium
+      }
+      isFavourite
+      description(asHtml: false)
+      dateOfBirth {
+        day
+        month
+        year
+      }
+      age
+      gender
+      bloodType
+      yearsActive
+      homeTown
+      primaryOccupations
+      characterMedia(sort: POPULARITY_DESC) {
         edges {
+          staffRole
           node {
             id
             type
@@ -334,6 +349,154 @@ export const GET_CHARACTER_MEDIA = gql`
             startDate {
               year
             }
+          }
+        }
+      }
+      staffMedia(sort: ID_DESC) {
+        edges {
+          staffRole
+          node {
+            id
+            type
+            title {
+              romaji
+              english
+            }
+            coverImage {
+              medium
+              large
+            }
+            isAdult
+            format
+            seasonYear
+            averageScore
+            isFavourite
+            startDate {
+              year
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_CHARACTER_MEDIA = gql`
+  query CharacterMedia($id: Int!, $page: Int = 1, $perPage: Int = 25) {
+    Character(id: $id) {
+      id
+      media(
+        page: $page,
+        perPage: $perPage,
+        sort: POPULARITY_DESC,
+      ) {
+        pageInfo {
+          currentPage
+          hasNextPage
+          perPage
+          total
+        }
+        edges {
+          characterRole
+          node {
+            id
+            type
+            title {
+              romaji
+              english
+            }
+            coverImage {
+              medium
+              large
+            }
+            isAdult
+            format
+            seasonYear
+            averageScore
+            isFavourite
+            startDate {
+              year
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_STAFF_MEDIA_STAFF = gql`
+  query StaffMedia($id: Int!, $page: Int = 1, $perPage: Int = 25) {
+    Staff(id: $id) {
+      id
+      staffMedia(
+        page: $page,
+        perPage: $perPage,
+        sort: POPULARITY_DESC,
+      ) {
+        pageInfo {
+          currentPage
+          hasNextPage
+          perPage
+          total
+        }
+        edges {
+          staffRole
+          node {
+            id
+            type
+            title {
+              romaji
+              english
+            }
+            coverImage {
+              medium
+              large
+            }
+            isAdult
+            format
+            seasonYear
+            averageScore
+            isFavourite
+            startDate {
+              year
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_STAFF_VA_CHARACTERS = gql`
+  query StaffMedia($id: Int!, $page: Int = 1, $perPage: Int = 25) {
+    Staff(id: $id) {
+      id
+      characters(
+        page: $page,
+        perPage: $perPage,
+        sort: [ROLE, RELEVANCE, ID],
+      ) {
+        pageInfo {
+          currentPage
+          hasNextPage
+          perPage
+          total
+        }
+        edges {
+          role
+          node {
+            id
+            name {
+              full
+              native
+              alternative
+              alternativeSpoiler
+            }
+            image {
+              large
+              medium
+            }
+            isFavourite
           }
         }
       }

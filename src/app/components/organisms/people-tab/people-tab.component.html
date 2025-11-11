@@ -61,6 +61,7 @@
                       [note]="character.role"
                       [isFavourite]="character.node.isFavourite"
                       [voiceActors]="character.voiceActors"
+                      (voiceActorSelected)="openModal('staff', $event)"
                     />
                   </ion-col>
                 }
@@ -132,11 +133,11 @@
                   <ion-icon name="film"></ion-icon>
                 </ion-segment-button>
 
-                <!-- @if (modalData?.voiceActingRoles) {
+                @if (!isCharacter(modalData)) {
                   <ion-segment-button value="va" layout="icon-top">
                     <ion-icon name="mic"></ion-icon>
                   </ion-segment-button>
-                } -->
+                }
               </ion-segment>
             </ion-col>
           </ion-row>
@@ -155,7 +156,7 @@
                 <am-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
               }
               @case ('va') {
-                <am-people-va-tab [data]="modalData" [loading]="loading" />
+                <am-people-va-tab [data]="modalData" (navigate)="goToDetails($event)" (characterSelected)="openModal('character', $event)" />
               }
             }
           } <!-- @else {

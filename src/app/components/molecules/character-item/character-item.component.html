@@ -9,10 +9,10 @@
         [isFavourite]="isFavourite"
         />
     </ion-col>
-    <!-- @if (voiceActors && voiceActors.length > 0) {
-      <ion-col size="1" (click)="openModal()">
+    @if (voiceActors && voiceActors.length > 0) {
+      <ion-col size="1" (click)="openModal($event)">
         <ion-icon name="mic"></ion-icon>
       </ion-col>
-    } -->
+    }
   </ion-row>
 </ion-grid>

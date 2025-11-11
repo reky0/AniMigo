@@ -267,23 +267,8 @@ export interface Character {
   media: {
     pageInfo?: PageInfo,
     edges: Array<{
-      node: {
-        id: number;
-        title: {
-          romaji: string;
-          english?: string | null;
-        }
-        coverImage: {
-          medium: string;
-          large?: string;
-        }
-        type: 'ANIME' | 'MANGA'
-        format?: string | null;
-        seasonYear?: number | null;
-        averageScore?: string | null;
-        isFavourite?: boolean | null;
-        isAdult?: boolean | null;
-      }
+      characterRole: string;
+      node: DetailedMedia
     }>
   }
 }
@@ -291,6 +276,54 @@ export interface Character {
 export interface CharacterResponse {
   Character: Character;
 }
+
+export interface Staff {
+  id: number;
+  name: {
+    full: string;
+    native?: string | null;
+    alternative?: string[] | null;
+  }
+  image: {
+    large?: string | null;
+    medium?: string | null;
+  }
+  isFavourite?: boolean | null;
+  description?: string | null;
+  dateOfBirth?: {
+    day?: number | null;
+    month?: number | null;
+    year?: number | null;
+  } | null;
+  age?: number | null;
+  gender?: string | null;
+  bloodType?: string | null;
+  yearsActive?: number[] | null;
+  homeTown?: string | null;
+  primaryOccupations?: string[] | null;
+  characters?: {
+    pageInfo: PageInfo,
+    edges: Array<{
+      staffRole: string;
+      node: Character;
+    }>;
+  } | null;
+  staffMedia?: {
+    pageInfo: PageInfo,
+    edges: Array<{
+      staffRole: string;
+      node: BasicMedia;
+    }>;
+  } | null;
+}
+
+export interface StaffResponse {
+  Staff: Staff;
+}
+
+// ============================================
+// Airing Schedule Interfaces
+// ============================================
 
 export interface AiringSchedule {
   episode: number;
@@ -593,21 +626,6 @@ export interface MediaListCollectionResponse {
   MediaListCollection: MediaListCollection;
 }
 
-// ============================================
-// Re-export Mutation Interfaces
-// ============================================
-export * from './mutationInterfaces';
-
-
-export interface SearchResponse {
-  Page: {
-    pageInfo: PageInfo;
-    media?: BasicMedia[];
-    characters?: Character[];
-    // staff?: StaffConnection;
-  };
-}
-
 export interface SmallUser {
   id: number;
   name: string;
@@ -621,3 +639,21 @@ export interface SocialStatResponse {
     following?: SmallUser[];
   }
 }
+
+// ============================================
+// Re-export Mutation Interfaces
+// ============================================
+export * from './mutationInterfaces';
+
+// ============================================
+// Search Interfaces
+// ============================================
+export interface SearchResponse {
+  Page: {
+    pageInfo: PageInfo;
+    media?: BasicMedia[];
+    characters?: Character[];
+    // staff?: StaffConnection;
+  };
+}
+

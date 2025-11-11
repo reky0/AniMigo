@@ -103,8 +103,17 @@ export class MediaListPage implements OnInit {
   }
 
   async loadMore(event?: any) {
-    if (this.loadingMore || !this.hasNextPage) {
+    // Prevent multiple simultaneous requests
+    if (this.loadingMore) {
       event?.target?.complete();
+      return;
+    }
+
+    if (!this.hasNextPage) {
+      event?.target?.complete();
+      if (event) {
+        event.target.disabled = true;
+      }
       return;
     }
 
@@ -157,6 +166,8 @@ export class MediaListPage implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: ({ data, errors }) => {
+          this.loading = false;
+
           if (!errors) {
             const newEdges = data?.Page?.media ?? [];
             for (const e of newEdges) {
@@ -184,7 +195,9 @@ export class MediaListPage implements OnInit {
             }
           }
         },
-        error: () => {
+        error: (err) => {
+          console.error('Error loading more media:', err);
+          this.loading = false;
           this.loadingMore = false;
           event?.target?.complete();
         }

@@ -11,7 +11,9 @@
             [image]="voiceActor.image.large ?? voiceActor.image.medium"
             [name]="voiceActor.name.full"
             [note]="voiceActor.language"
-            [isFavourite]="voiceActor.isFavourite"/>
+            [isFavourite]="voiceActor.isFavourite"
+            (click)="openModal(voiceActor.id)"
+            />
         </ion-col>
     }
   </ion-row>

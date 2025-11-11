@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { PlatformService } from '@components/core/services/platform.service';
 import { IonicModule, ModalController, PopoverController } from '@ionic/angular';
 import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
@@ -13,6 +13,7 @@ import { VoiceActorListComponent } from '../voice-actor-list/voice-actor-list.co
 })
 export class CharacterItemComponent extends PersonItemComponent {
   @Input() voiceActors: Array<VoiceActor> | null | undefined = null;
+  @Output() voiceActorSelected = new EventEmitter<number>();
 
   platformService: PlatformService;
 
@@ -25,7 +26,12 @@ export class CharacterItemComponent extends PersonItemComponent {
     this.platformService = platformService;
   }
 
-  async openModal() {
+  async openModal(event?: Event) {
+    // Prevent the click event from bubbling up to the parent
+    if (event) {
+      event.stopPropagation();
+    }
+
     try {
       const modal = await this.modalController.create({
         component: VoiceActorListComponent,
@@ -43,8 +49,14 @@ export class CharacterItemComponent extends PersonItemComponent {
         throw err;
       });
 
-
       await modal.present();
+
+      // Wait for the modal to be dismissed and check if data was returned
+      const { data } = await modal.onWillDismiss();
+      if (data && data.staffId) {
+        // Emit the staff ID to the parent component
+        this.voiceActorSelected.emit(data.staffId);
+      }
     } catch (error) {
       console.error("=== MODAL ERROR ===", error);
       console.error("Error type:", typeof error);

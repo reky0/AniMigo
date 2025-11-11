@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IonicModule } from "@ionic/angular";
+import { IonicModule, ModalController } from "@ionic/angular";
 import { VoiceActor } from 'src/app/models/aniList/responseInterfaces';
 import { PersonItemComponent } from "../person-item/person-item.component";
 
@@ -13,5 +13,12 @@ import { PersonItemComponent } from "../person-item/person-item.component";
 export class VoiceActorListComponent  {
   @Input() data: Array<VoiceActor> | undefined;
 
-  constructor() { }
+  constructor(private modalController: ModalController) { }
+
+  openModal(id: number) {
+    // Dismiss the modal and pass the staff ID back
+    this.modalController.dismiss({
+      staffId: id
+    });
+  }
 }

@@ -17,6 +17,7 @@ import {
   FavoriteType,
   MediaListCollectionResponse,
   SearchResponse,
+  StaffResponse,
   UpdateUserResponse,
   UpdateUserSettingsResult,
   UserResponse,
@@ -174,6 +175,39 @@ export class ApiService {
       catchError(err => {
         if (showToast) {
           const errorMsg = this.formatNetworkError(err, 'Network error loading character media');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  fetchStaffById(query: any, variables: Object, showToast = true): Observable<{
+    data: StaffResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    const queryRef = this.apollo.watchQuery<StaffResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'cache-and-network',
+    });
+
+    return queryRef.valueChanges.pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load staff data');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading staff data');
           this.showErrorToast(errorMsg);
         }
         return throwError(() => err);
