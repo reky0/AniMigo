@@ -5,8 +5,8 @@ import { Router } from '@angular/router';
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
-import { ToastService } from '@components/core/services/toast.service';
 import { PlatformService } from '@components/core/services/platform.service';
+import { ToastService } from '@components/core/services/toast.service';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
@@ -16,7 +16,7 @@ import { IonButton, IonButtons, IonCardSubtitle, IonChip, IonCol, IonContent, Io
 import { addIcons } from 'ionicons';
 import { arrowBack, banOutline, checkmark, film, informationCircle, searchOutline, shareSocial, textOutline } from 'ionicons/icons';
 import { take } from 'rxjs';
-import { GET_CHARACTER_BY_ID, SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
+import { SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
 import { Character } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
@@ -274,30 +274,34 @@ export class ExploreTabPage {
     }, 100);
   }
 
-  openModal(type: 'staff' | 'character' | 'va', id: number) {
-    let variables = {
-      id: id
-    }
+  // openModal(type: 'staff' | 'character' | 'va', id: number) {
+  openModal(type: 'staff' | 'character' | 'va', data: Character) {
+    // let variables = {
+    //   id: id
+    // }
+
+    this.modalData = data;
+    this.isModalOpen = true;
 
     switch (type) {
       case ('staff'):
         break;
       case ('character'):
-        this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
-          next: ({ data, loading, errors }) => {
-            this.modalDataLoading = loading;
-            if (errors) {
-              this.error = errors[0];
-            } else {
-              this.modalData = data?.Character;
-              this.isModalOpen = true;
-            }
-          },
-          error: (err) => {
-            this.error = err;
-            this.modalDataLoading = false;
-          }
-        });
+        // this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
+        //   next: ({ data, loading, errors }) => {
+        //     this.modalDataLoading = loading;
+        //     if (errors) {
+        //       this.error = errors[0];
+        //     } else {
+        //       this.modalData = data?.Character;
+        //       this.isModalOpen = true;
+        //     }
+        //   },
+        //   error: (err) => {
+        //     this.error = err;
+        //     this.modalDataLoading = false;
+        //   }
+        // });
         break;
       case ('va'):
         break;

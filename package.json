@@ -5,7 +5,7 @@
   "homepage": "https://github.com/reky0/AniMigo",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ionic serve",
     "start:android": "ionic capacitor run android",
     "start:android:live": "ionic capacitor run android -l --external",
     "build": "ng build",

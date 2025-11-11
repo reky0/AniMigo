@@ -43,8 +43,13 @@ export class SettingsPage implements OnInit {
 
   logOut() {
     this.authService.logout();
+    this.token = null;
+    this.userData = null;
 
-    this.router.navigate(['/profile']);
+
+    this.apiService.clearCache?.();
+
+    window.location.href = '/';
   }
 
   refreshToken() {

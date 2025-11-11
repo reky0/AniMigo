@@ -81,18 +81,7 @@ export interface CharacterConnection {
   edges: Array<{
     id: number;
     role: string;
-    node: {
-      id: number;
-      name: {
-        full: string;
-        native?: string | null;
-      };
-      image: {
-        medium: string
-        large?: string | null;
-      };
-      isFavourite?: boolean | null;
-    };
+    node: Character;
     voiceActors: Array<VoiceActor>;
   }>;
 }
@@ -276,7 +265,7 @@ export interface Character {
   bloodType?: string | null;
   isFavourite?: boolean | null;
   media: {
-    pageInfo: PageInfo,
+    pageInfo?: PageInfo,
     edges: Array<{
       node: {
         id: number;
@@ -588,6 +577,8 @@ export interface User {
   moderatorRoles?: string[];
   createdAt?: number | null;
   updatedAt?: number | null;
+  followers?: SmallUser[];
+  following?: SmallUser[];
 }
 
 export interface UserResponse {
@@ -615,4 +606,18 @@ export interface SearchResponse {
     characters?: Character[];
     // staff?: StaffConnection;
   };
+}
+
+export interface SmallUser {
+  id: number;
+  name: string;
+  avatar: UserAvatar;
+}
+
+export interface SocialStatResponse {
+  Page: {
+    pageInfo: PageInfo;
+    followers?: SmallUser[];
+    following?: SmallUser[];
+  }
 }

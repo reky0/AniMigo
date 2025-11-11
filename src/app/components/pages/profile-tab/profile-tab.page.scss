@@ -83,6 +83,7 @@
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 8px;
+  // padding-inline: 0;
 
   @media (max-width: 767px) {
     text-align: center;
@@ -253,4 +254,9 @@
 
 ion-modal {
   --border-radius: 20px;
+
+  am-people-info-tab,
+  am-people-media-tab {
+    width: 100%;
+  }
 }

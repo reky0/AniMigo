@@ -56,7 +56,7 @@
             <!-- User Info -->
             <ion-row class="user-info">
               <ion-col size="12" sizeMd="6">
-                <ion-title class="username">{{ username }}</ion-title>
+                <ion-title class="username ion-no-padding">{{ username }}</ion-title>
               </ion-col>
               <ion-col size="12" sizeMd="6" class="user-meta">
                 <ion-card-subtitle class="meta-item">
@@ -377,7 +377,7 @@
     </div>
   }
 
-  <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
+  <ion-modal [isOpen]="modalState.isOpen" (willDismiss)="closeModal()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -391,14 +391,14 @@
           </ion-buttons>
 
           <ion-buttons slot="end">
-            <ion-button (click)="toggleCharacterFavorite()" [disabled]="isTogglingFavorite">
-              @if (isTogglingFavorite) {
+            <ion-button (click)="toggleCharacterFavorite()" [disabled]="modalState.isTogglingFavorite">
+              @if (modalState.isTogglingFavorite) {
                 <ion-spinner name="dots" slot="icon-only"></ion-spinner>
               } @else {
                 <ion-icon
                   slot="icon-only"
-                  [name]="modalData?.isFavourite ? 'heart' : 'heart-outline'"
-                  [color]="modalData?.isFavourite ? 'danger' : 'medium'">
+                  [name]="modalState.data?.isFavourite ? 'heart' : 'heart-outline'"
+                  [color]="modalState.data?.isFavourite ? 'danger' : 'medium'">
                 </ion-icon>
               }
             </ion-button>
@@ -413,7 +413,7 @@
             <ion-row>
               <ion-col>
                 <ion-segment
-                  [value]="modalSelectedTab"
+                  [value]="modalState.selectedTab"
                   (ionChange)="onSegmentChange($event)"
                   mode="md"
                   class="tab-segment">
@@ -426,7 +426,7 @@
                     <ion-icon name="film"></ion-icon>
                   </ion-segment-button>
 
-                  <!-- @if (modalData?.voiceActingRoles) {
+                  <!-- @if (modalState.data?.voiceActingRoles) {
                     <ion-segment-button value="va" layout="icon-top">
                       <ion-icon name="mic"></ion-icon>
                     </ion-segment-button>
@@ -441,15 +441,15 @@
         <ion-grid>
           <ion-row class="tabsContainer">
             @if (!loading) {
-              @switch (modalSelectedTab) {
+              @switch (modalState.selectedTab) {
                 @case ('info') {
-                  <am-people-info-tab [data]="modalData" [loading]="loading" />
+                  <am-people-info-tab [data]="modalState.data" [loading]="loading" />
                 }
                 @case ('media') {
-                  <am-people-media-tab [data]="modalData" (navigate)="goToDetails($event)" />
+                  <am-people-media-tab [data]="modalState.data" (navigate)="goToDetails($event)" />
                 }
                 @case ('va') {
-                  <am-people-va-tab [data]="modalData" [loading]="loading" />
+                  <am-people-va-tab [data]="modalState.data" [loading]="loading" />
                 }
               }
             } <!-- @else {
@@ -469,7 +469,7 @@
     </ng-template>
   </ion-modal>
 
-  <ion-modal [isOpen]="isFavouritesModalOpen" (willDismiss)="closeModal()">
+  <ion-modal [isOpen]="modalState.isFavouritesOpen" (willDismiss)="closeModal()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -487,7 +487,7 @@
         <ion-grid>
           <ion-row>
             @if (!loading) {
-              @switch (favouriteType) {
+              @switch (modalState.favouriteType) {
                 @case ('anime') {
                   @for (anime of favoriteAnime; track $index) {
                     <ion-col size="12" sizeMd="6">

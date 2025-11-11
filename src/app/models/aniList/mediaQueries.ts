@@ -10,7 +10,8 @@ export const GET_MEDIA_LIST = gql`
     $seasonYear: Int,
     $format: MediaFormat,
     $status: MediaStatus,
-    $context: String
+    $context: String,
+    $isAdult: Boolean
   ) {
     Page(page: $page, perPage: $perPage) @connection (key: "mediaList", filter: ["context", "sort"]) {
       pageInfo {
@@ -25,7 +26,8 @@ export const GET_MEDIA_LIST = gql`
         season: $season,
         seasonYear: $seasonYear,
         format: $format,
-        status: $status
+        status: $status,
+        isAdult: $isAdult
       ) {
         id
         title {
@@ -267,21 +269,14 @@ export const GET_CHARACTER_BY_ID = gql`
       }
       description(asHtml: false)
       dateOfBirth {
-          day
-          month
-          year
+        day
+        month
       }
       age
       gender
       bloodType
       isFavourite
-      media(page: 1, perPage: 15) {
-        pageInfo {
-          currentPage
-          hasNextPage
-          perPage
-          total
-        }
+      media {
         edges {
           node {
             id
@@ -305,12 +300,12 @@ export const GET_CHARACTER_BY_ID = gql`
 `;
 
 export const GET_CHARACTER_MEDIA = gql`
-  query CharacterMedia($id: Int!, $page: Int = 1, $perPage: Int = 20) {
+  query CharacterMedia($id: Int!) {
     Character(id: $id) {
       id
       media(
-        page: $page,
-        perPage: $perPage,
+        # page: $page,
+        # perPage: $perPage,
         sort: POPULARITY_DESC,
       ) {
         pageInfo {
@@ -421,12 +416,48 @@ export const SEARCH_CHARACTER = gql`
         name {
           full
           native
+          alternative
+          alternativeSpoiler
         }
         image {
           large
           medium
         }
+        description(asHtml: false)
+        dateOfBirth {
+            day
+            month
+            year
+        }
+        age
+        gender
+        bloodType
         isFavourite
+        media {
+          pageInfo {
+            currentPage
+            hasNextPage
+            perPage
+            total
+          }
+          edges {
+            node {
+              id
+              title {
+                romaji
+                english
+              }
+              coverImage {
+                medium
+                large
+              }
+              type
+              format
+              seasonYear
+              averageScore
+            }
+          }
+        }
       }
     }
   }
@@ -1028,6 +1059,48 @@ export const GET_USER_STATUS_COUNTS = gql`
       lists {
         entries {
           id
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_FOLLOWERS = gql`
+  query($id:Int!,$page:Int) {
+    Page(page:$page) {
+      pageInfo {
+        total
+        perPage
+        currentPage
+        lastPage
+        hasNextPage
+      }
+      followers(userId:$id,sort:USERNAME) {
+        id
+        name
+        avatar {
+          large
+        }
+      }
+    }
+  }
+`;
+
+export const GET_USER_FOLLOWING = gql`
+  query($id:Int!,$page:Int) {
+    Page(page:$page) {
+      pageInfo {
+        total
+        perPage
+        currentPage
+        lastPage
+        hasNextPage
+      }
+      following(userId:$id,sort:USERNAME) {
+        id
+        name
+        avatar {
+          large
         }
       }
     }

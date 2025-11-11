@@ -179,11 +179,25 @@ export class HomeTabPage implements OnInit {
   }
 
   private loadAllData() {
+    this.fetchData();
+  }
+
+  refresh(event: any) {
+    this.fetchData(() => event.target.complete());
+  }
+
+  private fetchData(onComplete?: () => void) {
     // Create an object of observables for forkJoin
     const requests: { [key: string]: any } = {};
 
     this.dataSections.forEach(section => {
       this.setLoadingState(section.key, true);
+
+      if (this.authService.getUserData()?.options?.displayAdultContent === undefined ||
+          this.authService.getUserData()?.options?.displayAdultContent === false) {
+        section.variables.isAdult = false;
+      }
+
       // Wait for loading to be false before taking the result
       requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent).pipe(
         filter(result => !result.loading),
@@ -206,6 +220,8 @@ export class HomeTabPage implements OnInit {
           // Always set loading to false after processing, as forkJoin completes when all are done
           this.setLoadingState(section.key, false);
         });
+
+        onComplete?.();
       },
       error: (err) => {
         console.error('Error loading data:', err);
@@ -214,6 +230,8 @@ export class HomeTabPage implements OnInit {
         this.dataSections.forEach(section => {
           this.setLoadingState(section.key, false);
         });
+
+        onComplete?.();
       }
     });
   }
@@ -228,51 +246,6 @@ export class HomeTabPage implements OnInit {
 
   navigate(target: string) {
     this.router.navigate([target]);
-  }
-
-  refresh(event: any) {
-    // Create an object of observables for forkJoin
-    const requests: { [key: string]: any } = {};
-
-    this.dataSections.forEach(section => {
-      this.setLoadingState(section.key, true);
-      // Wait for loading to be false before taking the result
-      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent).pipe(
-        filter(result => !result.loading),
-        take(1)
-      );
-    });
-
-    forkJoin(requests).subscribe({
-      next: (results: any) => {
-        // Process all results
-        this.dataSections.forEach(section => {
-          const result = results[section.key];
-
-          if (result.errors) {
-            this.error = result.errors[0];
-          } else {
-            this.setData(section.key, result.data?.Page.media);
-          }
-
-          // Always set loading to false after processing, as forkJoin completes when all are done
-          this.setLoadingState(section.key, false);
-        });
-
-        // Complete the refresher after all data is loaded
-        event.target.complete();
-      },
-      error: (err) => {
-        this.error = err;
-        // Set all loading states to false on error
-        this.dataSections.forEach(section => {
-          this.setLoadingState(section.key, false);
-        });
-
-        // Complete the refresher even on error
-        event.target.complete();
-      }
-    });
   }
 
   private async showErrorToast(message: string) {

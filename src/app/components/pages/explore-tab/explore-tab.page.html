@@ -118,7 +118,7 @@
                             [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
                             [fallbackImage]="result.image.large"
                             [isFavourite]="result.isFavourite"
-                            (click)="openModal('character', result.id)"
+                            (click)="openModal('character', result)"
                             />
                           </ion-col>
                       }
@@ -295,6 +295,7 @@
     </ion-row>
   </ion-grid>
 
+  <!-- MODAL -->
   <ion-modal [isOpen]="isModalOpen" (willDismiss)="closeModal()">
     <ng-template>
       <ion-header>

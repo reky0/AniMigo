@@ -20,7 +20,7 @@ export class PeopleInfoTabComponent implements OnInit {
   @Input() loading: boolean = true;
 
   showSpoilerNames = false;
-  birthdate: Date = new Date(1, 0, 1);
+  birthdate: Date | null = new Date(1, 0, 1);
   parsedDescription: SafeHtml | undefined;
 
   constructor(private sanitizer: DomSanitizer) { }
@@ -29,9 +29,13 @@ export class PeopleInfoTabComponent implements OnInit {
     if (this.data) {
       if (this.data.dateOfBirth && this.data.dateOfBirth.day && this.data.dateOfBirth.month) {
         this.birthdate = new Date(this.data.dateOfBirth.year ?? new Date().getFullYear(), this.data.dateOfBirth.month - 1, this.data.dateOfBirth.day)
+      } else {
+        this.birthdate = null;
       }
 
-      this.parsedDescription = this.sanitizer.bypassSecurityTrustHtml(marked(this.data.description) as string);
+      if (this.data.description) {
+        this.parsedDescription = this.sanitizer.bypassSecurityTrustHtml(marked(this.data.description) as string);
+      }
     }
   }
 

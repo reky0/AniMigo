@@ -187,3 +187,7 @@ ion-searchbar {
     pointer-events: none; // Prevent searchbar from capturing clicks
   }
 }
+
+ion-modal {
+  --border-radius: 20px;
+}

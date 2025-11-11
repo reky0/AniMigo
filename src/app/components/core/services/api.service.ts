@@ -54,8 +54,6 @@ export class ApiService {
           this.showErrorToast(errorMsg);
         }
 
-        // console.log(result.data.Page.media);
-
         // Filter out adult content if displayAdultContent is false
         const filteredData = result.data && !displayAdultContent ? {
           ...result.data,
@@ -776,5 +774,12 @@ export class ApiService {
 
     // Use ToastService with alerts for reliable notifications
     await this.toastService.error(message);
+  }
+
+  clearCache(): void {
+    // Clear Apollo cache
+    this.apollo.client.clearStore().catch((error) => {
+      console.error('Error clearing Apollo cache:', error);
+    });
   }
 }
