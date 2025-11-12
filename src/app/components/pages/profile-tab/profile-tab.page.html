@@ -523,20 +523,16 @@
                   }
                 }
               }
-
-            } <!-- @else {
-              <ion-col>
-                @for (i of 7 | range; track i) {
-                  <ion-row>
-                    <ion-col size="12">
-                      <ion-skeleton-text class="skeleton" animated/>
-                    </ion-col>
-                  </ion-row>
-                }
-              </ion-col>
-            } -->
+            }
           </ion-row>
         </ion-grid>
+        <ion-infinite-scroll
+          (ionInfinite)="loadMoreFavourites($event)"
+          [disabled]="!favouritesPagination[modalState.favouriteType].hasNextPage"
+          threshold="20px"
+        >
+          <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+        </ion-infinite-scroll>
       </ion-content>
     </ng-template>
   </ion-modal>

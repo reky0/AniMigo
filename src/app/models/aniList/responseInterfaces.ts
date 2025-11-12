@@ -529,6 +529,7 @@ export interface FavouriteMedia {
     isAdult?: boolean | null;
     isFavourite?: boolean | null;
   }>;
+  pageInfo?: PageInfo;
 }
 
 export interface FavouriteCharacters {
@@ -544,6 +545,7 @@ export interface FavouriteCharacters {
     };
     isFavourite?: boolean | null;
   }>;
+  pageInfo?: PageInfo;
 }
 
 export interface FavouriteStaff {
@@ -559,6 +561,7 @@ export interface FavouriteStaff {
     };
     isFavourite?: boolean | null;
   }>;
+  pageInfo?: PageInfo;
 }
 
 export interface UserFavourites {

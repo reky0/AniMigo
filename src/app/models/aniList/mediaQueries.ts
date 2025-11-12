@@ -854,12 +854,19 @@ export const GET_USER_STATISTICS = gql`
 `;
 
 export const GET_USER_FAVOURITES = gql`
-  query GetUserFavourites($userId: Int!) {
+  query GetUserFavourites($userId: Int!, $animePage: Int, $mangaPage: Int, $charactersPage: Int, $staffPage: Int, $perPage: Int) {
     User(id: $userId) {
       id
       name
       favourites {
-        anime {
+        anime(page: $animePage, perPage: $perPage) {
+          pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+          }
           nodes {
             id
             title {
@@ -875,9 +882,18 @@ export const GET_USER_FAVOURITES = gql`
             format
             seasonYear
             averageScore
+            isAdult
+            isFavourite
           }
         }
-        manga {
+        manga(page: $mangaPage, perPage: $perPage) {
+          pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+          }
           nodes {
             id
             title {
@@ -893,9 +909,18 @@ export const GET_USER_FAVOURITES = gql`
             format
             seasonYear
             averageScore
+            isAdult
+            isFavourite
           }
         }
-        characters {
+        characters(page: $charactersPage, perPage: $perPage) {
+          pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+          }
           nodes {
             id
             name {
@@ -906,9 +931,17 @@ export const GET_USER_FAVOURITES = gql`
               large
               medium
             }
+            isFavourite
           }
         }
-        staff {
+        staff(page: $staffPage, perPage: $perPage) {
+          pageInfo {
+            total
+            perPage
+            currentPage
+            lastPage
+            hasNextPage
+          }
           nodes {
             id
             name {
@@ -919,6 +952,7 @@ export const GET_USER_FAVOURITES = gql`
               large
               medium
             }
+            isFavourite
           }
         }
       }

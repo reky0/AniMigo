@@ -520,12 +520,14 @@ export class ApiService {
    * @param id - The ID of the entity to toggle
    * @param type - The type of entity (ANIME, MANGA, CHARACTER, STAFF, STUDIO)
    * @param showToast - Whether to show success/error toasts
+   * @param currentState - The current favorite state (optional, for better state tracking)
    * @returns Observable with toggle result including new favorite status
    */
   toggleFavorite(
     id: number,
     type: FavoriteType,
-    showToast = true
+    showToast = true,
+    currentState?: boolean
   ): Observable<FavoriteToggleResult> {
     const { mutation, variables } = this.prepareFavoriteMutation(id, type);
 
@@ -535,7 +537,23 @@ export class ApiService {
     }).pipe(
       map((result: any) => {
         const favoriteIds = this.extractFavoriteIds(result.data, type);
-        const isFavorite = favoriteIds.includes(id);
+        const isInList = favoriteIds.includes(id);
+
+        // If we know the current state, we can determine the new state by toggling it
+        // This is more reliable than trusting the API response alone
+        let isFavorite: boolean;
+        if (currentState !== undefined) {
+          // If current state is provided, toggle it
+          isFavorite = !currentState;
+
+          // Verify against API response for consistency
+          if (isFavorite !== isInList) {
+            console.warn(`State mismatch: Expected ${isFavorite}, API returned ${isInList}. Using expected state.`);
+          }
+        } else {
+          // Fall back to checking the list
+          isFavorite = isInList;
+        }
 
         if (showToast) {
           this.showFavoriteSuccessToast(isFavorite, type);
@@ -564,36 +582,36 @@ export class ApiService {
   /**
    * Toggle favorite for anime
    */
-  toggleFavoriteAnime(id: number, showToast = true): Observable<FavoriteToggleResult> {
-    return this.toggleFavorite(id, 'ANIME', showToast);
+  toggleFavoriteAnime(id: number, showToast = true, currentState?: boolean): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'ANIME', showToast, currentState);
   }
 
   /**
    * Toggle favorite for manga
    */
-  toggleFavoriteManga(id: number, showToast = true): Observable<FavoriteToggleResult> {
-    return this.toggleFavorite(id, 'MANGA', showToast);
+  toggleFavoriteManga(id: number, showToast = true, currentState?: boolean): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'MANGA', showToast, currentState);
   }
 
   /**
    * Toggle favorite for character
    */
-  toggleFavoriteCharacter(id: number, showToast = true): Observable<FavoriteToggleResult> {
-    return this.toggleFavorite(id, 'CHARACTER', showToast);
+  toggleFavoriteCharacter(id: number, showToast = true, currentState?: boolean): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'CHARACTER', showToast, currentState);
   }
 
   /**
    * Toggle favorite for staff
    */
-  toggleFavoriteStaff(id: number, showToast = true): Observable<FavoriteToggleResult> {
-    return this.toggleFavorite(id, 'STAFF', showToast);
+  toggleFavoriteStaff(id: number, showToast = true, currentState?: boolean): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'STAFF', showToast, currentState);
   }
 
   /**
    * Toggle favorite for studio
    */
-  toggleFavoriteStudio(id: number, showToast = true): Observable<FavoriteToggleResult> {
-    return this.toggleFavorite(id, 'STUDIO', showToast);
+  toggleFavoriteStudio(id: number, showToast = true, currentState?: boolean): Observable<FavoriteToggleResult> {
+    return this.toggleFavorite(id, 'STUDIO', showToast, currentState);
   }
 
   /**
@@ -601,13 +619,15 @@ export class ApiService {
    * @param id - Media ID
    * @param mediaType - 'ANIME' or 'MANGA'
    * @param showToast - Whether to show toasts
+   * @param currentState - The current favorite state
    */
   toggleFavoriteMedia(
     id: number,
     mediaType: 'ANIME' | 'MANGA',
-    showToast = true
+    showToast = true,
+    currentState?: boolean
   ): Observable<FavoriteToggleResult> {
-    return this.toggleFavorite(id, mediaType, showToast);
+    return this.toggleFavorite(id, mediaType, showToast, currentState);
   }
 
   // ============================================

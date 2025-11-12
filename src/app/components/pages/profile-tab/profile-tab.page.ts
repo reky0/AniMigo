@@ -11,7 +11,7 @@ import { MediaListItemComponent } from "@components/molecules/media-list-item/me
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { IonAvatar, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonAvatar, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
 import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
 import { Character, User } from 'src/app/models/aniList/responseInterfaces';
@@ -22,7 +22,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent]
+  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
@@ -55,6 +55,34 @@ export class ProfileTabPage implements OnInit {
     favouriteType: 'anime' as 'anime' | 'manga' | 'characters',
     data: undefined as Character | undefined,
     isTogglingFavorite: false
+  };
+
+  // Pagination state for favourites
+  favouritesPagination = {
+    anime: {
+      currentPage: 0,
+      perPage: 25,
+      hasNextPage: true,
+      loadingMore: false,
+      firstLoading: false,
+      idSet: new Set<number>()
+    },
+    manga: {
+      currentPage: 0,
+      perPage: 25,
+      hasNextPage: true,
+      loadingMore: false,
+      firstLoading: false,
+      idSet: new Set<number>()
+    },
+    characters: {
+      currentPage: 0,
+      perPage: 25,
+      hasNextPage: true,
+      loadingMore: false,
+      firstLoading: false,
+      idSet: new Set<number>()
+    }
   };
 
   error: any;
@@ -380,62 +408,112 @@ export class ProfileTabPage implements OnInit {
         break;
     }
 
-    this.apiService.fetchUserFavorites(GET_USER_FAVOURITES, { userId: this.userData?.id ?? 0 }).subscribe({
-      next: ({ data, loading, errors }) => {
-        this.loading = loading;
-        if (errors) {
-          this.error = errors[0];
-        } else {
-          // Append new favorites to existing ones, preventing duplicates
-          if (this.userData && data?.User?.favourites) {
-            const newFavourites = data.User.favourites;
+    // Reset pagination and trigger initial load
+    const paginationKey = type as 'anime' | 'manga' | 'characters';
+    this.favouritesPagination[paginationKey].currentPage = 0;
+    this.favouritesPagination[paginationKey].hasNextPage = true;
+    this.favouritesPagination[paginationKey].idSet.clear();
 
-            // Helper function to merge and deduplicate by ID
-            const mergeUnique = <T extends { id: number }>(existing: T[], incoming: T[]): T[] => {
-              const existingIds = new Set(existing.map(item => item.id));
-              const uniqueIncoming = incoming.filter(item => !existingIds.has(item.id));
-              return [...existing, ...uniqueIncoming];
-            };
+    // Trigger initial load
+    this.loadMoreFavourites(null);
+  }
 
-            // Update userData with appended favorites (no duplicates)
+  async loadMoreFavourites(event: any) {
+    const favouriteType = this.modalState.favouriteType as 'anime' | 'manga' | 'characters';
+    const pagination = this.favouritesPagination[favouriteType];
+
+    if (pagination.loadingMore || !pagination.hasNextPage || !this.userData?.id) {
+      event?.target?.complete();
+      return;
+    }
+
+    if (event === null) {
+      pagination.firstLoading = true;
+    }
+
+    pagination.loadingMore = true;
+
+    const variables: any = {
+      userId: this.userData.id,
+      perPage: pagination.perPage
+    };
+
+    // Set the appropriate page parameter based on the type
+    switch (favouriteType) {
+      case 'anime':
+        variables.animePage = pagination.currentPage + 1;
+        break;
+      case 'manga':
+        variables.mangaPage = pagination.currentPage + 1;
+        break;
+      case 'characters':
+        variables.charactersPage = pagination.currentPage + 1;
+        break;
+    }
+
+    this.apiService.fetchUserFavorites(GET_USER_FAVOURITES, variables).subscribe({
+      next: ({ data, errors }) => {
+        if (!errors && data?.User?.favourites) {
+          const favouritesData = data.User.favourites[favouriteType];
+          const newNodes = favouritesData?.nodes ?? [];
+          const pageInfo = favouritesData?.pageInfo;
+
+          // Add unique items to accumulated list
+          if (this.userData) {
+            // Get or initialize the current nodes array (create a new mutable copy)
+            if (!this.userData.favourites) {
+              this.userData.favourites = {};
+            }
+
+            if (!this.userData.favourites[favouriteType]) {
+              this.userData.favourites[favouriteType] = { nodes: [] };
+            }
+
+            // Create a new mutable array from existing nodes
+            const currentNodes = [...(this.userData.favourites[favouriteType]!.nodes || [])];
+
+            // Add new unique nodes
+            for (const node of newNodes) {
+              if (node?.id && !pagination.idSet.has(node.id)) {
+                pagination.idSet.add(node.id);
+                currentNodes.push(node as any); // Type assertion to handle union types
+              }
+            }
+
+            // Trigger change detection by creating new object
             this.userData = {
               ...this.userData,
               favourites: {
-                anime: {
-                  nodes: mergeUnique(
-                    this.userData.favourites?.anime?.nodes ?? [],
-                    newFavourites.anime?.nodes ?? []
-                  )
-                },
-                manga: {
-                  nodes: mergeUnique(
-                    this.userData.favourites?.manga?.nodes ?? [],
-                    newFavourites.manga?.nodes ?? []
-                  )
-                },
-                characters: {
-                  nodes: mergeUnique(
-                    this.userData.favourites?.characters?.nodes ?? [],
-                    newFavourites.characters?.nodes ?? []
-                  )
-                },
-                staff: {
-                  nodes: mergeUnique(
-                    this.userData.favourites?.staff?.nodes ?? [],
-                    newFavourites.staff?.nodes ?? []
-                  )
+                ...this.userData.favourites,
+                [favouriteType]: {
+                  nodes: currentNodes
                 }
               }
             };
           }
+
+          // Update pagination state
+          pagination.currentPage = pageInfo?.currentPage ?? pagination.currentPage + 1;
+          pagination.hasNextPage = !!pageInfo?.hasNextPage;
         }
+
+        this.completeLoadMoreFavourites(event, favouriteType);
       },
       error: (err) => {
-        this.error = err;
-        this.loading = false;
+        console.error('Error loading more favourites:', err);
+        this.completeLoadMoreFavourites(event, favouriteType);
       }
     });
+  }
 
+  private completeLoadMoreFavourites(event: any, favouriteType: 'anime' | 'manga' | 'characters') {
+    const pagination = this.favouritesPagination[favouriteType];
+    pagination.loadingMore = false;
+    pagination.firstLoading = false;
+    event?.target?.complete();
+    if (!pagination.hasNextPage && event?.target) {
+      event.target.disabled = true;
+    }
   }
 
   closeModal() {
@@ -448,14 +526,25 @@ export class ProfileTabPage implements OnInit {
       data: undefined,
       isTogglingFavorite: false
     };
+
+    // Reset pagination states when closing favourites modal
+    Object.keys(this.favouritesPagination).forEach(key => {
+      const paginationKey = key as 'anime' | 'manga' | 'characters';
+      this.favouritesPagination[paginationKey].currentPage = 0;
+      this.favouritesPagination[paginationKey].hasNextPage = true;
+      this.favouritesPagination[paginationKey].loadingMore = false;
+      this.favouritesPagination[paginationKey].firstLoading = false;
+      this.favouritesPagination[paginationKey].idSet.clear();
+    });
   }
 
   toggleCharacterFavorite() {
     if (!this.modalState.data?.id || this.modalState.isTogglingFavorite) return;
 
     this.modalState.isTogglingFavorite = true;
+    const previousState = this.modalState.data.isFavourite;
 
-    this.apiService.toggleFavoriteCharacter(this.modalState.data.id)
+    this.apiService.toggleFavoriteCharacter(this.modalState.data.id, true, previousState as boolean)
       .pipe(take(1))
       .subscribe({
         next: (result) => {

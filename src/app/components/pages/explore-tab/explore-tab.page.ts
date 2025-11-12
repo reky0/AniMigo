@@ -321,8 +321,9 @@ export class ExploreTabPage {
     if (!this.modalData?.id || this.isTogglingFavorite) return;
 
     this.isTogglingFavorite = true;
+    const previousState = this.modalData.isFavourite;
 
-    this.apiService.toggleFavoriteCharacter(this.modalData.id)
+    this.apiService.toggleFavoriteCharacter(this.modalData.id, true, previousState as boolean)
       .pipe(take(1))
       .subscribe({
         next: (result) => {

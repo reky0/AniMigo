@@ -124,15 +124,16 @@ export class MediaDetailsPageComponent implements OnDestroy {
     if (!this.data?.id || this.isTogglingFavorite) return;
 
     this.isTogglingFavorite = true;
+    const previousState = this.data.isFavourite;
 
-    this.apiService.toggleFavoriteMedia(this.data.id, this.data.type)
+    this.apiService.toggleFavoriteMedia(this.data.id, this.data.type, true, previousState as boolean)
       .pipe(take(1))
       .subscribe({
         next: (result) => {
           this.ngZone.run(() => {
             this.isTogglingFavorite = false;
             if (result.success && this.data) {
-              // Update local state by creating a new object
+              // Update local state with the new state from the API
               this.data = {
                 ...this.data,
                 isFavourite: result.isFavorite
