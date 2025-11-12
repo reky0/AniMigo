@@ -14,7 +14,6 @@ import { RangePipe } from "../../../helpers/range.pipe";
   imports: [IonicModule, MediaListItemComponent, RangePipe],
 })
 export class PeopleMediaTabComponent implements OnInit {
-  // TODO: Add same functionality for voice actors too
   @Input() data: Character | Staff | undefined;
   @Output() navigate = new EventEmitter<{ id: number, type: string, isAdult: boolean }>(); // Emit changes
 
@@ -59,7 +58,6 @@ export class PeopleMediaTabComponent implements OnInit {
     this.navigate.emit({ type: type.toLowerCase(), id: id, isAdult: isAdult ?? false });
   }
 
-    // TODO: Add same functionality for voice actors too
   async loadMore(event: any) {
     if (this.loadingMore || !this.hasNextPage || !this.data?.id) {
       event?.target?.complete();

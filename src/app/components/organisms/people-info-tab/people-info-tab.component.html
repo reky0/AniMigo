@@ -64,6 +64,55 @@
       </ion-col>
     </ion-row>
 
+    @if (!isCharacter(data)) {
+      @if (data.yearsActive && data.yearsActive.length > 1) {
+        <ion-row>
+          <ion-col size="4">
+            <ion-note>Years active</ion-note>
+          </ion-col>
+          <ion-col size="8">
+            <ion-text>{{ data.yearsActive[0] }} - {{ data.yearsActive[1] }}</ion-text>
+          </ion-col>
+        </ion-row>
+      } @else if (data.yearsActive && data.yearsActive.length === 1) {
+        <ion-row>
+          <ion-col size="4">
+            <ion-note>Years active</ion-note>
+          </ion-col>
+          <ion-col size="8">
+            <ion-text>{{ data.yearsActive[0] }} - Present</ion-text>
+          </ion-col>
+        </ion-row>
+      } @else {
+        <ion-row>
+          <ion-col size="4">
+            <ion-note>Years active</ion-note>
+          </ion-col>
+          <ion-col size="8">
+            <ion-text>Unknown</ion-text>
+          </ion-col>
+        </ion-row>
+      }
+
+      <ion-row>
+        <ion-col size="4">
+          <ion-note>Home town</ion-note>
+        </ion-col>
+        <ion-col size="8">
+          <ion-text>{{ data.homeTown ?? 'Unknown' }}</ion-text>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="4">
+          <ion-note>Primary occupations</ion-note>
+        </ion-col>
+        <ion-col size="8">
+          <ion-text>{{ data.primaryOccupations ?? 'Unknown' }}</ion-text>
+        </ion-col>
+      </ion-row>
+    }
+
     <ion-row>
       <ion-col>
         <ion-text [innerHTML]="parsedDescription"></ion-text>

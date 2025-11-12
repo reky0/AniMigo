@@ -306,7 +306,6 @@ export class ApiService {
   // ============================================
   // User Data Methods
   // ============================================
-
   /**
    * Fetch current authenticated user data
    * @param query - GraphQL query for viewer data
@@ -516,7 +515,6 @@ export class ApiService {
   // ============================================
   // Favorite Toggle Methods
   // ============================================
-
   /**
    * Toggle favorite status for any AniList entity
    * @param id - The ID of the entity to toggle
@@ -615,7 +613,6 @@ export class ApiService {
   // ============================================
   // Private Favorite Helper Methods
   // ============================================
-
   /**
    * Prepare mutation and variables based on type
    */
@@ -718,7 +715,6 @@ export class ApiService {
   // ============================================
   // User Settings Methods
   // ============================================
-
   /**
    * Update user settings
    * @param settings - Object containing settings to update (only include fields you want to change)
