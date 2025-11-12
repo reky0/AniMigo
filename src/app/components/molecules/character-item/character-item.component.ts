@@ -38,8 +38,8 @@ export class CharacterItemComponent extends PersonItemComponent {
         componentProps: {
           data: this.voiceActors
         },
-        breakpoints: [0, 0.5, 0.8, 1],   // modal heights
-        initialBreakpoint: 0.8,           // start in the middle (50%)
+        breakpoints: [0, 0.5],            // modal heights (max 50%)
+        initialBreakpoint: 0.3,           // start at 50%
         backdropBreakpoint: 0.3,          // optional: when to close on swipe down
         handle: true,
         // canDismiss: true,

@@ -1,25 +1,38 @@
 <ion-grid class="main ion-padding-top" role="feed">
-  @if (data) {
-    @for (media of mediaEdges; track $index) {
-      <am-media-list-item
-        [media]="media.node"
-        [isFavourite]="media.node.isFavourite"
-        [role]="media.characterRole ?? media.staffRole"
-        (click)="triggerNavigationEvent(media.node.type, media.node.id, media.node.isAdult)"
-        />
-    }
-    <ion-infinite-scroll
-      (ionInfinite)="loadMore($event)"
-      [disabled]="hasNextPage"
-      threshold="20px"
-      >
-      <ion-infinite-scroll-content loadingSpinner="bubbles"/>
-    </ion-infinite-scroll>
-  } @else {
+  @if (firstLoading) {
     <ion-row>
-      <ion-col size="12" class="ion-text-center">
-        <ion-text>No data available.</ion-text>
-      </ion-col>
+      @for (i of 10 | range; track i) {
+        <ion-col size="12">
+          <ion-skeleton-text
+            class="skeleton ion-margin-bottom"
+            animated
+          ></ion-skeleton-text>
+        </ion-col>
+      }
     </ion-row>
+  } @else {
+    @if (data && mediaEdges && mediaEdges.length > 0) {
+      @for (media of mediaEdges; track $index) {
+        <am-media-list-item
+          [media]="media.node"
+          [isFavourite]="media.node.isFavourite"
+          [role]="media.characterRole ?? media.staffRole"
+          (click)="triggerNavigationEvent(media.node.type, media.node.id, media.node.isAdult)"
+          />
+      }
+      <ion-infinite-scroll
+        (ionInfinite)="loadMore($event)"
+        [disabled]="!hasNextPage"
+        threshold="20px"
+        >
+        <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+      </ion-infinite-scroll>
+    } @else {
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-text>No media data available.</ion-text>
+        </ion-col>
+      </ion-row>
+    }
   }
 </ion-grid>

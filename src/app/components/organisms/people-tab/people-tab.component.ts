@@ -20,7 +20,6 @@ import {
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonSkeletonText,
   IonSpinner,
   IonToolbar
 } from "@ionic/angular/standalone";
@@ -36,7 +35,7 @@ import { PeopleVATabComponent } from "../people-va-tab/people-va-tab.component";
   selector: 'am-people-tab',
   templateUrl: './people-tab.component.html',
   styleUrls: ['./people-tab.component.scss'],
-  imports: [IonSkeletonText, IonButton,
+  imports: [IonButton,
     IonButtons,
     IonToolbar,
     IonHeader,
@@ -91,15 +90,9 @@ export class PeopleTabComponent implements OnInit {
   }
 
   openModal(type: 'staff' | 'character' | 'va', id: number) {
-    // openModal(type: 'staff' | 'character' | 'va', data: any) {
     let variables = {
       id: id
     }
-
-    // this.modalData = data;
-    // this.isModalOpen = true;
-
-
 
     switch (type) {
       case ('character'):
@@ -169,6 +162,30 @@ export class PeopleTabComponent implements OnInit {
     this.isTogglingFavorite = true;
 
     this.apiService.toggleFavoriteCharacter(this.modalData.id)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.isTogglingFavorite = false;
+          if (result.success && this.modalData) {
+            // Update local state by creating a new object
+            this.modalData = {
+              ...this.modalData,
+              isFavourite: result.isFavorite
+            };
+          }
+        },
+        error: () => {
+          this.isTogglingFavorite = false;
+        }
+      });
+  }
+
+  toggleStaffFavorite() {
+    if (!this.modalData?.id || this.isTogglingFavorite) return;
+
+    this.isTogglingFavorite = true;
+
+    this.apiService.toggleFavoriteStaff(this.modalData.id)
       .pipe(take(1))
       .subscribe({
         next: (result) => {

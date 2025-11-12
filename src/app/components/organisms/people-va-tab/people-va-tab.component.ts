@@ -6,11 +6,12 @@ import { take } from 'rxjs';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_STAFF_VA_CHARACTERS } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
+import { RangePipe } from "../../../helpers/range.pipe";
 @Component({
   selector: 'am-people-va-tab',
   templateUrl: './people-va-tab.component.html',
   styleUrls: ['./people-va-tab.component.scss'],
-  imports: [IonicModule, CharacterItemComponent],
+  imports: [IonicModule, CharacterItemComponent, RangePipe],
 })
 export class PeopleVATabComponent implements OnInit {
   @Input() data: Character | Staff | undefined;
@@ -28,6 +29,7 @@ export class PeopleVATabComponent implements OnInit {
   perPage = 25;
   hasNextPage = true;
   loadingMore = false;
+  firstLoading = false;
 
   constructor(private readonly apiService: ApiService) { }
 
@@ -52,56 +54,62 @@ export class PeopleVATabComponent implements OnInit {
     this.characterSelected.emit(characterId);
   }
 
-  // TODO: Add same functionality for staff and voice actors too
   async loadMore(event: any) {
-
     if (this.loadingMore || !this.hasNextPage || !this.data?.id) {
-
       event?.target?.complete();
       return;
     }
 
+    if (event === null) {
+      this.firstLoading = true;
+    }
 
     this.loadingMore = true;
 
-    const variables = {
-      id: this.data.id,
-    };
+    const variables = { id: this.data.id, page: this.currentPage+1, perPage: this.perPage };
 
-
-    this.apiService
-      .fetchStaffById(GET_STAFF_VA_CHARACTERS, variables)
+    this.apiService.fetchStaffById(GET_STAFF_VA_CHARACTERS, variables)
       .pipe(take(1))
       .subscribe({
         next: ({ data, errors }) => {
-          if (!errors) {
-
-            const newEdges = data?.Staff?.characters?.edges ?? [];
-            for (const e of newEdges) {
-              const id = e?.node?.id;
-              if (id && !this.characterIdSet.has(id)) {
-                this.characterIdSet.add(id);
-                this.characterEdges.push(e);
-              }
-            }
-
-            const pageInfo = data?.Staff?.staffMedia?.pageInfo;
-            this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
-            this.hasNextPage = !!pageInfo?.hasNextPage;
-
-          }
-
-          this.loadingMore = false;
-          event?.target?.complete();
-          if (!this.hasNextPage && event?.target) {
-            event.target.disabled = true;
-          }
+          this.handleCharacterResponse(
+            data?.Staff?.characters?.edges,
+            data?.Staff?.characters?.pageInfo,
+            errors,
+            event
+          );
         },
-        error: () => {
-          this.loadingMore = false;
-          event?.target?.complete();
-        }
+        error: () => this.completeLoadMore(event)
       });
+  }
 
+  private handleCharacterResponse(edges: any[] | undefined, pageInfo: any, errors: any, event: any) {
+    if (!errors) {
+      const newEdges = edges ?? [];
+
+      // Add unique edges to accumulated list
+      for (const edge of newEdges) {
+        const id = edge?.node?.id;
+        if (id && !this.characterIdSet.has(id)) {
+          this.characterIdSet.add(id);
+          this.characterEdges.push(edge);
+        }
+      }
+
+      // Update pagination state
+      this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
+      this.hasNextPage = !!pageInfo?.hasNextPage;
+    }
+
+    this.completeLoadMore(event);
+  }
+
+  private completeLoadMore(event: any) {
+    this.loadingMore = false;
+    this.firstLoading = false;
+    event?.target?.complete();
+    if (!this.hasNextPage && event?.target) {
+      event.target.disabled = true;
+    }
   }
 }

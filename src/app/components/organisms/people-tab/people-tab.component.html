@@ -98,7 +98,9 @@
         </ion-buttons>
 
         <ion-buttons slot="end">
-          <ion-button (click)="toggleCharacterFavorite()" [disabled]="isTogglingFavorite">
+          <ion-button
+            (click)="isCharacter(modalData) ? toggleCharacterFavorite() : toggleStaffFavorite()"
+            [disabled]="isTogglingFavorite">
             @if (isTogglingFavorite) {
               <ion-spinner name="dots" slot="icon-only"></ion-spinner>
             } @else {

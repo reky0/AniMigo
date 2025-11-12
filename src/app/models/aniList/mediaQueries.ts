@@ -474,7 +474,7 @@ export const GET_STAFF_VA_CHARACTERS = gql`
       characters(
         page: $page,
         perPage: $perPage,
-        sort: [ROLE, RELEVANCE, ID],
+        sort: [RELEVANCE, ID],
       ) {
         pageInfo {
           currentPage

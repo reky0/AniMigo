@@ -6,11 +6,12 @@ import { take } from 'rxjs';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_CHARACTER_MEDIA, GET_STAFF_MEDIA_STAFF } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
+import { RangePipe } from "../../../helpers/range.pipe";
 @Component({
   selector: 'am-people-media-tab',
   templateUrl: './people-media-tab.component.html',
   styleUrls: ['./people-media-tab.component.scss'],
-  imports: [IonicModule, MediaListItemComponent],
+  imports: [IonicModule, MediaListItemComponent, RangePipe],
 })
 export class PeopleMediaTabComponent implements OnInit {
   // TODO: Add same functionality for voice actors too
@@ -29,6 +30,7 @@ export class PeopleMediaTabComponent implements OnInit {
   perPage = 25;
   hasNextPage = true;
   loadingMore = false;
+  firstLoading = false;
 
   constructor(private readonly apiService: ApiService) { }
 
@@ -57,85 +59,79 @@ export class PeopleMediaTabComponent implements OnInit {
     this.navigate.emit({ type: type.toLowerCase(), id: id, isAdult: isAdult ?? false });
   }
 
-  // TODO: Add same functionality for staff and voice actors too
+    // TODO: Add same functionality for voice actors too
   async loadMore(event: any) {
-
     if (this.loadingMore || !this.hasNextPage || !this.data?.id) {
-
       event?.target?.complete();
       return;
     }
 
+    if (event === null) {
+      this.firstLoading = true;
+    }
+
     this.loadingMore = true;
 
-    const variables = {
-      id: this.data.id,
-    };
+    const variables = { id: this.data.id, page: this.currentPage+1, perPage: this.perPage };
 
     if (this.isCharacter(this.data)) {
-      this.apiService
-        .fetchCharacterById(GET_CHARACTER_MEDIA, variables)
+      this.apiService.fetchCharacterById(GET_CHARACTER_MEDIA, variables)
         .pipe(take(1))
         .subscribe({
           next: ({ data, errors }) => {
-            if (!errors) {
-              const newEdges = data?.Character?.media?.edges ?? [];
-              for (const e of newEdges) {
-                const id = e?.node?.id;
-                if (id && !this.mediaIdSet.has(id)) {
-                  this.mediaIdSet.add(id);
-                  this.mediaEdges.push(e);
-                }
-              }
-
-              const pageInfo = data?.Character?.media?.pageInfo;
-              this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
-              this.hasNextPage = !!pageInfo?.hasNextPage;
-            }
-
-            this.loadingMore = false;
-            event?.target?.complete();
-            if (!this.hasNextPage && event?.target) {
-              event.target.disabled = true;
-            }
+            this.handleMediaResponse(
+              data?.Character?.media?.edges,
+              data?.Character?.media?.pageInfo,
+              errors,
+              event
+            );
           },
-          error: () => {
-            this.loadingMore = false;
-            event?.target?.complete();
-          }
+          error: () => this.completeLoadMore(event)
         });
     } else {
-      this.apiService
-        .fetchStaffById(GET_STAFF_MEDIA_STAFF, variables)
+      this.apiService.fetchStaffById(GET_STAFF_MEDIA_STAFF, variables)
         .pipe(take(1))
         .subscribe({
           next: ({ data, errors }) => {
-            if (!errors) {
-              const newEdges = data?.Staff?.staffMedia?.edges ?? [];
-              for (const e of newEdges) {
-                const id = e?.node?.id;
-                if (id && !this.mediaIdSet.has(id)) {
-                  this.mediaIdSet.add(id);
-                  this.mediaEdges.push(e);
-                }
-              }
-
-              const pageInfo = data?.Staff?.staffMedia?.pageInfo;
-              this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
-              this.hasNextPage = !!pageInfo?.hasNextPage;
-            }
-
-            this.loadingMore = false;
-            event?.target?.complete();
-            if (!this.hasNextPage && event?.target) {
-              event.target.disabled = true;
-            }
+            this.handleMediaResponse(
+              data?.Staff?.staffMedia?.edges,
+              data?.Staff?.staffMedia?.pageInfo,
+              errors,
+              event
+            );
           },
-          error: () => {
-            this.loadingMore = false;
-            event?.target?.complete();
-          }
+          error: () => this.completeLoadMore(event)
         });
+    }
+  }
+
+  private handleMediaResponse(edges: any[] | undefined, pageInfo: any, errors: any, event: any) {
+    if (!errors) {
+      const newEdges = edges ?? [];
+
+      // Add unique edges to accumulated list
+      for (const edge of newEdges) {
+        const id = edge?.node?.id;
+        if (id && !this.mediaIdSet.has(id)) {
+          this.mediaIdSet.add(id);
+          this.mediaEdges.push(edge);
+        }
+      }
+
+      // Update pagination state
+      this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
+      this.hasNextPage = !!pageInfo?.hasNextPage;
+    }
+
+    this.completeLoadMore(event);
+  }
+
+  private completeLoadMore(event: any) {
+    this.loadingMore = false;
+    this.firstLoading = false;
+    event?.target?.complete();
+    if (!this.hasNextPage && event?.target) {
+      event.target.disabled = true;
     }
   }
 }

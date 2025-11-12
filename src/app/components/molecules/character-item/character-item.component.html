@@ -1,6 +1,6 @@
 <ion-grid>
   <ion-row>
-    <ion-col>
+    <ion-col size="10">
       <am-person-item
         [image]="image"
         [name]="name"
@@ -10,7 +10,7 @@
         />
     </ion-col>
     @if (voiceActors && voiceActors.length > 0) {
-      <ion-col size="1" (click)="openModal($event)">
+      <ion-col size="2" (click)="openModal($event)">
         <ion-icon name="mic"></ion-icon>
       </ion-col>
     }

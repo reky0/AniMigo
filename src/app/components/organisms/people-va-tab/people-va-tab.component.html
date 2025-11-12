@@ -1,30 +1,42 @@
 <ion-grid class="main ion-padding-top" role="feed">
-  @if (data) {
+  @if (firstLoading) {
     <ion-row>
-      @for (character of characterEdges; track $index) {
-        <ion-col size="6" sizeMd="4">
+      @for (i of 10 | range; track i) {
+        <ion-col size="4" sizeMd="3">
           <am-character-item
-            [image]="character.node.image.large"
-            [name]="character.node.name.full"
-            [note]="character.role"
-            [isFavourite]="character.node.isFavourite"
-            (click)="onCharacterClick(character.node.id)"
+            [loading]="true"
             />
         </ion-col>
       }
     </ion-row>
-    <ion-infinite-scroll
-      (ionInfinite)="loadMore($event)"
-      [disabled]="hasNextPage"
-      threshold="20px"
-      >
-      <ion-infinite-scroll-content loadingSpinner="bubbles"/>
-    </ion-infinite-scroll>
   } @else {
-    <ion-row>
-      <ion-col size="12" class="ion-text-center">
-        <ion-text>No data available.</ion-text>
-      </ion-col>
-    </ion-row>
+    @if (data && characterEdges && characterEdges.length > 0) {
+      <ion-row>
+        @for (character of characterEdges; track $index) {
+          <ion-col size="4" sizeMd="3">
+            <am-character-item
+              [image]="character.node.image.large"
+              [name]="character.node.name.full"
+              [note]="character.role"
+              [isFavourite]="character.node.isFavourite"
+              (click)="onCharacterClick(character.node.id)"
+              />
+          </ion-col>
+        }
+      </ion-row>
+      <ion-infinite-scroll
+        (ionInfinite)="loadMore($event)"
+        [disabled]="!hasNextPage"
+        threshold="20px"
+        >
+        <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+      </ion-infinite-scroll>
+    } @else {
+      <ion-row>
+        <ion-col size="12" class="ion-text-center">
+          <ion-text>No voice acting data available.</ion-text>
+        </ion-col>
+      </ion-row>
+    }
   }
 </ion-grid>
