@@ -626,6 +626,96 @@ export const SEARCH_CHARACTER = gql`
   }
 `;
 
+export const SEARCH_STAFF = gql`
+  query SearchStaff($page: Int!, $search: String!) {
+    Page(page: $page) {
+      pageInfo {
+        currentPage
+        hasNextPage
+        perPage
+        total
+      }
+      staff(search: $search) {
+        id
+        name {
+          full
+          native
+          alternative
+        }
+        image {
+          large
+          medium
+        }
+        description(asHtml: false)
+        dateOfBirth {
+          day
+          month
+          year
+        }
+        age
+        gender
+        bloodType
+        yearsActive
+        homeTown
+        primaryOccupations
+        isFavourite
+        characters(page: 1, perPage: 25) {
+          pageInfo {
+            currentPage
+            hasNextPage
+            perPage
+            total
+          }
+          edges {
+            role
+            node {
+              id
+              name {
+                full
+              }
+              image {
+                large
+                medium
+              }
+            }
+          }
+        }
+        staffMedia(page: 1, perPage: 25) {
+          pageInfo {
+            currentPage
+            hasNextPage
+            perPage
+            total
+          }
+          edges {
+            staffRole
+            node {
+              id
+              type
+              title {
+                romaji
+                english
+              }
+              coverImage {
+                medium
+                large
+              }
+              isAdult
+              format
+              seasonYear
+              averageScore
+              isFavourite
+              startDate {
+                year
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 
 // ============================================
 // User Queries

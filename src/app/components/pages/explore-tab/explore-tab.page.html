@@ -67,6 +67,18 @@
               Characters
             </ion-chip>
           </ion-col>
+          <ion-col>
+            <ion-chip
+              [outline]="category !== 'staff'"
+              color="primary"
+              class="filter-chip ion-color-secondary"
+              [class.active]="category === 'staff'"
+              (click)="changeCategory('staff')"
+              >
+              <ion-icon class="ion-no-margin ion-margin-end" name="checkmark" />
+              Staff
+            </ion-chip>
+          </ion-col>
         </ion-row>
       </ion-row>
 
@@ -120,7 +132,17 @@
                             [isFavourite]="result.isFavourite"
                             (click)="openModal('character', result)"
                             />
-                          </ion-col>
+                        </ion-col>
+                      } @else if (category === 'staff') {
+                        <ion-col size="4" sizeMd="2" sizeLg="1">
+                          <am-person-item
+                            [name]="result.name.full ?? result.name.native"
+                            [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
+                            [fallbackImage]="result.image.large"
+                            [isFavourite]="result.isFavourite"
+                            (click)="openModal('staff', result)"
+                            />
+                        </ion-col>
                       }
                     }
                   </ion-row>
@@ -310,7 +332,9 @@
           </ion-buttons>
 
           <ion-buttons slot="end">
-            <ion-button (click)="toggleCharacterFavorite()" [disabled]="isTogglingFavorite">
+            <ion-button
+              (click)="isCharacter(modalData) ? toggleCharacterFavorite() : toggleStaffFavorite()"
+              [disabled]="isTogglingFavorite">
               @if (isTogglingFavorite) {
                 <ion-spinner name="dots" slot="icon-only"></ion-spinner>
               } @else {
@@ -345,11 +369,11 @@
                     <ion-icon name="film"></ion-icon>
                   </ion-segment-button>
 
-                  <!-- @if (modalData?.voiceActingRoles) {
+                  @if (!isCharacter(modalData)) {
                     <ion-segment-button value="va" layout="icon-top">
                       <ion-icon name="mic"></ion-icon>
                     </ion-segment-button>
-                  } -->
+                  }
                 </ion-segment>
               </ion-col>
             </ion-row>

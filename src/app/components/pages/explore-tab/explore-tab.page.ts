@@ -14,10 +14,10 @@ import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
 import { IonButton, IonButtons, IonCardSubtitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBack, banOutline, checkmark, film, informationCircle, searchOutline, shareSocial, textOutline } from 'ionicons/icons';
+import { arrowBack, banOutline, checkmark, film, informationCircle, mic, searchOutline, shareSocial, textOutline } from 'ionicons/icons';
 import { take } from 'rxjs';
-import { SEARCH_CHARACTER, SEARCH_MEDIA } from 'src/app/models/aniList/mediaQueries';
-import { Character } from 'src/app/models/aniList/responseInterfaces';
+import { SEARCH_CHARACTER, SEARCH_MEDIA, SEARCH_STAFF } from 'src/app/models/aniList/mediaQueries';
+import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
   selector: 'am-explore-tab',
@@ -38,18 +38,19 @@ export class ExploreTabPage {
   storedAnimes: any[] = [];
   storedMangas: any[] = [];
   storedCharacters: any[] = [];
+  storedStaff: any[] = [];
 
   resultIds: Set<number> = new Set();
-  category: 'anime' | 'manga' | 'characters' = 'anime';
+  category: 'anime' | 'manga' | 'characters' | 'staff' = 'anime';
   isSearching = false;
   actualAnimePage = 1;
   actualMangaPage = 1;
   actualCharacterPage = 1;
-
+  actualStaffPage = 1;
   hasNextPage = true;
   isModalOpen: boolean;
   modalSelectedTab: string; // info | media | va
-  modalData: Character | undefined;
+  modalData: Character | Staff | undefined;
   modalDataLoading: boolean = false;
   error: any
   isTogglingFavorite: boolean = false;
@@ -62,7 +63,7 @@ export class ExploreTabPage {
     private readonly authService: AuthService,
     private readonly toastService: ToastService,
   ) {
-    addIcons({ checkmark, searchOutline, textOutline, banOutline, arrowBack, shareSocial, informationCircle, film });
+    addIcons({checkmark,searchOutline,textOutline,banOutline,arrowBack,shareSocial,informationCircle,film,mic});
 
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
@@ -114,7 +115,7 @@ export class ExploreTabPage {
     }, 10);
   }
 
-  changeCategory(newCategory: 'anime' | 'manga' | 'characters') {
+  changeCategory(newCategory: 'anime' | 'manga' | 'characters' | 'staff') {
     const isNewCategory = this.category !== newCategory;
     const isNewQuery = this.searchQuery !== this.storedQuery;
 
@@ -129,6 +130,9 @@ export class ExploreTabPage {
         break;
       case 'characters':
         hasDataStored = this.storedCharacters.length > 0;
+        break;
+      case 'staff':
+        hasDataStored = this.storedStaff.length > 0;
         break;
     }
 
@@ -148,6 +152,8 @@ export class ExploreTabPage {
       this.actualMangaPage += 1;
     } else if (this.category === 'characters') {
       this.actualCharacterPage += 1;
+    } else if (this.category === 'staff') {
+      this.actualStaffPage += 1;
     }
 
     // Perform search with loadingMore flag
@@ -181,11 +187,19 @@ export class ExploreTabPage {
       return;
     }
 
+    if (this.storedStaff.length > 0 && this.category === 'staff' && (!newRequest && !loadingMore)) {
+      // Create new array reference to force Angular change detection
+      this.results = [...this.storedStaff];
+      this.triggerContentAnimation();
+      return;
+    }
+
     if (newRequest) {
       this.isSearching = true;
       this.actualAnimePage = 1;
       this.actualMangaPage = 1;
       this.actualCharacterPage = 1;
+      this.actualStaffPage = 1;
       this.results = [];
       this.resultIds.clear();
 
@@ -193,6 +207,7 @@ export class ExploreTabPage {
         this.storedAnimes = [];
         this.storedMangas = [];
         this.storedCharacters = [];
+        this.storedStaff = [];
       }
     }
 
@@ -202,16 +217,14 @@ export class ExploreTabPage {
       'anime': SEARCH_MEDIA,
       'manga': SEARCH_MEDIA,
       'characters': SEARCH_CHARACTER,
-      // 'staff': SEARCH_MEDIA, // TODO: Replace with SEARCH_STAFF when available
-      // 'studios': SEARCH_MEDIA, // TODO: Replace with SEARCH_STUDIOS when available
+      'staff': SEARCH_STAFF,
     };
 
     const variablesMap: Record<typeof this.category, { page: number, search: string, type?: string }> = {
       'anime': { page: this.actualAnimePage, search: this.searchQuery, type: 'ANIME' },
       'manga': { page: this.actualMangaPage, search: this.searchQuery, type: 'MANGA' },
       'characters': { page: this.actualCharacterPage, search: this.searchQuery },
-      // 'staff': {page: this.actualPage, search: this.searchQuery, type: 'STAFF'}, // TODO: Replace with SEARCH_STAFF when available
-      // 'studios': {page: this.actualPage, search: this.searchQuery, type: 'STUDIO'}, // TODO: Replace with SEARCH_STUDIOS when available
+      'staff': { page: this.actualStaffPage, search: this.searchQuery },
     };
 
     const query = queryMap[this.category];
@@ -219,7 +232,7 @@ export class ExploreTabPage {
 
     this.apiService.search(query, variables, true, this.authService.getUserData()?.options?.displayAdultContent ?? false).subscribe({
       next: ({ data, loading, errors }) => {
-        const newResults = data?.Page?.media ?? data?.Page?.characters ?? [];
+        const newResults = data?.Page?.media ?? data?.Page?.characters ?? data?.Page?.staff ?? [];
         this.hasNextPage = !!data?.Page?.pageInfo?.hasNextPage;
 
         // If loading more, append to existing results. Otherwise, replace.
@@ -235,6 +248,8 @@ export class ExploreTabPage {
           this.storedMangas.push(...data.Page.media)
         } else if (data?.Page.characters && this.category === 'characters') {
           this.storedCharacters.push(...data.Page.characters)
+        } else if (data?.Page.staff && this.category === 'staff') {
+          this.storedStaff.push(...data.Page.staff)
         }
 
         this.isSearching = loading;
@@ -275,7 +290,7 @@ export class ExploreTabPage {
   }
 
   // openModal(type: 'staff' | 'character' | 'va', id: number) {
-  openModal(type: 'staff' | 'character' | 'va', data: Character) {
+  openModal(type: 'staff' | 'character' | 'va', data: Character | Staff) {
     // let variables = {
     //   id: id
     // }
@@ -285,6 +300,7 @@ export class ExploreTabPage {
 
     switch (type) {
       case ('staff'):
+        // Staff modal is already handled by setting modalData
         break;
       case ('character'):
         // this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
@@ -340,6 +356,36 @@ export class ExploreTabPage {
           this.isTogglingFavorite = false;
         }
       });
+  }
+
+  toggleStaffFavorite() {
+    if (!this.modalData?.id || this.isTogglingFavorite) return;
+
+    this.isTogglingFavorite = true;
+    const previousState = this.modalData.isFavourite;
+
+    this.apiService.toggleFavoriteStaff(this.modalData.id, true, previousState as boolean)
+      .pipe(take(1))
+      .subscribe({
+        next: (result) => {
+          this.isTogglingFavorite = false;
+          if (result.success && this.modalData) {
+            // Update local state by creating a new object
+            this.modalData = {
+              ...this.modalData,
+              isFavourite: result.isFavorite
+            };
+          }
+        },
+        error: () => {
+          this.isTogglingFavorite = false;
+        }
+      });
+  }
+
+  isCharacter(data: Character | Staff | undefined): data is Character {
+    if (!data) return false;
+    return 'media' in data && 'edges' in (data as Character).media;
   }
 
   private async showErrorToast(message: string) {

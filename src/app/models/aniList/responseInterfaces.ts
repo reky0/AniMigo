@@ -656,7 +656,7 @@ export interface SearchResponse {
     pageInfo: PageInfo;
     media?: BasicMedia[];
     characters?: Character[];
-    // staff?: StaffConnection;
+    staff?: Staff[];
   };
 }
 
