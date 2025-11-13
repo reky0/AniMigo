@@ -21,7 +21,7 @@
     </ion-row>
     <ion-row class="ion-no-padding ion-align-items-center ion-justify-content-center content-middle">
       <ion-col size="12" class="ion-no-padding">
-        <ion-note>{{ `${toSentenceCase(role)} · ${toSentenceCase(media.format)} ${media.seasonYear ? ` · ${media.seasonYear}` : media.startDate ? media.startDate.year ? ` · ${media.startDate.year}` : '' : ''}` }}</ion-note>
+        <ion-note>{{ `${role ? toSentenceCase(role) + ' ·' : ''} ${toSentenceCase(media.format)} ${media.seasonYear ? ` · ${media.seasonYear}` : media.startDate ? media.startDate.year ? ` · ${media.startDate.year}` : '' : ''}` }}</ion-note>
 
       </ion-col>
     </ion-row>

@@ -22,6 +22,8 @@ export class InfoChipComponent extends LoadingStateComponent {
   @Input() horizontal: any;
   @Input() color: any;
   @Input() textColor: any;
+  @Input() isAdult: boolean | null | undefined = false;
+  @Input() isSpoiler: boolean | null | undefined = false;
 
   constructor() {
     super();

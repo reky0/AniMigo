@@ -139,14 +139,23 @@
       }
 
       @if (data.tags && data.tags.length > 0) {
-        <ion-card-title class="ion-margin-top ion-margin-bottom">Tags</ion-card-title>
+        <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
+          <ion-card-title style="margin: 0;">Tags</ion-card-title>
+          <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
+            {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
+          </ion-button>
+        </div>
 
         <am-collapsible [thresholdHeight]="100">
           <ion-row>
             @for (tag of data.tags; track $index) {
-              <ion-col size="6" sizeLg="3">
-                <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" />
-              </ion-col>
+              @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
+                @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
+                  <ion-col size="6" sizeLg="3">
+                    <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
+                  </ion-col>
+                }
+              }
             }
           </ion-row>
         </am-collapsible>

@@ -193,7 +193,7 @@
                         <div class="expandable-filter-title">
                           <ion-label class="filter-label">Genres</ion-label>
                           @if (filters.genres.length > 0) {
-                            <ion-badge color="danger">Adult</ion-badge>
+                            <ion-badge>{{filters.genres.length}}</ion-badge>
                           }
                         </div>
                         <ion-icon [name]="isGenresExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
@@ -203,12 +203,19 @@
                         <div class="expandable-filter-content">
                           <div class="checkbox-list">
                             @for (genre of genres; track genre.value) {
-                              <div class="checkbox-item" (click)="toggleFilter('genres', genre.value)">
-                                <ion-checkbox
+                              @if (genre.value !== 'Hentai' || (genre.value === 'Hentai' && authService.getUserData()?.options?.displayAdultContent)) {
+                                <div class="checkbox-item" (click)="toggleFilter('genres', genre.value)">
+                                  <ion-checkbox
                                   [checked]="filters.genres.includes(genre.value)">
-                                </ion-checkbox>
-                                <span class="checkbox-label">{{ genre.label }}</span>
-                              </div>
+                                  </ion-checkbox>
+                                  <span class="checkbox-label">
+                                    {{ genre.label }}
+                                    @if (genre.value === 'Hentai') {
+                                      <ion-badge color="danger">Adult</ion-badge>
+                                    }
+                                  </span>
+                                </div>
+                              }
                             }
                           </div>
                         </div>
@@ -233,22 +240,23 @@
                         <div class="expandable-filter-content">
                           <div class="checkbox-list">
                             @for (tag of tags; track tag.name) {
-                              <div
-                                class="checkbox-item"
-                                [title]="tag.description"
-                                (click)="toggleFilter('tags', tag.name)"
-                                >
-                                <ion-checkbox
-                                  [checked]="filters.tags.includes(tag.name)">
-                                </ion-checkbox>
-                                <span class="checkbox-label">
-                                  {{ tag.name }}
-                                  @if (tag.isAdult) {
-                                    <ion-badge _ngcontent-ng-c1840000285="" color="danger" class="ion-color ion-color-danger md hydrated"><template shadowrootmode="open"><slot></slot></template>Adult</ion-badge>
-                                  }
-                                </span>
-
-                              </div>
+                              @if (!tag.isAdult || (tag.isAdult && authService.getUserData()?.options?.displayAdultContent)) {
+                                <div
+                                  class="checkbox-item"
+                                  [title]="tag.description"
+                                  (click)="toggleFilter('tags', tag.name)"
+                                  >
+                                  <ion-checkbox
+                                    [checked]="filters.tags.includes(tag.name)">
+                                  </ion-checkbox>
+                                  <span class="checkbox-label">
+                                    {{ tag.name }}
+                                    @if (tag.isAdult) {
+                                      <ion-badge color="danger">Adult</ion-badge>
+                                    }
+                                  </span>
+                                </div>
+                              }
                             }
                           </div>
                         </div>
@@ -390,12 +398,19 @@
                         <div class="expandable-filter-content">
                           <div class="checkbox-list">
                             @for (genre of genres; track genre.value) {
-                              <div class="checkbox-item" (click)="toggleFilter('genres', genre.value)">
-                                <ion-checkbox
-                                  [checked]="filters.genres.includes(genre.value)">
-                                </ion-checkbox>
-                                <span class="checkbox-label">{{ genre.label }}</span>
-                              </div>
+                              @if (genre.value !== 'Hentai' || (genre.value === 'Hentai' && authService.getUserData()?.options?.displayAdultContent)) {
+                                <div class="checkbox-item" (click)="toggleFilter('genres', genre.value)">
+                                  <ion-checkbox
+                                    [checked]="filters.genres.includes(genre.value)">
+                                  </ion-checkbox>
+                                  <span class="checkbox-label">
+                                    {{ genre.label }}
+                                    @if (genre.value === 'Hentai') {
+                                      <ion-badge color="danger">Adult</ion-badge>
+                                    }
+                                  </span>
+                                </div>
+                              }
                             }
                           </div>
                         </div>
@@ -420,12 +435,19 @@
                         <div class="expandable-filter-content">
                           <div class="checkbox-list">
                             @for (tag of tags; track tag.name) {
-                              <div class="checkbox-item" (click)="toggleFilter('tags', tag.name)">
-                                <ion-checkbox
-                                  [checked]="filters.tags.includes(tag.name)">
-                                </ion-checkbox>
-                                <span class="checkbox-label">{{ tag.name }}</span>
-                              </div>
+                              @if (!tag.isAdult || (tag.isAdult && authService.getUserData()?.options?.displayAdultContent)) {
+                                <div class="checkbox-item" (click)="toggleFilter('tags', tag.name)">
+                                  <ion-checkbox
+                                    [checked]="filters.tags.includes(tag.name)">
+                                  </ion-checkbox>
+                                  <span class="checkbox-label">
+                                    {{ tag.name }}
+                                    @if (tag.isAdult) {
+                                      <ion-badge color="danger">Adult</ion-badge>
+                                    }
+                                  </span>
+                                </div>
+                              }
                             }
                           </div>
                         </div>

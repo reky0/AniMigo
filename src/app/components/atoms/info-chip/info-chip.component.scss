@@ -11,6 +11,16 @@
     cursor: default;
     pointer-events: none;
 
+    &.adult {
+      background-color: rgba(var(--ion-color-danger-rgb), .3);
+      color: var(--ion-color-danger);
+    }
+
+    &.isSpoiler {
+      background-color: rgba(var(--ion-color-warning-rgb), .3);
+      color: var(--ion-color-warning);
+    }
+
     * {
       cursor: inherit;
       pointer-events: inherit;

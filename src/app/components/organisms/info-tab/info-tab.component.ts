@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { InfoChipComponent } from "@components/atoms/info-chip/info-chip.component";
 import { MediaThumbnailComponent } from "@components/atoms/media-thumbnail/media-thumbnail.component";
+import { AuthService } from '@components/core/services/auth.service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
-import { IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonNote, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
+import { IonButton, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonNote, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 import { RangePipe } from 'src/app/helpers/range.pipe';
 import { formatDate, getLangCode, openUrl, toSentenceCase } from 'src/app/helpers/utils';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
@@ -11,7 +12,7 @@ import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
   selector: 'am-info-tab',
   templateUrl: './info-tab.component.html',
   styleUrls: ['./info-tab.component.scss'],
-  imports: [IonGrid, IonRow, IonNote, IonCol, IonText, IonCardSubtitle, IonCardTitle, InfoChipComponent, MediaThumbnailComponent, CollapsibleComponent, IonSkeletonText, RangePipe]
+  imports: [IonButton, IonGrid, IonRow, IonNote, IonCol, IonText, IonCardSubtitle, IonCardTitle, InfoChipComponent, MediaThumbnailComponent, CollapsibleComponent, IonSkeletonText, RangePipe]
 })
 export class InfoTabComponent implements OnInit {
   @Input() data: DetailedMedia | null | undefined = undefined;
@@ -46,12 +47,19 @@ export class InfoTabComponent implements OnInit {
     siteId?: string | null;
   }> | null | undefined;
 
+  showSpoilerTags: boolean = false;
+  showAdultContent: boolean = false;
+
   openUrl = openUrl;
   getLangCode = getLangCode;
   formatDate = formatDate;
   toSentenceCase = toSentenceCase;
 
-  constructor() { }
+  constructor(
+    authService: AuthService
+  ) {
+    this.showAdultContent = authService.getUserData()?.options?.displayAdultContent ?? false;
+  }
 
   ngOnInit() {
     this.mainStudios = this.data?.studios?.edges.filter(studio => studio.isMain);
@@ -71,12 +79,8 @@ export class InfoTabComponent implements OnInit {
       this.externalLinks = this.data.externalLinks?.filter(link => link.type !== 'STREAMING')
     }
   }
-}
 
-interface themeLinks {
-  youtube: string;
-  spotify: string;
-  ytMusic: string;
-  appleMusic: string;
-  deezer: string;
+  toggleShowSpoilerTags() {
+    this.showSpoilerTags = !this.showSpoilerTags;
+  }
 }

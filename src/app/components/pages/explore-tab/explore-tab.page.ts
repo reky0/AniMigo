@@ -13,8 +13,6 @@ import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/pe
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
 import { IonBadge, IonButton, IonButtons, IonCardSubtitle, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonModal, IonRadio, IonRadioGroup, IonRange, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
-import { addIcons } from 'ionicons';
-import { arrowBack, banOutline, checkmark, checkmarkCircle, chevronDown, chevronUp, closeCircle, film, gift, heart, informationCircle, mic, searchOutline, shareSocial, star, statsChart, text, textOutline, trendingUp } from 'ionicons/icons';
 import { take } from 'rxjs';
 import { GET_GENRES_AND_TAGS, SEARCH_CHARACTER, SEARCH_MEDIA, SEARCH_STAFF } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
@@ -183,11 +181,9 @@ export class ExploreTabPage {
     readonly platformService: PlatformService,
     private readonly router: Router,
     private readonly apiService: ApiService,
-    private readonly authService: AuthService,
+    readonly authService: AuthService,
     private readonly toastService: ToastService,
   ) {
-    addIcons({checkmark,closeCircle,gift,checkmarkCircle,searchOutline,textOutline,banOutline,arrowBack,shareSocial,informationCircle,film,mic,chevronDown,chevronUp,star,statsChart,trendingUp,heart,text});
-
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
     this.toastService.setTabBarVisibility(this.platformService.isHybrid());

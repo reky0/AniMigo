@@ -3,6 +3,8 @@
 } @else {
   <ion-chip
     [style.background]="color"
+    [class.adult]="isAdult"
+    [class.isSpoiler]="isSpoiler && !isAdult"
     >
     <ion-grid>
       <ion-row>

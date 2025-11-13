@@ -197,6 +197,7 @@ export interface DetailedMedia {
     isMediaSpoiler: boolean;
     isGeneralSpoiler: boolean;
     rank: number;
+    isAdult?: boolean;
   }> | null;
 
   characters?: CharacterConnection | null;
