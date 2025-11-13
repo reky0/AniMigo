@@ -11,28 +11,20 @@
   .img-container {
     height: 75%;
     justify-content: center;
-  }
 
-  .img-container ion-col {
-    height: 100%;
-
-    .img {
+    ion-col {
       height: 100%;
-      object-fit: cover;
-      display: flex;
-    }
 
-    .favorite-tag {
-      position: absolute;
-      top: 0;
-      left: 0;
-      background-color: var(--ion-color-danger);
-      color: whitesmoke;
-      padding: 4px 8px;
-      font-size: 12px;
-      font-weight: bold;
-      border-radius: 8px 0 10px 0;
-      z-index: 1;
+      .img {
+        height: 100%;
+        object-fit: cover;
+        display: flex;
+      }
+
+      .favorite-tag {
+        font-weight: bold;
+        z-index: 1;
+      }
     }
   }
 
@@ -59,18 +51,16 @@
   }
 
   .label-container {
-
     .label {
       margin-top: 5px;
       display: -webkit-box;
-      line-clamp: 2;
-      -webkit-line-clamp: 2; /* Limit to 2 lines */
       -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
       overflow: hidden;
       text-overflow: ellipsis;
-
-      height: 2.3em; /* Approximate height for 2 lines */
-      line-height: 1.2em; /* Adjust line height as needed */
+      height: 2.3em;
+      line-height: 1.2em;
     }
   }
 
@@ -81,7 +71,6 @@
     color: #ffcc00;
   }
 
-  /* Utility: push a row to the bottom of the grid */
   .bottom-row {
     margin-top: auto;
   }
@@ -94,3 +83,5 @@
     margin-right: 5px;
   }
 }
+
+

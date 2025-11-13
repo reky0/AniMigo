@@ -1,5 +1,17 @@
 import { gql } from "apollo-angular";
 
+export const GET_GENRES_AND_TAGS = gql`
+  query {
+    genres: GenreCollection
+    tags: MediaTagCollection {
+      name
+      description
+      category
+      isAdult
+    }
+  }
+`;
+
 export const GET_MEDIA_LIST = gql`
   query MediaList(
     $page: Int = 1,
@@ -534,7 +546,17 @@ export const GET_AIRING_SCHEDULES = gql`
 `;
 
 export const SEARCH_MEDIA = gql`
-  query SearchMedia($page: Int!, $search: String!, $type: MediaType!) {
+  query SearchMedia(
+    $page: Int!,
+    $search: String,
+    $type: MediaType!,
+    $format_in: [MediaFormat],
+    $status_in: [MediaStatus],
+    $startDate_greater: FuzzyDateInt,
+    $startDate_lesser: FuzzyDateInt,
+    $genre_in: [String],
+    $sort: [MediaSort]
+  ) {
     Page(page: $page) {
       pageInfo {
         currentPage
@@ -542,7 +564,16 @@ export const SEARCH_MEDIA = gql`
         perPage
         total
       }
-      media(search: $search, type: $type) {
+      media(
+        search: $search,
+        type: $type,
+        format_in: $format_in,
+        status_in: $status_in,
+        startDate_greater: $startDate_greater,
+        startDate_lesser: $startDate_lesser,
+        genre_in: $genre_in,
+        sort: $sort
+      ) {
         id
         title {
           romaji
@@ -566,7 +597,12 @@ export const SEARCH_MEDIA = gql`
 `;
 
 export const SEARCH_CHARACTER = gql`
-  query SearchCharacter($page: Int!, $search: String!) {
+  query SearchCharacter(
+    $page: Int!,
+    $search: String,
+    $isBirthday: Boolean,
+    $sort: [CharacterSort]
+  ) {
     Page(page: $page) {
       pageInfo {
         currentPage
@@ -574,7 +610,11 @@ export const SEARCH_CHARACTER = gql`
         perPage
         total
       }
-      characters(search: $search) {
+      characters(
+        search: $search,
+        isBirthday: $isBirthday,
+        sort: $sort
+      ) {
         id
         name {
           full
@@ -627,7 +667,12 @@ export const SEARCH_CHARACTER = gql`
 `;
 
 export const SEARCH_STAFF = gql`
-  query SearchStaff($page: Int!, $search: String!) {
+  query SearchStaff(
+    $page: Int!,
+    $search: String,
+    $isBirthday: Boolean,
+    $sort: [StaffSort]
+  ) {
     Page(page: $page) {
       pageInfo {
         currentPage
@@ -635,7 +680,11 @@ export const SEARCH_STAFF = gql`
         perPage
         total
       }
-      staff(search: $search) {
+      staff(
+        search: $search,
+        isBirthday: $isBirthday,
+        sort: $sort
+      ) {
         id
         name {
           full

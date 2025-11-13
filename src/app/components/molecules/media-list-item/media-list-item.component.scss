@@ -73,7 +73,6 @@
     &.hasTag {
       left: inherit;
       right: 0;
-
       border-radius: 0 10px 0 10px;
       z-index: 1;
     }
@@ -97,6 +96,8 @@
   .img::part(image) {
     border-radius: 10px;
   }
+
+
 
   .rating-container * {
     color: gold;

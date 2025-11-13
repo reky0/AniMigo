@@ -12,11 +12,11 @@ import { PersonItemComponent } from "@components/molecules/person-item/person-it
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { IonButton, IonButtons, IonCardSubtitle, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonBadge, IonButton, IonButtons, IonCardSubtitle, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonModal, IonRadio, IonRadioGroup, IonRange, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowBack, banOutline, checkmark, film, informationCircle, mic, searchOutline, shareSocial, textOutline } from 'ionicons/icons';
+import { arrowBack, banOutline, checkmark, checkmarkCircle, chevronDown, chevronUp, closeCircle, film, gift, heart, informationCircle, mic, searchOutline, shareSocial, star, statsChart, text, textOutline, trendingUp } from 'ionicons/icons';
 import { take } from 'rxjs';
-import { SEARCH_CHARACTER, SEARCH_MEDIA, SEARCH_STAFF } from 'src/app/models/aniList/mediaQueries';
+import { GET_GENRES_AND_TAGS, SEARCH_CHARACTER, SEARCH_MEDIA, SEARCH_STAFF } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 
 @Component({
@@ -24,7 +24,7 @@ import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
   templateUrl: './explore-tab.page.html',
   styleUrls: ['./explore-tab.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScroll, IonSegmentButton, IonSegment, IonButton, IonButtons, IonModal, IonCardSubtitle, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonSearchbar, IonRow, IonCol, InfoChipComponent, IonIcon, IonSpinner, MediaListItemComponent, IonChip, PersonItemComponent, IonInfiniteScrollContent, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent]
+  imports: [IonInfiniteScroll, IonSegmentButton, IonSegment, IonButton, IonButtons, IonModal, IonCardSubtitle, IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonGrid, IonSearchbar, IonRow, IonCol, InfoChipComponent, IonIcon, IonSpinner, MediaListItemComponent, IonChip, PersonItemComponent, IonInfiniteScrollContent, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, IonLabel, IonRange, IonBadge, IonCheckbox, IonRadioGroup, IonRadio]
 })
 export class ExploreTabPage {
   @ViewChild('searchBar') searchBar!: IonSearchbar;
@@ -55,6 +55,129 @@ export class ExploreTabPage {
   error: any
   isTogglingFavorite: boolean = false;
 
+  // Filter panel properties
+  isFilterPanelOpen = false;
+  isFormatsExpanded = false;
+  isStatusesExpanded = false;
+  isGenresExpanded = false;
+  isTagsExpanded = false;
+  isSortByExpanded = false;
+  currentYear = new Date().getFullYear();
+
+  filters = {
+    formats: [] as string[],
+    statuses: [] as string[],
+    yearRange: { start: 1940, end: this.currentYear + 1 },
+    genres: [] as string[],
+    tags: [] as string[],
+    isBirthday: false,
+    sortBy: 'SEARCH_MATCH' as string
+  };
+
+  // Track applied filters to detect changes
+  appliedFilters = {
+    formats: [] as string[],
+    statuses: [] as string[],
+    yearRange: { start: 1940, end: this.currentYear + 1 },
+    genres: [] as string[],
+    tags: [] as string[],
+    isBirthday: false,
+    sortBy: 'SEARCH_MATCH' as string
+  };
+
+  get hasUnappliedFilters(): boolean {
+    return JSON.stringify(this.filters) !== JSON.stringify(this.appliedFilters);
+  }
+
+  // Filter options
+  animeFormats = [
+    { value: 'TV', label: 'TV' },
+    { value: 'TV_SHORT', label: 'TV Short' },
+    { value: 'MOVIE', label: 'Movie' },
+    { value: 'SPECIAL', label: 'Special' },
+    { value: 'OVA', label: 'OVA' },
+    { value: 'ONA', label: 'ONA' },
+    { value: 'MUSIC', label: 'Music' }
+  ];
+
+  mangaFormats = [
+    { value: 'MANGA', label: 'Manga' },
+    { value: 'LIGHT_NOVEL', label: 'Light Novel' },
+    { value: 'ONE_SHOT', label: 'One Shot' },
+    { value: 'DOUJIN', label: 'Doujin' },
+    { value: 'MANHWA', label: 'Manhwa' },
+    { value: 'MANHUA', label: 'Manhua' },
+    { value: 'NOVEL', label: 'Novel' }
+  ];
+
+  animeStatuses = [
+    { value: 'RELEASING', label: 'Airing' },
+    { value: 'FINISHED', label: 'Finished' },
+    { value: 'NOT_YET_RELEASED', label: 'Not Yet Aired' },
+    { value: 'CANCELLED', label: 'Cancelled' }
+  ];
+
+  mangaStatuses = [
+    { value: 'RELEASING', label: 'Publishing' },
+    { value: 'FINISHED', label: 'Finished' },
+    { value: 'NOT_YET_RELEASED', label: 'Not Yet Published' },
+    { value: 'CANCELLED', label: 'Cancelled' },
+    { value: 'HIATUS', label: 'Hiatus' }
+  ];
+
+  genres: { value: string, label: string }[] = [];
+  tags: { name: string, description: string, category: string, isAdult: boolean }[] = [];
+
+  animeSortOptions = [
+    { value: 'SEARCH_MATCH', label: 'Best Match', icon: 'search-outline' },
+    { value: 'SCORE_DESC', label: 'Score', icon: 'star' },
+    { value: 'POPULARITY_DESC', label: 'Popularity', icon: 'stats-chart' },
+    { value: 'TRENDING_DESC', label: 'Trending', icon: 'trending-up' },
+    { value: 'FAVOURITES_DESC', label: 'Favorites', icon: 'heart' },
+    { value: 'START_DATE_DESC', label: 'Newest', icon: 'text-outline' },
+    { value: 'TITLE_ROMAJI', label: 'A-Z', icon: 'text' }
+  ];
+
+  mangaSortOptions = [
+    { value: 'SEARCH_MATCH', label: 'Best Match', icon: 'search-outline' },
+    { value: 'SCORE_DESC', label: 'Score', icon: 'star' },
+    { value: 'POPULARITY_DESC', label: 'Popularity', icon: 'stats-chart' },
+    { value: 'TRENDING_DESC', label: 'Trending', icon: 'trending-up' },
+    { value: 'FAVOURITES_DESC', label: 'Favorites', icon: 'heart' },
+    { value: 'START_DATE_DESC', label: 'Newest', icon: 'text-outline' },
+    { value: 'TITLE_ROMAJI', label: 'A-Z', icon: 'text' }
+  ];
+
+  peopleSortOptions = [
+    { value: 'SEARCH_MATCH', label: 'Best Match', icon: 'search-outline' },
+    { value: 'FAVOURITES_DESC', label: 'Favorites', icon: 'heart' },
+    { value: 'RELEVANCE', label: 'Relevance', icon: 'star' }
+  ];
+
+  get activeFiltersCount(): number {
+    let count = 0;
+    count += this.appliedFilters.formats.length;
+    count += this.appliedFilters.statuses.length;
+    count += this.appliedFilters.genres.length;
+
+    // Check if birthday filter is active
+    if (this.appliedFilters.isBirthday) {
+      count += 1;
+    }
+
+    // Check if year range is not default
+    if (this.appliedFilters.yearRange.start !== 1940 || this.appliedFilters.yearRange.end !== this.currentYear + 1) {
+      count += 1;
+    }
+
+    // Check if sort is not default
+    if (this.appliedFilters.sortBy !== 'SEARCH_MATCH') {
+      count += 1;
+    }
+
+    return count;
+  }
+
 
   constructor(
     readonly platformService: PlatformService,
@@ -63,11 +186,42 @@ export class ExploreTabPage {
     private readonly authService: AuthService,
     private readonly toastService: ToastService,
   ) {
-    addIcons({checkmark,searchOutline,textOutline,banOutline,arrowBack,shareSocial,informationCircle,film,mic});
+    addIcons({checkmark,closeCircle,gift,checkmarkCircle,searchOutline,textOutline,banOutline,arrowBack,shareSocial,informationCircle,film,mic,chevronDown,chevronUp,star,statsChart,trendingUp,heart,text});
 
     this.isModalOpen = false;
     this.modalSelectedTab = 'info';
     this.toastService.setTabBarVisibility(this.platformService.isHybrid());
+
+    // Load genres and tags from API
+    this.loadGenresAndTags();
+  }
+
+  loadGenresAndTags(): void {
+    this.apiService.getGenresAndTags(GET_GENRES_AND_TAGS).subscribe({
+      next: ({ data, loading, errors }) => {
+        if (errors) {
+          console.error('Error loading genres and tags:', errors);
+          // Fallback to empty arrays
+          this.genres = [];
+          this.tags = [];
+        } else if (data) {
+          // Map genres to our format
+          this.genres = (data.genres || []).map((genre: string) => ({
+            value: genre,
+            label: genre
+          }));
+
+          // Store tags as-is
+          this.tags = data.tags || [];
+        }
+      },
+      error: (err) => {
+        console.error('Error loading genres and tags:', err);
+        // Fallback to empty arrays
+        this.genres = [];
+        this.tags = [];
+      }
+    });
   }
 
   activateSearch() {
@@ -106,7 +260,23 @@ export class ExploreTabPage {
   }
 
   canSearch(): boolean {
-    return this.searchQuery.trim().length >= 3;
+    // Allow search if there's text with 3+ characters OR if there are active filters
+    const hasSearchText = this.searchQuery.trim().length >= 3;
+    const hasActiveFilters = this.hasActiveFilters();
+    return hasSearchText || hasActiveFilters;
+  }
+
+  hasActiveFilters(): boolean {
+    return (
+      this.appliedFilters.formats.length > 0 ||
+      this.appliedFilters.statuses.length > 0 ||
+      this.appliedFilters.genres.length > 0 ||
+      this.appliedFilters.tags.length > 0 ||
+      this.appliedFilters.isBirthday ||
+      this.appliedFilters.sortBy !== 'SEARCH_MATCH' ||
+      this.appliedFilters.yearRange.start !== 1940 ||
+      this.appliedFilters.yearRange.end !== this.currentYear + 1
+    );
   }
 
   triggerContentAnimation() {
@@ -138,6 +308,22 @@ export class ExploreTabPage {
 
     if (!isNewCategory && !isNewQuery) {
       return;
+    }
+
+    // Clear filters when switching between media (anime/manga) and people (characters/staff)
+    const oldIsMedia = this.category === 'anime' || this.category === 'manga';
+    const newIsMedia = newCategory === 'anime' || newCategory === 'manga';
+
+    if (oldIsMedia !== newIsMedia) {
+      this.filters = {
+        formats: [],
+        statuses: [],
+        yearRange: { start: 1940, end: this.currentYear + 1 },
+        genres: [],
+        tags: [],
+        isBirthday: false,
+        sortBy: 'SEARCH_MATCH'
+      };
     }
 
     this.category = newCategory;
@@ -220,11 +406,11 @@ export class ExploreTabPage {
       'staff': SEARCH_STAFF,
     };
 
-    const variablesMap: Record<typeof this.category, { page: number, search: string, type?: string }> = {
-      'anime': { page: this.actualAnimePage, search: this.searchQuery, type: 'ANIME' },
-      'manga': { page: this.actualMangaPage, search: this.searchQuery, type: 'MANGA' },
-      'characters': { page: this.actualCharacterPage, search: this.searchQuery },
-      'staff': { page: this.actualStaffPage, search: this.searchQuery },
+    const variablesMap: Record<typeof this.category, any> = {
+      'anime': this.buildAnimeVariables(),
+      'manga': this.buildMangaVariables(),
+      'characters': this.buildCharacterVariables(),
+      'staff': this.buildStaffVariables(),
     };
 
     const query = queryMap[this.category];
@@ -386,6 +572,240 @@ export class ExploreTabPage {
   isCharacter(data: Character | Staff | undefined): data is Character {
     if (!data) return false;
     return 'media' in data && 'edges' in (data as Character).media;
+  }
+
+  // Filter methods
+  toggleFilterPanel(): void {
+    this.isFilterPanelOpen = !this.isFilterPanelOpen;
+  }
+
+  toggleFormatsExpanded(): void {
+    this.isFormatsExpanded = !this.isFormatsExpanded;
+  }
+
+  toggleStatusesExpanded(): void {
+    this.isStatusesExpanded = !this.isStatusesExpanded;
+  }
+
+  toggleGenresExpanded(): void {
+    this.isGenresExpanded = !this.isGenresExpanded;
+  }
+
+  toggleTagsExpanded(): void {
+    this.isTagsExpanded = !this.isTagsExpanded;
+  }
+
+  toggleSortByExpanded(): void {
+    this.isSortByExpanded = !this.isSortByExpanded;
+  }
+
+  private buildAnimeVariables(): any {
+    const variables: any = {
+      page: this.actualAnimePage,
+      type: 'ANIME'
+    };
+
+    // Only add search parameter if there's a query
+    if (this.searchQuery.trim().length > 0) {
+      variables.search = this.searchQuery;
+    }
+
+    // Only add filter parameters if they have values (use appliedFilters)
+    if (this.appliedFilters.formats.length > 0) {
+      variables.format_in = this.appliedFilters.formats;
+    }
+
+    if (this.appliedFilters.statuses.length > 0) {
+      variables.status_in = this.appliedFilters.statuses;
+    }
+
+    if (this.appliedFilters.genres.length > 0) {
+      variables.genre_in = this.appliedFilters.genres;
+    }
+
+    if (this.appliedFilters.tags.length > 0) {
+      variables.tag_in = this.appliedFilters.tags;
+    }
+
+    // Only add year filters if they're not at default values
+    const hasYearFilter = this.appliedFilters.yearRange.start !== 1940 || this.appliedFilters.yearRange.end !== this.currentYear + 1;
+    if (hasYearFilter) {
+      // Use startDate filters for both anime and manga (works for both)
+      variables.startDate_greater = this.appliedFilters.yearRange.start * 10000 + 101; // January 1st
+      variables.startDate_lesser = this.appliedFilters.yearRange.end * 10000 + 1231; // December 31st
+    }
+
+    // Only add sort if it's not the default
+    if (this.appliedFilters.sortBy !== 'SEARCH_MATCH') {
+      variables.sort = [this.appliedFilters.sortBy];
+    }
+
+    return variables;
+  }
+
+  private buildMangaVariables(): any {
+    const variables: any = {
+      page: this.actualMangaPage,
+      type: 'MANGA'
+    };
+
+    // Only add search parameter if there's a query
+    if (this.searchQuery.trim().length > 0) {
+      variables.search = this.searchQuery;
+    }
+
+    // Only add filter parameters if they have values (use appliedFilters)
+    if (this.appliedFilters.formats.length > 0) {
+      variables.format_in = this.appliedFilters.formats;
+    }
+
+    if (this.appliedFilters.statuses.length > 0) {
+      variables.status_in = this.appliedFilters.statuses;
+    }
+
+    if (this.appliedFilters.genres.length > 0) {
+      variables.genre_in = this.appliedFilters.genres;
+    }
+
+    if (this.appliedFilters.tags.length > 0) {
+      variables.tag_in = this.appliedFilters.tags;
+    }
+
+    // Only add year filters if they're not at default values
+    const hasYearFilter = this.appliedFilters.yearRange.start !== 1940 || this.appliedFilters.yearRange.end !== this.currentYear + 1;
+    if (hasYearFilter) {
+      // Convert to FuzzyDateInt format (YYYYMMDD)
+      variables.startDate_greater = this.appliedFilters.yearRange.start * 10000 + 101; // January 1st
+      variables.startDate_lesser = this.appliedFilters.yearRange.end * 10000 + 1231; // December 31st
+    }
+
+    // Only add sort if it's not the default
+    if (this.appliedFilters.sortBy !== 'SEARCH_MATCH') {
+      variables.sort = [this.appliedFilters.sortBy];
+    }
+
+    return variables;
+  }
+
+  private buildCharacterVariables(): any {
+    const variables: any = {
+      page: this.actualCharacterPage
+    };
+
+    // Only add search parameter if there's a query
+    if (this.searchQuery.trim().length > 0) {
+      variables.search = this.searchQuery;
+    }
+
+    // Only add birthday filter if it's enabled (use appliedFilters)
+    if (this.appliedFilters.isBirthday) {
+      variables.isBirthday = true;
+    }
+
+    // Only add sort if it's not the default
+    if (this.appliedFilters.sortBy !== 'SEARCH_MATCH') {
+      variables.sort = [this.appliedFilters.sortBy];
+    }
+
+    return variables;
+  }
+
+  private buildStaffVariables(): any {
+    const variables: any = {
+      page: this.actualStaffPage
+    };
+
+    // Only add search parameter if there's a query
+    if (this.searchQuery.trim().length > 0) {
+      variables.search = this.searchQuery;
+    }
+
+    // Only add birthday filter if it's enabled (use appliedFilters)
+    if (this.appliedFilters.isBirthday) {
+      variables.isBirthday = true;
+    }
+
+    // Only add sort if it's not the default
+    if (this.appliedFilters.sortBy !== 'SEARCH_MATCH') {
+      variables.sort = [this.appliedFilters.sortBy];
+    }
+
+    return variables;
+  }
+
+  toggleFilter(filterType: 'formats' | 'statuses' | 'genres' | 'tags', value: string): void {
+    const filterArray = this.filters[filterType];
+    const index = filterArray.indexOf(value);
+
+    if (index > -1) {
+      filterArray.splice(index, 1);
+    } else {
+      filterArray.push(value);
+    }
+
+    // Don't auto-apply filters anymore - wait for user to click "Apply Filters"
+  }
+
+  toggleBirthdayFilter(): void {
+    this.filters.isBirthday = !this.filters.isBirthday;
+    // Don't auto-apply filters anymore - wait for user to click "Apply Filters"
+  }
+
+  setFilter(filterType: 'sortBy', value: string): void {
+    this.filters[filterType] = value;
+    // Don't auto-apply filters anymore - wait for user to click "Apply Filters"
+  }
+
+  onYearRangeChange(event: any): void {
+    this.filters.yearRange = {
+      start: event.detail.value.lower,
+      end: event.detail.value.upper
+    };
+    // Don't auto-apply filters anymore - wait for user to click "Apply Filters"
+  }
+
+  clearAllFilters(): void {
+    this.filters = {
+      formats: [],
+      statuses: [],
+      yearRange: { start: 1940, end: this.currentYear + 1 },
+      genres: [],
+      tags: [],
+      isBirthday: false,
+      sortBy: 'SEARCH_MATCH'
+    };
+    // Apply immediately when clearing all filters
+    this.applyFilters();
+  }
+
+  applyFilters(): void {
+    // Copy current filters to applied filters
+    this.appliedFilters = {
+      formats: [...this.filters.formats],
+      statuses: [...this.filters.statuses],
+      yearRange: { ...this.filters.yearRange },
+      genres: [...this.filters.genres],
+      tags: [...this.filters.tags],
+      isBirthday: this.filters.isBirthday,
+      sortBy: this.filters.sortBy
+    };
+
+    // Reset stored data when filters change
+    this.storedAnimes = [];
+    this.storedMangas = [];
+    this.storedCharacters = [];
+    this.storedStaff = [];
+
+    // Reset pagination
+    this.actualAnimePage = 1;
+    this.actualMangaPage = 1;
+    this.actualCharacterPage = 1;
+    this.actualStaffPage = 1;
+
+    // Trigger search with current query and filters (allow filter-only searches)
+    if (this.canSearch()) {
+      this.performSearch(true);
+    }
   }
 
   private async showErrorToast(message: string) {

@@ -9,33 +9,32 @@
 <ion-content>
   <!-- Full Screen Search Overlay -->
   <div class="search-overlay" [class.active]="isSearchActive" [class.has-header]="platformService.isHybrid()">
-    <ion-grid class="search-container">
-      <ion-row class="ion-no-padding">
-        <ion-col class="ion-no-padding">
-          <ion-searchbar
-            #searchBar
-            class="ion-padding"
-            placeholder="Search for an anime, manga, character..."
-            animated
-            color="light"
-            [value]="searchQuery"
-            (ionInput)="onSearchInput($event)"
-            (ionFocus)="activateSearch()"
-            (ionCancel)="deactivateSearch()"
-            (keydown.enter)="onEnterPress()"
-            (keydown.escape)="deactivateSearch()"
-            [showCancelButton]="'always'"
-          ></ion-searchbar>
-        </ion-col>
-      </ion-row>
+    <div class="search-header">
+      <ion-searchbar
+        #searchBar
+        class="ion-padding"
+        placeholder="Search for an anime, manga, character..."
+        animated
+        color="light"
+        [value]="searchQuery"
+        (ionInput)="onSearchInput($event)"
+        (ionFocus)="activateSearch()"
+        (ionCancel)="deactivateSearch()"
+        (keydown.enter)="onEnterPress()"
+        (keydown.escape)="deactivateSearch()"
+        [showCancelButton]="'always'"
+      ></ion-searchbar>
+    </div>
 
-      <ion-row class="filter-chips-container">
+    <ion-content #resultsContent class="search-content">
+      <ion-grid class="search-container">
+        <ion-row class="filter-chips-container">
         <ion-row>
           <ion-col>
             <ion-chip
               [outline]="category !== 'anime'"
               color="primary"
-              class="filter-chip ion-color-secondary"
+              class="filter-chip ion-color-secondary ion-no-margin"
               [class.active]="category === 'anime'"
               (click)="changeCategory('anime')"
               >
@@ -47,7 +46,7 @@
             <ion-chip
               [outline]="category !== 'manga'"
               color="primary"
-              class="filter-chip ion-color-secondary"
+              class="filter-chip ion-color-secondary ion-no-margin"
               [class.active]="category === 'manga'"
               (click)="changeCategory('manga')"
               >
@@ -59,7 +58,7 @@
             <ion-chip
               [outline]="category !== 'characters'"
               color="primary"
-              class="filter-chip ion-color-secondary"
+              class="filter-chip ion-color-secondary ion-no-margin"
               [class.active]="category === 'characters'"
               (click)="changeCategory('characters')"
               >
@@ -71,7 +70,7 @@
             <ion-chip
               [outline]="category !== 'staff'"
               color="primary"
-              class="filter-chip ion-color-secondary"
+              class="filter-chip ion-color-secondary ion-no-margin"
               [class.active]="category === 'staff'"
               (click)="changeCategory('staff')"
               >
@@ -80,19 +79,527 @@
             </ion-chip>
           </ion-col>
         </ion-row>
+
+        <ion-row class="filter-panel-container">
+          <ion-col size="12">
+            <div class="filter-panel-header" (click)="toggleFilterPanel()">
+              <div class="filter-panel-title">
+                <ion-icon [name]="isFilterPanelOpen ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                <span>Filters</span>
+                @if (activeFiltersCount > 0) {
+                  <ion-badge color="primary">{{ activeFiltersCount }}</ion-badge>
+                }
+              </div>
+              @if (activeFiltersCount > 0) {
+                <ion-button
+                  fill="clear"
+                  color="danger"
+                  (click)="clearAllFilters(); $event.stopPropagation()">
+                  <ion-icon slot="icon-only" name="close-circle"></ion-icon>
+                </ion-button>
+              }
+            </div>
+
+            <div class="filter-panel-content" [class.expanded]="isFilterPanelOpen">
+              <!-- ANIME FILTERS -->
+              @if (category === 'anime') {
+                <ion-grid class="filter-grid">
+                  <!-- Format Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleFormatsExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Format</ion-label>
+                          @if (filters.formats.length > 0) {
+                            <ion-badge color="primary">{{ filters.formats.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isFormatsExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isFormatsExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (format of animeFormats; track format.value) {
+                              <div class="checkbox-item" (click)="toggleFilter('formats', format.value)">
+                                <ion-checkbox
+                                  [checked]="filters.formats.includes(format.value)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ format.label }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Status Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleStatusesExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Status</ion-label>
+                          @if (filters.statuses.length > 0) {
+                            <ion-badge color="primary">{{ filters.statuses.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isStatusesExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isStatusesExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (status of animeStatuses; track status.value) {
+                              <div class="checkbox-item" (click)="toggleFilter('statuses', status.value)">
+                                <ion-checkbox
+                                  [checked]="filters.statuses.includes(status.value)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ status.label }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Year Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-label class="filter-label">Year</ion-label>
+                      <div class="year-filter-wrapper">
+                        <ion-range
+                          [min]="1940"
+                          [max]="currentYear + 1"
+                          [value]="{lower: filters.yearRange.start, upper: filters.yearRange.end}"
+                          [dualKnobs]="true"
+                          [pin]="true"
+                          [snaps]="true"
+                          (ionChange)="onYearRangeChange($event)">
+                        </ion-range>
+                        <div class="year-labels">
+                          <span>{{ filters.yearRange.start }}</span>
+                          <span>{{ filters.yearRange.end }}</span>
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Genres Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleGenresExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Genres</ion-label>
+                          @if (filters.genres.length > 0) {
+                            <ion-badge color="danger">Adult</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isGenresExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isGenresExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (genre of genres; track genre.value) {
+                              <div class="checkbox-item" (click)="toggleFilter('genres', genre.value)">
+                                <ion-checkbox
+                                  [checked]="filters.genres.includes(genre.value)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ genre.label }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Tags Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleTagsExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Tags</ion-label>
+                          @if (filters.tags.length > 0) {
+                            <ion-badge color="secondary">{{ filters.tags.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isTagsExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isTagsExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (tag of tags; track tag.name) {
+                              <div
+                                class="checkbox-item"
+                                [title]="tag.description"
+                                (click)="toggleFilter('tags', tag.name)"
+                                >
+                                <ion-checkbox
+                                  [checked]="filters.tags.includes(tag.name)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">
+                                  {{ tag.name }}
+                                  @if (tag.isAdult) {
+                                    <ion-badge _ngcontent-ng-c1840000285="" color="danger" class="ion-color ion-color-danger md hydrated"><template shadowrootmode="open"><slot></slot></template>Adult</ion-badge>
+                                  }
+                                </span>
+
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Sort By -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleSortByExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Sort By</ion-label>
+                        </div>
+                        <ion-icon [name]="isSortByExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isSortByExpanded) {
+                        <div class="expandable-filter-content">
+                          <ion-radio-group [value]="filters.sortBy" (ionChange)="setFilter('sortBy', $event.detail.value)">
+                            <div class="radio-list">
+                              @for (sort of animeSortOptions; track sort.value) {
+                                <div class="radio-item">
+                                  <ion-radio [value]="sort.value" labelPlacement="start">
+                                    <div class="radio-label-with-icon">
+                                      <ion-icon [name]="sort.icon"></ion-icon>
+                                      <span>{{ sort.label }}</span>
+                                    </div>
+                                  </ion-radio>
+                                </div>
+                              }
+                            </div>
+                          </ion-radio-group>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              }
+
+              <!-- MANGA FILTERS -->
+              @if (category === 'manga') {
+                <ion-grid class="filter-grid">
+                  <!-- Format Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleFormatsExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Format</ion-label>
+                          @if (filters.formats.length > 0) {
+                            <ion-badge color="primary">{{ filters.formats.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isFormatsExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isFormatsExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (format of mangaFormats; track format.value) {
+                              <div class="checkbox-item" (click)="toggleFilter('formats', format.value)">
+                                <ion-checkbox
+                                  [checked]="filters.formats.includes(format.value)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ format.label }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Status Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleStatusesExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Status</ion-label>
+                          @if (filters.statuses.length > 0) {
+                            <ion-badge color="primary">{{ filters.statuses.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isStatusesExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isStatusesExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (status of mangaStatuses; track status.value) {
+                              <div class="checkbox-item" (click)="toggleFilter('statuses', status.value)">
+                                <ion-checkbox
+                                  [checked]="filters.statuses.includes(status.value)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ status.label }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Year Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-label class="filter-label">Year</ion-label>
+                      <div class="year-filter-wrapper">
+                        <ion-range
+                          [min]="1940"
+                          [max]="currentYear + 1"
+                          [value]="{lower: filters.yearRange.start, upper: filters.yearRange.end}"
+                          [dualKnobs]="true"
+                          [pin]="true"
+                          [snaps]="true"
+                          (ionChange)="onYearRangeChange($event)">
+                        </ion-range>
+                        <div class="year-labels">
+                          <span>{{ filters.yearRange.start }}</span>
+                          <span>{{ filters.yearRange.end }}</span>
+                        </div>
+                      </div>
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Genres Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleGenresExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Genres</ion-label>
+                          @if (filters.genres.length > 0) {
+                            <ion-badge color="secondary">{{ filters.genres.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isGenresExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+                      @if (isGenresExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (genre of genres; track genre.value) {
+                              <div class="checkbox-item" (click)="toggleFilter('genres', genre.value)">
+                                <ion-checkbox
+                                  [checked]="filters.genres.includes(genre.value)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ genre.label }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Tags Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleTagsExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Tags</ion-label>
+                          @if (filters.tags.length > 0) {
+                            <ion-badge color="secondary">{{ filters.tags.length }}</ion-badge>
+                          }
+                        </div>
+                        <ion-icon [name]="isTagsExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isTagsExpanded) {
+                        <div class="expandable-filter-content">
+                          <div class="checkbox-list">
+                            @for (tag of tags; track tag.name) {
+                              <div class="checkbox-item" (click)="toggleFilter('tags', tag.name)">
+                                <ion-checkbox
+                                  [checked]="filters.tags.includes(tag.name)">
+                                </ion-checkbox>
+                                <span class="checkbox-label">{{ tag.name }}</span>
+                              </div>
+                            }
+                          </div>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Sort By -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleSortByExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Sort By</ion-label>
+                        </div>
+                        <ion-icon [name]="isSortByExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isSortByExpanded) {
+                        <div class="expandable-filter-content">
+                          <ion-radio-group [value]="filters.sortBy" (ionChange)="setFilter('sortBy', $event.detail.value)">
+                            <div class="radio-list">
+                              @for (sort of mangaSortOptions; track sort.value) {
+                                <div class="radio-item">
+                                  <ion-radio [value]="sort.value" labelPlacement="start">
+                                    <div class="radio-label-with-icon">
+                                      <ion-icon [name]="sort.icon"></ion-icon>
+                                      <span>{{ sort.label }}</span>
+                                    </div>
+                                  </ion-radio>
+                                </div>
+                              }
+                            </div>
+                          </ion-radio-group>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              }
+
+              <!-- CHARACTER FILTERS -->
+              @if (category === 'characters') {
+                <ion-grid class="filter-grid">
+                  <!-- Birthday Today Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-chip
+                        [outline]="!filters.isBirthday"
+                        color="success"
+                        class="birthday-chip"
+                        (click)="toggleBirthdayFilter()">
+                        <ion-icon name="gift" class="ion-margin-end"></ion-icon>
+                        @if (filters.isBirthday) {
+                          <ion-icon name="checkmark" class="ion-margin-end"></ion-icon>
+                        }
+                        Birthday Today
+                      </ion-chip>
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Sort By -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleSortByExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Sort By</ion-label>
+                        </div>
+                        <ion-icon [name]="isSortByExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isSortByExpanded) {
+                        <div class="expandable-filter-content">
+                          <ion-radio-group [value]="filters.sortBy" (ionChange)="setFilter('sortBy', $event.detail.value)">
+                            <div class="radio-list">
+                              @for (sort of peopleSortOptions; track sort.value) {
+                                <div class="radio-item">
+                                  <ion-radio [value]="sort.value" labelPlacement="start">
+                                    <div class="radio-label-with-icon">
+                                      <ion-icon [name]="sort.icon"></ion-icon>
+                                      <span>{{ sort.label }}</span>
+                                    </div>
+                                  </ion-radio>
+                                </div>
+                              }
+                            </div>
+                          </ion-radio-group>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              }
+
+              <!-- STAFF FILTERS -->
+              @if (category === 'staff') {
+                <ion-grid class="filter-grid">
+                  <!-- Birthday Today Filter -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <ion-chip
+                        [outline]="!filters.isBirthday"
+                        color="success"
+                        class="birthday-chip"
+                        (click)="toggleBirthdayFilter()">
+                        <ion-icon name="gift" class="ion-margin-end"></ion-icon>
+                        @if (filters.isBirthday) {
+                          <ion-icon name="checkmark" class="ion-margin-end"></ion-icon>
+                        }
+                        Birthday Today
+                      </ion-chip>
+                    </ion-col>
+                  </ion-row>
+
+                  <!-- Sort By -->
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="expandable-filter-header" (click)="toggleSortByExpanded()">
+                        <div class="expandable-filter-title">
+                          <ion-label class="filter-label">Sort By</ion-label>
+                        </div>
+                        <ion-icon [name]="isSortByExpanded ? 'chevron-up' : 'chevron-down'"></ion-icon>
+                      </div>
+
+                      @if (isSortByExpanded) {
+                        <div class="expandable-filter-content">
+                          <ion-radio-group [value]="filters.sortBy" (ionChange)="setFilter('sortBy', $event.detail.value)">
+                            <div class="radio-list">
+                              @for (sort of peopleSortOptions; track sort.value) {
+                                <div class="radio-item">
+                                  <ion-radio [value]="sort.value" labelPlacement="start">
+                                    <div class="radio-label-with-icon">
+                                      <ion-icon [name]="sort.icon"></ion-icon>
+                                      <span>{{ sort.label }}</span>
+                                    </div>
+                                  </ion-radio>
+                                </div>
+                              }
+                            </div>
+                          </ion-radio-group>
+                        </div>
+                      }
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              }
+            </div>
+
+            <!-- Apply Filters Button -->
+            @if (isFilterPanelOpen && hasUnappliedFilters) {
+              <div class="apply-filters-section">
+                <ion-button
+                  expand="block"
+                  color="primary"
+                  (click)="applyFilters()">
+                  <ion-icon slot="start" name="checkmark-circle"></ion-icon>
+                  Apply Filters
+                </ion-button>
+              </div>
+            }
+          </ion-col>
+        </ion-row>
       </ion-row>
 
       <ion-row class="search-results">
-        @if (searchQuery.length === 0 && results.length === 0) {
+        @if (searchQuery.length === 0 && results.length === 0 && !hasActiveFilters()) {
           <ion-col class="empty-state">
             <ion-icon name="search-outline"></ion-icon>
-            <p>Start typing to search</p>
-            <p class="hint">Type at least 3 characters and press Enter</p>
+            <p>Start typing to search or apply filters</p>
+            <p class="hint">Type at least 3 characters or select filters</p>
           </ion-col>
-        } @else if (searchQuery.length < 3 && results.length === 0) {
+        } @else if (searchQuery.length < 3 && results.length === 0 && !hasActiveFilters()) {
           <ion-col class="empty-state">
             <ion-icon name="text-outline"></ion-icon>
-            <p>Type at least {{ 3 - searchQuery.length }} more character{{ (3 - searchQuery.length) > 1 ? 's' : '' }}</p>
+            <p>Type at least {{ 3 - searchQuery.length }} more character{{ (3 - searchQuery.length) > 1 ? 's' : '' }} or apply filters</p>
           </ion-col>
         } @else if (isSearching) {
           <ion-col class="empty-state">
@@ -108,13 +615,13 @@
         } @else {
           <!-- Search results will appear here -->
           <ion-col size="12" class="results-wrapper">
-            <ion-card-subtitle class="results-info">Searching for "{{ storedQuery }}"</ion-card-subtitle>
-            <div class="results-content-wrapper">
-              <ion-content #resultsContent class="results-content">
-                <ion-grid>
-                  <ion-row class="ion-padding-bottom">
-                    <!-- Add your search results items here -->
-                    @for (result of results; track result.id) {
+            @if (storedQuery.length > 0) {
+              <ion-card-subtitle class="results-info">Searching for "{{ storedQuery }}"</ion-card-subtitle>
+            }
+            <ion-grid>
+              <ion-row class="ion-padding-bottom">
+                <!-- Add your search results items here -->
+                @for (result of results; track result.id) {
                       @if (category === 'anime' || category === 'manga') {
                         <ion-col size="12" sizeMd="6" sizeLg="4">
                           <am-media-list-item
@@ -147,18 +654,17 @@
                     }
                   </ion-row>
                 </ion-grid>
-                <ion-infinite-scroll
-                  threshold="0px"
-                  (ionInfinite)="onIonInfinite($event)"
-                  >
-                  <ion-infinite-scroll-content loadingSpinner="bubbles"/>
-                </ion-infinite-scroll>
-              </ion-content>
-            </div>
+            <ion-infinite-scroll
+              threshold="0px"
+              (ionInfinite)="onIonInfinite($event)"
+              >
+              <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+            </ion-infinite-scroll>
           </ion-col>
         }
       </ion-row>
-    </ion-grid>
+      </ion-grid>
+    </ion-content>
   </div>
 
   <!-- QUICK ACCESS OPTIONS -->

@@ -2,27 +2,27 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { catchError, map, Observable, take, throwError } from 'rxjs';
 import {
-  TOGGLE_FAVORITE_CHARACTER,
-  TOGGLE_FAVORITE_MEDIA,
-  TOGGLE_FAVORITE_STAFF,
-  TOGGLE_FAVORITE_STUDIO,
-  UPDATE_USER_SETTINGS
+    TOGGLE_FAVORITE_CHARACTER,
+    TOGGLE_FAVORITE_MEDIA,
+    TOGGLE_FAVORITE_STAFF,
+    TOGGLE_FAVORITE_STUDIO,
+    UPDATE_USER_SETTINGS
 } from 'src/app/models/aniList/mutations';
 import {
-  AiringSchedulesResponse,
-  BasicMediaResponse,
-  CharacterResponse,
-  DetailedMediaResponse,
-  FavoriteToggleResult,
-  FavoriteType,
-  MediaListCollectionResponse,
-  SearchResponse,
-  StaffResponse,
-  UpdateUserResponse,
-  UpdateUserSettingsResult,
-  UserResponse,
-  UserSettingsInput,
-  ViewerResponse
+    AiringSchedulesResponse,
+    BasicMediaResponse,
+    CharacterResponse,
+    DetailedMediaResponse,
+    FavoriteToggleResult,
+    FavoriteType,
+    MediaListCollectionResponse,
+    SearchResponse,
+    StaffResponse,
+    UpdateUserResponse,
+    UpdateUserSettingsResult,
+    UserResponse,
+    UserSettingsInput,
+    ViewerResponse
 } from 'src/app/models/aniList/responseInterfaces';
 import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
@@ -298,6 +298,35 @@ export class ApiService {
           const errorMsg = this.formatNetworkError(err, 'Network error loading search results');
           this.showErrorToast(errorMsg);
         }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  // ============================================
+  // Genres and Tags Methods
+  // ============================================
+  /**
+   * Fetch genres and tags from AniList API
+   * @param query - GraphQL query for genres and tags
+   * @returns Observable with genres and tags data
+   */
+  getGenresAndTags(query: any): Observable<{
+    data: { genres: string[], tags: any[] } | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<{ genres: string[], tags: any[] }>({
+      query: query,
+      fetchPolicy: 'cache-first', // Cache this data as it doesn't change often
+    }).pipe(
+      map(result => ({
+        data: result.data,
+        loading: result.loading,
+        errors: result.errors ? result.errors[0] : undefined,
+      })),
+      catchError(err => {
+        console.error('Error fetching genres and tags:', err);
         return throwError(() => err);
       })
     );

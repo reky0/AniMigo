@@ -1,193 +1,31 @@
-// Full Screen Search Overlay
-.search-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  background: var(--ion-background-color);
-  z-index: 9999;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  display: flex;
-  flex-direction: column;
-
-  &.active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  // When there's an existing header in hybrid mode, position below it
-  &.has-header {
-    // Account for header height (~56px) + safe area
-    top: calc(56px + var(--ion-safe-area-top, 0));
-
-    .search-container {
-      padding-top: 0;
-    }
-  }
-}
-
-.search-container {
-  width: 100%;
-  max-width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-
-  // Only add safe area padding when there's no header
-  padding-top: var(--ion-safe-area-top, 0);
-
-  // Remove padding when header exists (it already handles safe area)
-  .search-overlay.has-header & {
-    padding-top: 0;
-  }
-}
-
-// Search Bar Styling
-.search-overlay ion-searchbar {
-  padding: 10px 5px;
-  --background: var(--ion-color-light);
-  --box-shadow: none;
-}
-
-.filter-chip {
-  border-radius: 10px;
-
-  ion-icon {
-    display: none;
-  }
-
-  &.active ion-icon {
-    display: block;
-  }
-}
-
-// Search Results Section
-.search-results {
-  padding: 16px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0; // Important for flexbox to allow shrinking
-  overflow: hidden;
-}
-
-// Empty State
-.empty-state {
-  align-items: center;
-  justify-content: center;
-  padding: 80px 20px;
-  color: var(--ion-color-medium);
-  text-align: center;
-
-  ion-icon {
-    font-size: 80px;
-    opacity: 0.3;
-    margin-bottom: 16px;
-  }
-
-  ion-spinner {
-    font-size: 48px;
-    margin-bottom: 16px;
-    --color: var(--ion-color-primary);
-  }
-
-  p {
-    font-size: 16px;
-    margin: 0;
-    opacity: 0.7;
-  }
-
-  .hint {
-    font-size: 14px;
-    margin-top: 8px;
-    opacity: 0.5;
-  }
-}
-
-// Results Content
-.results-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  padding: 0;
-}
-
-.results-info {
-  font-size: 14px;
-  color: var(--ion-color-medium);
-  margin: 0 0 12px 0;
-  padding: 0 8px;
-  flex-shrink: 0; // Don't let this shrink
-}
-
-.results-content-wrapper {
-  flex: 1;
-  min-height: 0; // Important for flexbox to allow shrinking
-  display: flex;
-  flex-direction: column;
-}
-
-.results-content {
-  animation: fadeIn 0.3s ease;
-  --background: transparent;
-  flex: 1;
-  min-height: 0; // Important for flexbox to allow shrinking
-  transition: .2 ease-in;
-}
+.search-overlay{position:fixed;inset:0;background:var(--ion-background-color);z-index:9999;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;display:flex;flex-direction:column;&.active{opacity:1;visibility:visible}&.has-header{top:calc(56px + var(--ion-safe-area-top,0))}}
+.search-header{flex-shrink:0;background:var(--ion-background-color);z-index:10;padding-top:var(--ion-safe-area-top,0);.search-overlay.has-header &{padding-top:0}}
+.search-content{flex:1;--background:var(--ion-background-color);overflow-y:auto}
+.search-container,.results-wrapper,.filter-panel-container{width:100%}
+.search-overlay ion-searchbar{padding:10px 5px;--background:var(--ion-color-light);--box-shadow:none}
+.filter-chips-container{padding:0}
+.filter-chip{border-radius:10px;margin:0;ion-icon{display:none}&.active ion-icon{display:block}}
+.apply-filters-section{padding:16px;background:var(--ion-background-color);ion-button{--border-radius:8px;font-weight:600;text-transform:none}}
+.search-results{padding:0 16px 16px}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;color:var(--ion-color-medium);text-align:center;ion-icon{font-size:64px;opacity:.3;margin-bottom:16px}ion-spinner{font-size:48px;margin-bottom:16px}p{margin:0;opacity:.7}.hint{font-size:14px;margin-top:8px;opacity:.5}}
+.results-info{font-size:14px;color:var(--ion-color-medium);margin:0 0 12px;padding:0 8px}
+ion-searchbar{--border-radius:20px}
+.searchbar-trigger{cursor:pointer;position:relative;ion-searchbar{pointer-events:none}}
+ion-modal{--border-radius:20px}
+.filter-panel-header,.expandable-filter-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--ion-color-light);border-radius:8px;cursor:pointer;margin-bottom:8px}
+.filter-panel-title,.expandable-filter-title{display:flex;align-items:center;gap:8px;font-weight:600;ion-icon{font-size:20px}ion-badge{margin-left:4px}.filter-label{margin:0}}
+.expandable-filter-header ion-icon{color:var(--ion-color-medium)}
+.filter-panel-content{max-height:0;overflow:hidden;transition:max-height .3s;&.expanded{max-height:2000px}}
+.filter-grid{padding:16px 0}
+.filter-label{display:block;font-weight:600;margin-bottom:12px;color:var(--ion-color-dark);font-size:14px}
+.filter-chips-wrapper{display:flex;flex-wrap:wrap;gap:8px;&.scrollable{flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px;ion-chip{width:40px}}ion-chip{margin:0;cursor:pointer}}
+.expandable-filter-content{margin-bottom:16px;padding:8px 0}
+.checkbox-list,.radio-list{display:flex;flex-direction:column;background:var(--ion-background-color);border-radius:8px;max-height:300px;overflow-y:auto}
+.checkbox-item,.radio-item{display:flex;align-items:center;min-height:48px;cursor:pointer}
+.checkbox-item{padding:12px 16px;ion-checkbox{margin-right:12px}.checkbox-label{flex:1;font-size:14px}}
+.radio-item{padding:0;ion-radio{width:100%;padding:0 16px;margin:0;--inner-padding-top:0;--inner-padding-bottom:0;--inner-padding-start:0;--inner-padding-end:0}.radio-label-with-icon{display:flex;align-items:center;gap:12px;font-size:14px;width:100%;ion-icon{font-size:20px;color:var(--ion-color-primary);opacity:.8}span{flex:1}}ion-radio.radio-checked .radio-label-with-icon{color:var(--ion-color-primary);font-weight:600;ion-icon{opacity:1}}}
+.birthday-chip{font-weight:600;padding:12px 16px;cursor:pointer}
+.year-filter-wrapper{padding:8px 16px;ion-range{padding:0}.year-labels{display:flex;justify-content:space-between;margin-top:8px;color:var(--ion-color-medium)}}
+@media(max-width:768px){.filter-panel-content.expanded{max-height:1500px}.filter-chips-wrapper{font-size:.9rem}}
 
 
-// Fade In Animation
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Smooth scrolling
-.search-results {
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--ion-color-medium);
-    border-radius: 3px;
-    opacity: 0.5;
-  }
-}
-
-ion-searchbar {
-  --border-radius: 20px;
-  padding: 5px;
-}
-
-.searchbar-trigger {
-  cursor: pointer;
-  position: relative;
-
-  ion-searchbar {
-    --border-radius: 20px;
-    padding: 5px;
-    pointer-events: none; // Prevent searchbar from capturing clicks
-  }
-}
-
-ion-modal {
-  --border-radius: 20px;
-}

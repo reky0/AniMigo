@@ -2,7 +2,7 @@
   @if (loading) {
     <ion-row class="img-container">
       <ion-col>
-        <ion-skeleton-text animated class="img-loading"></ion-skeleton-text>
+        <ion-skeleton-text animated class="img-loading skeleton-circle"></ion-skeleton-text>
       </ion-col>
     </ion-row>
     <ion-row class="label-loading-container">
@@ -11,11 +11,11 @@
       </ion-col>
     </ion-row>
   } @else {
-    <ion-row class="img-container">
+    <ion-row class="img-container pos-relative">
       <ion-col>
         <ion-img [src]="image" class="img" (ionError)="onImageError()"></ion-img>
         @if (isFavourite) {
-          <div class="favorite-tag"> <ion-icon name="heart" class="heart-icon"></ion-icon></div>
+          <div class="favorite-tag tag-corner tag-corner-tl tag-favorite"> <ion-icon name="heart" class="heart-icon"></ion-icon></div>
         }
       </ion-col>
     </ion-row>

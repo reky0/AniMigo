@@ -8,11 +8,8 @@
     display: flex;
     margin: 0;
     text-align: center;
-
     cursor: default;
     pointer-events: none;
-
-
 
     * {
       cursor: inherit;
@@ -24,8 +21,8 @@
       ion-text,
       ion-note {
         display: flex;
-        justify-content: center; /* vertical centering */
-        align-items: center; /* horizontal centering */
+        justify-content: center;
+        align-items: center;
         height: 100%;
       }
 
@@ -60,3 +57,5 @@
 :host([horizontal]) {
   flex-direction: row;
 }
+
+

@@ -60,3 +60,277 @@
 ion-skeleton-text {
   border-radius: 20px;
 }
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Border Radius Utilities */
+.radius-lg { border-radius: 20px; }
+.radius-md { border-radius: 10px; }
+.radius-sm { border-radius: 8px; }
+.radius-circle { border-radius: 100%; }
+.radius-pill { border-radius: 50px; }
+
+/* Flexbox Utilities */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-center { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+.flex-between { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+}
+.flex-start { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-start; 
+}
+.flex-end { 
+  display: flex; 
+  align-items: center; 
+  justify-content: flex-end; 
+}
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+.flex-grow-1 { flex-grow: 1; }
+
+/* Text Utilities */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.text-truncate-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.text-center { text-align: center; }
+.text-medium { color: var(--ion-color-medium); }
+
+/* Position Utilities */
+.pos-relative { position: relative; }
+.pos-absolute { position: absolute; }
+.pos-fill {
+  position: absolute;
+  inset: 0;
+}
+
+/* Cursor Utilities */
+.cursor-pointer { cursor: pointer; }
+
+/* Image Utilities */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Common Component Patterns */
+.tag-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 2;
+}
+.tag-corner-tl {
+  border-radius: 10px 0 10px 0;
+}
+.tag-corner-tr {
+  left: auto;
+  right: 0;
+  border-radius: 0 10px 0 10px;
+}
+.tag-favorite {
+  background-color: var(--ion-color-danger);
+  color: white;
+}
+.tag-rank {
+  background-color: var(--ion-color-secondary);
+  color: var(--ion-color-secondary-contrast);
+}
+
+/* Gradient Overlays */
+.gradient-overlay-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(to bottom, transparent, var(--ion-background-color));
+  pointer-events: none;
+}
+.gradient-fade-top {
+  background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, 0.2), 
+    rgba(0, 0, 0, 0.5), 
+    rgba(0, 0, 0, 0.8), 
+    rgba(0, 0, 0, 1)
+  );
+  opacity: 0.7;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: var(--ion-color-medium);
+  text-align: center;
+
+  ion-icon {
+    font-size: 64px;
+    opacity: 0.3;
+    margin-bottom: 16px;
+  }
+  
+  ion-spinner {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    margin: 0;
+    opacity: 0.7;
+  }
+  
+  .hint {
+    font-size: 14px;
+    margin-top: 8px;
+    opacity: 0.5;
+  }
+}
+
+/* Skeleton Loading */
+.skeleton-text {
+  height: 20px;
+  border-radius: 8px;
+}
+.skeleton-circle {
+  border-radius: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* Section Header Pattern */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+/* Rounded Segment Buttons */
+.segment-rounded {
+  border-radius: 50px;
+  border: 1.5px solid white;
+
+  ion-segment-button {
+    --color-checked: white;
+    --background-checked: #ffffff50;
+  }
+}
+
+/* Modal Utilities */
+ion-modal.modal-rounded {
+  --border-radius: 20px;
+}
+
+/* Horizontal Scroll Container */
+.horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  flex-direction: row;
+  gap: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+
+/* Icon Button Circle */
+.icon-btn-circle {
+  background-color: #343434;
+  border-radius: 100%;
+  padding: 2px;
+  cursor: pointer;
+}
+
+/* Ripple Effect */
+.ripple-effect {
+  ion-ripple-effect {
+    color: var(--ion-color-tertiary);
+    --ripple-color: var(--ion-color-tertiary);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  ion-ripple-effect::part(native) {
+    animation-duration: 150ms;
+  }
+}
+
+/* Aspect Ratios */
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+.aspect-portrait {
+  padding-bottom: 140%;
+}
+
+/* Overflow Hidden */
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-y-auto { overflow-y: auto; }
+.overflow-x-auto { overflow-x: auto; }
+
+/* Width/Height Utilities */
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.h-auto { height: auto; }

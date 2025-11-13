@@ -6,7 +6,6 @@
   width: 90%;
   max-width: 400px;
   text-align: center;
-
   border-radius: 20px;
 
   .img {
@@ -22,50 +21,43 @@
   height: 25vh;
   overflow: hidden;
 }
+
 .banner-image {
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    135deg,
-    var(--ion-color-primary),
-    var(--ion-color-secondary)
-  );
+  background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary));
   background-size: cover;
   background-position: center;
 }
+
 .banner-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 100px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    var(--ion-background-color)
-  );
+  background: linear-gradient(to bottom, transparent, var(--ion-background-color));
 }
+
 .profile-header {
   margin-top: -60px;
   padding: 0 16px 24px;
   position: relative;
   z-index: 10;
-
 }
+
 .profile-header-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
+
 .avatar-container {
   position: relative;
   flex-shrink: 0;
   width: auto;
-
-  @media (max-width: 767px) {
-    // justify-content: center;
-  }
 }
+
 .profile-avatar {
   width: 150px;
   height: 150px;
@@ -76,19 +68,21 @@
     height: 120px;
   }
 }
+
 .user-info {
   flex: 1;
 }
+
 .username {
   font-size: 28px;
   font-weight: 700;
   margin: 0 0 8px;
-  // padding-inline: 0;
 
   @media (max-width: 767px) {
     text-align: center;
   }
 }
+
 .user-bio {
   font-size: 14px;
   color: var(--ion-color-medium);
@@ -99,17 +93,18 @@
     text-align: center;
   }
 }
+
 .user-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-
   justify-content: end;
 
   @media (max-width: 767px) {
     justify-content: center;
   }
 }
+
 .meta-item {
   display: flex;
   align-items: center;
@@ -117,6 +112,7 @@
   font-size: 13px;
   color: var(--ion-color-medium);
 }
+
 .profile-actions {
   display: flex;
   gap: 8px;
@@ -134,62 +130,68 @@
       align-self: flex-end;
     }
   }
-
 }
+
 .stats-section {
   padding: 0 16px;
-  @media (max-width: 767px) {
-    padding: 0 24px;
-  }
 }
+
 .stats-card {
   margin: 0;
 }
+
 .stat-item {
   text-align: center;
   padding: 8px 0;
 }
+
 .stat-value {
   font-size: 24px;
   font-weight: 700;
   color: var(--ion-color-primary);
+
   @media (max-width: 767px) {
     font-size: 28px;
   }
 }
+
 .stat-label {
   font-size: 12px;
   color: var(--ion-color-medium);
   text-transform: uppercase;
 }
+
 .profile-content {
   padding: 0 16px 32px;
-  @media (max-width: 767px) {
-    padding: 0 24px 40px;
-  }
 }
+
 .content-section {
   margin-bottom: 24px;
 }
+
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+
   h2 {
     font-size: 20px;
     font-weight: 600;
     margin: 0;
   }
 }
+
 .favorites-grid {
   padding: 0;
 }
+
 .favorite-item {
   position: relative;
   margin-bottom: 12px;
   cursor: pointer;
 }
+
 .favorite-image {
   position: relative;
   width: 100%;
@@ -197,6 +199,7 @@
   border-radius: 8px;
   overflow: hidden;
   background: var(--ion-color-light);
+
   img {
     position: absolute;
     top: 0;
@@ -206,6 +209,7 @@
     object-fit: cover;
   }
 }
+
 .favorite-title {
   margin-top: 8px;
   font-size: 13px;
@@ -214,32 +218,39 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .genre-card {
   margin: 0;
 }
+
 .genre-item {
   margin-bottom: 16px;
+
   &:last-child {
     margin-bottom: 0;
   }
 }
+
 .genre-info {
   display: flex;
   justify-content: space-between;
   margin-bottom: 8px;
 }
+
 .genre-name {
   font-size: 14px;
 }
+
 .genre-count {
   font-size: 13px;
   color: var(--ion-color-medium);
 }
+
 .list-stats-card {
   margin: 0;
 
   ion-badge {
-    padding: 10px
+    padding: 10px;
   }
 }
 
@@ -251,7 +262,6 @@
   padding: 20px;
 }
 
-
 ion-modal {
   --border-radius: 20px;
 
@@ -260,3 +270,5 @@ ion-modal {
     width: 100%;
   }
 }
+
+
