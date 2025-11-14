@@ -80,6 +80,13 @@ export class InfoTabComponent implements OnInit {
     }
   }
 
+  get hasSpoilerTags(): boolean {
+    if (!this.data?.tags) {
+      return false;
+    }
+    return this.data.tags.some(tag => tag.isMediaSpoiler || tag.isGeneralSpoiler);
+  }
+
   toggleShowSpoilerTags() {
     this.showSpoilerTags = !this.showSpoilerTags;
   }

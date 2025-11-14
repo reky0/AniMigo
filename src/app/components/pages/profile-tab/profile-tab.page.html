@@ -154,6 +154,7 @@
                             [title]="favoriteAnime[i-1].title.english || favoriteAnime[i-1].title.romaji"
                             [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
                             [fallbackImage]="favoriteAnime[i-1].coverImage.large"
+                            [mediaStatus]="favoriteAnime[i-1].mediaListEntry?.status"
                             (click)="goToDetails({id: favoriteAnime[i-1].id, type: favoriteAnime[i-1].type, isAdult: favoriteAnime[i-1].isAdult})"
                             />
                         </ion-col>
@@ -191,6 +192,7 @@
                             [title]="favoriteManga[i-1].title.english || favoriteManga[i-1].title.romaji"
                             [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
                             [fallbackImage]="favoriteManga[i-1].coverImage.large"
+                            [mediaStatus]="favoriteManga[i-1].mediaListEntry?.status"
                             (click)="goToDetails({id: favoriteManga[i-1].id, type: favoriteManga[i-1].type, isAdult: favoriteManga[i-1].isAdult})"
                             />
                         </ion-col>

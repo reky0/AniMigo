@@ -141,9 +141,11 @@
       @if (data.tags && data.tags.length > 0) {
         <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
           <ion-card-title style="margin: 0;">Tags</ion-card-title>
-          <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
-            {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
-          </ion-button>
+          @if (hasSpoilerTags) {
+            <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
+              {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
+            </ion-button>
+          }
         </div>
 
         <am-collapsible [thresholdHeight]="100">

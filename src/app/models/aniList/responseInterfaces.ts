@@ -23,6 +23,9 @@ export interface BasicMedia {
   startDate?: FuzzyDate;
   format?: string | null;
   isFavourite?: boolean | null;
+  mediaListEntry?: {
+    status: string;
+  } | null;
 }
 
 export interface BasicMediaResponse {
@@ -241,6 +244,20 @@ export interface DetailedMedia {
   rankings?: Array<Ranking> | null;
 
   stats?: Stats;
+
+  mediaListEntry?: {
+    id: number;
+    status: string;
+    score: number;
+    progress: number;
+    progressVolumes?: number | null;
+    repeat: number;
+    private: boolean;
+    hiddenFromStatusLists: boolean;
+    notes?: string | null;
+    startedAt?: FuzzyDate | null;
+    completedAt?: FuzzyDate | null;
+  } | null;
 }
 
 export interface DetailedMediaResponse {
@@ -529,6 +546,9 @@ export interface FavouriteMedia {
     averageScore?: number | null;
     isAdult?: boolean | null;
     isFavourite?: boolean | null;
+    mediaListEntry?: {
+      status: string;
+    } | null;
   }>;
   pageInfo?: PageInfo;
 }

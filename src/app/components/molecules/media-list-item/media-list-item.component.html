@@ -12,6 +12,12 @@
     @if (isFavourite) {
       <div class="rank-tag favourite" [class.hasTag]="tag ? true : false"> <ion-icon name="heart" class="heart-icon" /></div>
     }
+
+    @if (media.mediaListEntry?.status) {
+      <div class="status-tag tag-corner tag-corner-bl" [attr.data-status]="media.mediaListEntry.status">
+        <ion-icon [name]="getStatusIcon(media.mediaListEntry.status)"></ion-icon>
+      </div>
+    }
   </ion-col>
   <ion-col size="9" class="content-container ion-padding">
     <ion-row class="ion-no-padding ion-align-items-start content-top">

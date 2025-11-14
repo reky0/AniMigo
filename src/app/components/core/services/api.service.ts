@@ -2,27 +2,29 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { catchError, map, Observable, take, throwError } from 'rxjs';
 import {
-    TOGGLE_FAVORITE_CHARACTER,
-    TOGGLE_FAVORITE_MEDIA,
-    TOGGLE_FAVORITE_STAFF,
-    TOGGLE_FAVORITE_STUDIO,
-    UPDATE_USER_SETTINGS
+  DELETE_MEDIA_LIST_ENTRY,
+  SAVE_MEDIA_LIST_ENTRY,
+  TOGGLE_FAVORITE_CHARACTER,
+  TOGGLE_FAVORITE_MEDIA,
+  TOGGLE_FAVORITE_STAFF,
+  TOGGLE_FAVORITE_STUDIO,
+  UPDATE_USER_SETTINGS
 } from 'src/app/models/aniList/mutations';
 import {
-    AiringSchedulesResponse,
-    BasicMediaResponse,
-    CharacterResponse,
-    DetailedMediaResponse,
-    FavoriteToggleResult,
-    FavoriteType,
-    MediaListCollectionResponse,
-    SearchResponse,
-    StaffResponse,
-    UpdateUserResponse,
-    UpdateUserSettingsResult,
-    UserResponse,
-    UserSettingsInput,
-    ViewerResponse
+  AiringSchedulesResponse,
+  BasicMediaResponse,
+  CharacterResponse,
+  DetailedMediaResponse,
+  FavoriteToggleResult,
+  FavoriteType,
+  MediaListCollectionResponse,
+  SearchResponse,
+  StaffResponse,
+  UpdateUserResponse,
+  UpdateUserSettingsResult,
+  UserResponse,
+  UserSettingsInput,
+  ViewerResponse
 } from 'src/app/models/aniList/responseInterfaces';
 import { AuthService } from './auth.service';
 import { ToastService } from './toast.service';
@@ -759,6 +761,106 @@ export class ApiService {
       case 'STUDIO': return 'Studio';
       default: return 'Item';
     }
+  }
+
+  // ============================================
+  // Media List Entry Methods
+  // ============================================
+  /**
+   * Save or update a media list entry
+   * @param variables - Object containing entry data to save
+   * @param showToast - Whether to show success/error toasts
+   * @returns Observable with the saved entry data
+   *
+   * @example
+   * // Add to planning list
+   * saveMediaListEntry({ mediaId: 123, status: 'PLANNING' })
+   *
+   * @example
+   * // Update with progress and score
+   * saveMediaListEntry({
+   *   mediaId: 123,
+   *   status: 'CURRENT',
+   *   progress: 5,
+   *   score: 8.5
+   * })
+   */
+  saveMediaListEntry(
+    variables: {
+      mediaId?: number;
+      status?: 'CURRENT' | 'PLANNING' | 'COMPLETED' | 'DROPPED' | 'PAUSED' | 'REPEATING';
+      score?: number;
+      progress?: number;
+      progressVolumes?: number;
+      repeat?: number;
+      private?: boolean;
+      hiddenFromStatusLists?: boolean;
+      notes?: string;
+      startedAt?: { year?: number; month?: number; day?: number };
+      completedAt?: { year?: number; month?: number; day?: number };
+    },
+    showToast = true
+  ): Observable<any> {
+    return this.apollo.mutate({
+      mutation: SAVE_MEDIA_LIST_ENTRY,
+      variables
+    }).pipe(
+      map((result: any) => {
+        if (showToast) {
+          this.toastService.success('Entry saved successfully');
+        }
+        return {
+          success: true,
+          data: result.data.SaveMediaListEntry
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatGraphQLError(err, 'Failed to save entry');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => ({
+          success: false,
+          error: err.message || 'Failed to save entry'
+        }));
+      })
+    );
+  }
+
+  /**
+   * Delete a media list entry
+   * @param id - ID of the media list entry to delete
+   * @param showToast - Whether to show success/error toasts
+   * @returns Observable with deletion result
+   */
+  deleteMediaListEntry(
+    id: number,
+    showToast = true
+  ): Observable<any> {
+    return this.apollo.mutate({
+      mutation: DELETE_MEDIA_LIST_ENTRY,
+      variables: { id }
+    }).pipe(
+      map((result: any) => {
+        if (showToast) {
+          this.toastService.success('Entry deleted successfully');
+        }
+        return {
+          success: true,
+          deleted: result.data.DeleteMediaListEntry.deleted
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatGraphQLError(err, 'Failed to delete entry');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => ({
+          success: false,
+          error: err.message || 'Failed to delete entry'
+        }));
+      })
+    );
   }
 
   // ============================================

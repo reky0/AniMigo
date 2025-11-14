@@ -60,6 +60,9 @@ export const GET_MEDIA_LIST = gql`
         format
         isFavourite
         isAdult
+        mediaListEntry {
+          status
+        }
       }
     }
   }
@@ -98,6 +101,27 @@ export const GET_MEDIA_BY_ID = gql`
       type
       popularity
       favourites
+      mediaListEntry {
+        id
+        status
+        score
+        progress
+        progressVolumes
+        repeat
+        private
+        hiddenFromStatusLists
+        notes
+        startedAt {
+          year
+          month
+          day
+        }
+        completedAt {
+          year
+          month
+          day
+        }
+      }
       nextAiringEpisode {
         episode
         timeUntilAiring
@@ -536,6 +560,9 @@ export const GET_AIRING_SCHEDULES = gql`
           }
           type
           isAdult
+          mediaListEntry {
+            status
+          }
         }
         episode
         airingAt
@@ -590,6 +617,9 @@ export const SEARCH_MEDIA = gql`
         format
         startDate {
           year
+        }
+        mediaListEntry {
+          status
         }
       }
     }
@@ -1023,6 +1053,9 @@ export const GET_USER_FAVOURITES = gql`
             averageScore
             isAdult
             isFavourite
+            mediaListEntry {
+              status
+            }
           }
         }
         manga(page: $mangaPage, perPage: $perPage) {
@@ -1050,6 +1083,9 @@ export const GET_USER_FAVOURITES = gql`
             averageScore
             isAdult
             isFavourite
+            mediaListEntry {
+              status
+            }
           }
         }
         characters(page: $charactersPage, perPage: $perPage) {
@@ -1281,6 +1317,9 @@ export const GET_USER_PROFILE_DATA = gql`
             seasonYear
             averageScore
             isAdult
+            mediaListEntry {
+              status
+            }
           }
         }
         manga(page: 1, perPage: 9) {
@@ -1300,6 +1339,9 @@ export const GET_USER_PROFILE_DATA = gql`
             seasonYear
             averageScore
             isAdult
+            mediaListEntry {
+              status
+            }
           }
         }
         characters(page: 1, perPage: 9) {

@@ -83,6 +83,87 @@ export const TOGGLE_FAVORITE_STUDIO = gql`
 // ============================================
 
 /**
+ * Save or update a media list entry
+ * @param mediaId - ID of the media
+ * @param status - Media list status (CURRENT, PLANNING, COMPLETED, DROPPED, PAUSED, REPEATING)
+ * @param score - Score rating (0-10 or based on user's scoring system)
+ * @param progress - Episode/chapter progress
+ * @param progressVolumes - Volume progress (manga only)
+ * @param repeat - Number of times rewatched/reread
+ * @param private - Whether the entry is private
+ * @param hiddenFromStatusLists - Hide from status lists
+ * @param notes - Personal notes
+ * @param startedAt - Start date (FuzzyDateInput with year, month, day)
+ * @param completedAt - Completion date (FuzzyDateInput with year, month, day)
+ * @returns Updated media list entry
+ */
+export const SAVE_MEDIA_LIST_ENTRY = gql`
+  mutation SaveMediaListEntry(
+    $mediaId: Int
+    $status: MediaListStatus
+    $score: Float
+    $progress: Int
+    $progressVolumes: Int
+    $repeat: Int
+    $private: Boolean
+    $hiddenFromStatusLists: Boolean
+    $notes: String
+    $startedAt: FuzzyDateInput
+    $completedAt: FuzzyDateInput
+  ) {
+    SaveMediaListEntry(
+      mediaId: $mediaId
+      status: $status
+      score: $score
+      progress: $progress
+      progressVolumes: $progressVolumes
+      repeat: $repeat
+      private: $private
+      hiddenFromStatusLists: $hiddenFromStatusLists
+      notes: $notes
+      startedAt: $startedAt
+      completedAt: $completedAt
+    ) {
+      id
+      mediaId
+      status
+      score
+      progress
+      progressVolumes
+      repeat
+      private
+      hiddenFromStatusLists
+      notes
+      startedAt {
+        year
+        month
+        day
+      }
+      completedAt {
+        year
+        month
+        day
+      }
+      updatedAt
+      createdAt
+    }
+  }
+`;
+
+/**
+ * Delete a media list entry
+ * @param id - ID of the media list entry to delete
+ * @returns Deleted entry data
+ */
+export const DELETE_MEDIA_LIST_ENTRY = gql`
+  mutation DeleteMediaListEntry($id: Int) {
+    DeleteMediaListEntry(id: $id) {
+      deleted
+    }
+  }
+`;
+
+/**
  * Update user settings
  * @param titleLanguage - Preferred title language (ROMAJI, ENGLISH, NATIVE, ROMAJI_STYLISED, ENGLISH_STYLISED, NATIVE_STYLISED)
  * @param displayAdultContent - Whether to display adult content

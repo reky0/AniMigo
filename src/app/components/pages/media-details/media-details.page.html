@@ -79,6 +79,75 @@
                     fill="outline"
                     >Open in AniList</ion-button>
                 </ion-col>
+
+                <!-- FAB inline for desktop (large screens and above) -->
+                @if (authService.isAuthenticated()) {
+                  <ion-col size="12" class="inline-fab-container hidden-tablet-down">
+                    <div
+                      class="custom-fab-container inline-mode"
+                      [class.fab-open]="isFabOpen"
+                      [class.touch-device]="isTouchDevice()">
+
+                      <!-- Main FAB Container -->
+                      <div class="main-fab-wrapper">
+                        <!-- Main Action Button (Add to List) -->
+                        <ion-button
+                          class="main-fab-button"
+                          shape="round"
+                        color="primary"
+                        (touchstart)="onMainButtonTouchStart($event)"
+                        (touchend)="onMainButtonTouchEnd($event)"
+                        (click)="onMainButtonClick()"
+                        (contextmenu)="$event.preventDefault()">
+                        <ion-icon slot="start" [name]="getMainButtonIcon()"></ion-icon>
+                        <ion-label>{{ getMainButtonLabel() }}</ion-label>
+                      </ion-button>
+
+                      <!-- Quick Actions Toggle Button (Arrow) -->
+                      <ion-button
+                        class="toggle-fab-button"
+                        shape="round"
+                        color="primary"
+                        (touchstart)="onToggleButtonTouchStart($event)"
+                        (touchend)="onToggleButtonTouchEnd($event)"
+                        (click)="onToggleButtonClick($event)"
+                        (contextmenu)="$event.preventDefault()">
+                        <ion-icon
+                          slot="icon-only"
+                          [name]="getChevronIcon()">
+                        </ion-icon>
+                      </ion-button>
+                    </div>
+
+                    <!-- Quick Actions Buttons (shown when expanded - below button) -->
+                    <div class="quick-actions-list" [class.visible]="isFabOpen">
+                      <ion-button
+                        class="quick-action-btn"
+                        shape="round"
+                        color="primary"
+                        (click)="onQuickAction('planning')">
+                        <ion-icon slot="icon-only" name="time"></ion-icon>
+                      </ion-button>
+
+                      <ion-button
+                        class="quick-action-btn"
+                        shape="round"
+                        color="success"
+                        (click)="onQuickAction('completed')">
+                        <ion-icon slot="icon-only" name="checkmark-circle"></ion-icon>
+                      </ion-button>
+
+                      <ion-button
+                        class="quick-action-btn"
+                        shape="round"
+                        color="tertiary"
+                        (click)="onQuickAction('watching')">
+                        <ion-icon slot="icon-only" name="play"></ion-icon>
+                      </ion-button>
+                    </div>
+                  </div>
+                  </ion-col>
+                }
               </ion-row>
             </ion-col>
           </ion-row>
@@ -221,4 +290,336 @@
       </ion-content>
     </ng-template>
   </ion-modal>
+
+  @if (authService.isAuthenticated()) {
+    <!-- Redesigned FAB Button with Split Functionality (Floating - Tablet and below only) -->
+    <div
+      class="custom-fab-container floating-mode hidden-lg-up"
+      [class.fab-open]="isFabOpen"
+      [class.touch-device]="isTouchDevice()"
+      [class.tablet-mode]="isTabletOrAbove()">
+      <!-- Hover functionality disabled for now -->
+      <!-- (mouseenter)="onFabContainerMouseEnter()"
+      (mouseleave)="onFabContainerMouseLeave()"> -->
+
+      <!-- Quick Actions Buttons (shown when expanded) -->
+      <div class="quick-actions-list" [class.visible]="isFabOpen">
+        <ion-button
+          class="quick-action-btn"
+          shape="round"
+          color="primary"
+          title="Planning"
+          (click)="onQuickAction('planning')">
+          <ion-icon slot="icon-only" name="time"></ion-icon>
+        </ion-button>
+
+        <ion-button
+          class="quick-action-btn"
+          shape="round"
+          color="success"
+          title="Completed"
+          (click)="onQuickAction('completed')">
+          <ion-icon slot="icon-only" name="checkmark-circle"></ion-icon>
+        </ion-button>
+
+        <ion-button
+          class="quick-action-btn"
+          shape="round"
+          color="tertiary"
+          title="Watching"
+          (click)="onQuickAction('watching')">
+          <ion-icon slot="icon-only" name="play"></ion-icon>
+        </ion-button>
+      </div>
+
+      <!-- Main FAB Container -->
+      <div class="main-fab-wrapper">
+        <!-- Main Action Button (Add to List) -->
+        <ion-button
+          class="main-fab-button"
+          shape="round"
+          color="primary"
+          (touchstart)="onMainButtonTouchStart($event)"
+          (touchend)="onMainButtonTouchEnd($event)"
+          (click)="onMainButtonClick()"
+          (contextmenu)="$event.preventDefault()">
+          <ion-icon slot="start" [name]="getMainButtonIcon()"></ion-icon>
+          <ion-label>{{ getMainButtonLabel() }}</ion-label>
+        </ion-button>
+
+        <!-- Quick Actions Toggle Button (Arrow) -->
+        <ion-button
+          class="toggle-fab-button"
+          shape="round"
+          color="primary"
+          (touchstart)="onToggleButtonTouchStart($event)"
+          (touchend)="onToggleButtonTouchEnd($event)"
+          (click)="onToggleButtonClick($event)"
+          (contextmenu)="$event.preventDefault()">
+          <ion-icon
+            slot="icon-only"
+            [name]="getChevronIcon()">
+          </ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  }
+
+  <!-- Detailed Menu Modal -->
+  <ion-modal
+    [isOpen]="showHelloModal"
+    (didDismiss)="closeDetailedMenu()"
+    [backdropDismiss]="true"
+    class="detailed-menu-modal">
+    <ng-template>
+      <div class="modal-wrapper" (click)="closeDetailedMenu()">
+        <ion-card class="modal-card" (click)="$event.stopPropagation()">
+          <ion-card-header>
+            <div class="header-content">
+              <ion-button fill="clear" class="header-btn" (click)="closeDetailedMenu()">
+                Cancel
+              </ion-button>
+              <!-- <ion-card-title>{{ data?.title?.userPreferred || 'Options' }}</ion-card-title> -->
+              <ion-button fill="clear" class="header-btn save-btn" (click)="saveDetailedMenu()">
+                Save
+              </ion-button>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <!-- Quick action buttons -->
+            <div class="quick-actions-grid">
+              <ion-button
+                fill="clear"
+                class="action-icon-btn"
+                [class.selected]="modalFormData.status === 'CURRENT'"
+                [title]="data?.type === 'ANIME' ? 'Watching' : 'Reading'"
+                (click)="setModalStatus('CURRENT')">
+                <ion-icon slot="icon-only" name="play-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                class="action-icon-btn"
+                [class.selected]="modalFormData.status === 'PLANNING'"
+                [title]="data?.type === 'ANIME' ? 'Plan to Watch' : 'Plan to Read'"
+                (click)="setModalStatus('PLANNING')">
+                <ion-icon slot="icon-only" name="time-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                class="action-icon-btn"
+                [class.selected]="modalFormData.status === 'COMPLETED'"
+                title="Completed"
+                (click)="setModalStatus('COMPLETED')">
+                <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                class="action-icon-btn"
+                [class.selected]="modalFormData.status === 'DROPPED'"
+                title="Dropped"
+                (click)="setModalStatus('DROPPED')">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                class="action-icon-btn"
+                [class.selected]="modalFormData.status === 'PAUSED'"
+                title="On Hold"
+                (click)="setModalStatus('PAUSED')">
+                <ion-icon slot="icon-only" name="pause-circle-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                class="action-icon-btn"
+                [class.selected]="modalFormData.status === 'REPEATING'"
+                [title]="data?.type === 'ANIME' ? 'Rewatching' : 'Rereading'"
+                (click)="setModalStatus('REPEATING')">
+                <ion-icon slot="icon-only" name="repeat-outline"></ion-icon>
+              </ion-button>
+            </div>
+
+            <!-- Progress section - conditional based on type -->
+            <div class="option-section">
+              @if (data?.type === 'ANIME') {
+                <div class="option-item">
+                  <ion-icon name="play-outline"></ion-icon>
+                  <span class="option-label">{{ modalFormData.progress || 0 }} Episodes</span>
+                  <div class="counter-controls">
+                    <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementProgress()">
+                      <ion-icon slot="icon-only" name="remove"></ion-icon>
+                    </ion-button>
+                    <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementProgress()">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+              }
+
+              @if (data?.type === 'MANGA') {
+                <div class="option-item">
+                  <ion-icon name="book-outline"></ion-icon>
+                  <span class="option-label">{{ modalFormData.progress || 0 }} Chapters</span>
+                  <div class="counter-controls">
+                    <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementProgress()">
+                      <ion-icon slot="icon-only" name="remove"></ion-icon>
+                    </ion-button>
+                    <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementProgress()">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+
+                <div class="option-item">
+                  <ion-icon name="bookmark-outline"></ion-icon>
+                  <span class="option-label">{{ modalFormData.progressVolumes || 0 }} Volumes</span>
+                  <div class="counter-controls">
+                    <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementVolumes()">
+                      <ion-icon slot="icon-only" name="remove"></ion-icon>
+                    </ion-button>
+                    <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementVolumes()">
+                      <ion-icon slot="icon-only" name="add"></ion-icon>
+                    </ion-button>
+                  </div>
+                </div>
+              }
+
+              <div class="option-item">
+                <ion-icon name="star-outline"></ion-icon>
+                <span class="option-label">{{ modalFormData.score || '—' }}/10</span>
+                <div class="counter-controls">
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementScore()">
+                    <ion-icon slot="icon-only" name="remove"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementScore()">
+                    <ion-icon slot="icon-only" name="add"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Dates and repetitions section -->
+            <div class="option-section">
+              <div class="option-item clickable" (click)="openStartDatePicker()">
+                <ion-icon name="calendar-outline"></ion-icon>
+                <span class="option-label">{{ getStartDateLabel() }}</span>
+              </div>
+
+              <div class="option-item clickable" (click)="openEndDatePicker()">
+                <ion-icon name="calendar-clear-outline"></ion-icon>
+                <span class="option-label">{{ getEndDateLabel() }}</span>
+              </div>
+
+              <div class="option-item">
+                <ion-icon name="repeat-outline"></ion-icon>
+                <span class="option-label">{{ modalFormData.repeat || 0 }} Total rewatches</span>
+                <div class="counter-controls">
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementRepeat()">
+                    <ion-icon slot="icon-only" name="remove"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementRepeat()">
+                    <ion-icon slot="icon-only" name="add"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Toggle options -->
+            <div class="option-section">
+              <div class="option-item toggle-item">
+                <ion-icon name="eye-off-outline"></ion-icon>
+                <span class="option-label">Hide from status lists</span>
+                <ion-toggle slot="end" [(ngModel)]="modalFormData.hiddenFromStatusLists"></ion-toggle>
+              </div>
+
+              <div class="option-item toggle-item">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+                <span class="option-label">Private</span>
+                <ion-toggle slot="end" [(ngModel)]="modalFormData.private"></ion-toggle>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Notes section -->
+            <div class="option-section">
+              <div class="notes-container">
+                <div class="notes-header">
+                  <ion-icon name="list-outline"></ion-icon>
+                  <span class="option-label">Notes</span>
+                </div>
+                <ion-textarea
+                  [(ngModel)]="modalFormData.notes"
+                  placeholder="Add your notes here..."
+                  rows="4"
+                  class="notes-textarea"
+                ></ion-textarea>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Delete button -->
+            <div class="option-section">
+              <ion-button expand="full" fill="clear" color="danger" class="delete-btn" (click)="deleteEntry()">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Delete
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Start Date Picker Modal -->
+  @if (showStartDatePicker) {
+    <ion-modal
+      [isOpen]="showStartDatePicker"
+      (didDismiss)="showStartDatePicker = false"
+      [backdropDismiss]="true"
+      class="date-picker-modal">
+      <ng-template>
+        <div class="date-picker-wrapper">
+          <div class="date-picker-header">
+            <ion-button fill="clear" (click)="clearStartDate()">Clear</ion-button>
+            <h3>Start Date</h3>
+            <ion-button fill="clear" (click)="showStartDatePicker = false">Done</ion-button>
+          </div>
+          <ion-datetime
+            [(ngModel)]="startDateISO"
+            presentation="date"
+            (ionChange)="onStartDateChange($event)"
+          ></ion-datetime>
+        </div>
+      </ng-template>
+    </ion-modal>
+  }
+
+  <!-- End Date Picker Modal -->
+  @if (showEndDatePicker) {
+    <ion-modal
+      [isOpen]="showEndDatePicker"
+      (didDismiss)="showEndDatePicker = false"
+      [backdropDismiss]="true"
+      class="date-picker-modal">
+      <ng-template>
+        <div class="date-picker-wrapper">
+          <div class="date-picker-header">
+            <ion-button fill="clear" (click)="clearEndDate()">Clear</ion-button>
+            <h3>End Date</h3>
+            <ion-button fill="clear" (click)="showEndDatePicker = false">Done</ion-button>
+          </div>
+          <ion-datetime
+            [(ngModel)]="endDateISO"
+            presentation="date"
+            (ionChange)="onEndDateChange($event)"
+          ></ion-datetime>
+        </div>
+      </ng-template>
+    </ion-modal>
+  }
 </ion-content>

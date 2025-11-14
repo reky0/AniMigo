@@ -28,4 +28,15 @@ export class MediaListItemComponent  implements OnInit {
   onImageError() {
     this.coverImg = this.media.coverImage.large;
   }
+
+  getStatusIcon(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'CURRENT': 'play-circle-outline',
+      'COMPLETED': 'checkmark-circle-outline',
+      'PAUSED': 'pause-circle-outline',
+      'DROPPED': 'close-circle-outline',
+      'PLANNING': 'bookmark-outline'
+    };
+    return statusMap[status] || 'bookmark-outline';
+  }
 }

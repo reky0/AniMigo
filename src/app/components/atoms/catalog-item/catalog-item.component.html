@@ -17,6 +17,11 @@
         @if (isFavourite) {
           <div class="favorite-tag tag-corner tag-corner-tl tag-favorite"> <ion-icon name="heart" class="heart-icon"></ion-icon></div>
         }
+        @if (mediaStatus) {
+          <div class="status-tag tag-corner tag-corner-bl" [attr.data-status]="mediaStatus">
+            <ion-icon [name]="getStatusIcon(mediaStatus)"></ion-icon>
+          </div>
+        }
       </ion-col>
     </ion-row>
     <ion-row class="label-container">

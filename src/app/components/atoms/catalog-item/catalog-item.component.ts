@@ -16,6 +16,7 @@ export class CatalogItemComponent extends LoadingStateComponent {
   @Input() rating: number | null | undefined = null;
   @Input() recommendation: any = null;
   @Input() isFavourite: boolean | null | undefined = false;
+  @Input() mediaStatus: string | null | undefined = null;
 
   constructor() {
     super();
@@ -25,5 +26,16 @@ export class CatalogItemComponent extends LoadingStateComponent {
     if (this.image !== this.fallbackImage) {
       this.image = this.fallbackImage;
     }
+  }
+
+  getStatusIcon(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      'CURRENT': 'play-circle-outline',
+      'COMPLETED': 'checkmark-circle-outline',
+      'PAUSED': 'pause-circle-outline',
+      'DROPPED': 'close-circle-outline',
+      'PLANNING': 'bookmark-outline'
+    };
+    return statusMap[status] || 'bookmark-outline';
   }
 }

@@ -22,6 +22,7 @@
                       [title]="related.node.title.english ?? related.node.title.romaji"
                       [note]="toSentenceCase(related.relationType)"
                       [isFavourite]="related.node.isFavourite"
+                      [mediaStatus]="related.node.mediaListEntry?.status"
                       (click)="goToDetails(related.node.id, related.node.type, related.node.isAdult)"
                       />
                   </ion-col>
@@ -59,6 +60,7 @@
                       [rating]="recommendation.rating"
                       recommendation="true"
                       [isFavourite]="recommendation.mediaRecommendation.isFavourite"
+                      [mediaStatus]="recommendation.mediaRecommendation.mediaListEntry?.status"
                       (click)="goToDetails(recommendation.mediaRecommendation.id, recommendation.mediaRecommendation.type, recommendation.mediaRecommendation.isAdult)"
                       />
                   </ion-col>
