@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ionic serve",
+    "start:prod": "ionic serve --prod",
     "start:android": "ionic capacitor run android",
     "start:android:live": "ionic capacitor run android -l --external",
     "start:android:prod": "ionic capacitor run android --prod",
