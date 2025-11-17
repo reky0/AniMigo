@@ -5,20 +5,20 @@ import { Router } from '@angular/router';
 import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
 import { ToastService } from '@components/core/services/toast.service';
-import { 
+import { LoginPromptComponent } from '@components/molecules/login-prompt/login-prompt.component';
+import { MediaListItemComponent } from '@components/molecules/media-list-item/media-list-item.component';
+import {
+  IonCol,
+  IonGrid,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonLabel,
+  IonRow,
   IonSegment,
   IonSegmentButton,
-  IonLabel,
-  IonGrid,
-  IonRow,
-  IonCol,
   IonSpinner,
-  IonText,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent
+  IonText
 } from '@ionic/angular/standalone';
-import { MediaListItemComponent } from '@components/molecules/media-list-item/media-list-item.component';
-import { LoginPromptComponent } from '@components/molecules/login-prompt/login-prompt.component';
 import { GET_USER_MEDIA_LIST_BY_STATUS } from 'src/app/models/aniList/mediaQueries';
 import { MediaListEntry } from 'src/app/models/aniList/responseInterfaces';
 
@@ -46,7 +46,7 @@ interface StatusOption {
     IonLabel,
     IonSegmentButton,
     IonSegment,
-    CommonModule, 
+    CommonModule,
     FormsModule,
     MediaListItemComponent,
     LoginPromptComponent
@@ -54,7 +54,7 @@ interface StatusOption {
 })
 export class UserMediaCollectionComponent implements OnInit {
   @Input() mediaType: MediaType = 'ANIME';
-  
+
   selectedStatus: MediaListStatus = 'CURRENT';
   allMediaList: MediaListEntry[] = []; // Store all loaded entries
   mediaList: MediaListEntry[] = []; // Currently displayed entries
@@ -149,7 +149,7 @@ export class UserMediaCollectionComponent implements OnInit {
     const startIndex = this.currentChunk * this.CHUNK_SIZE;
     const endIndex = startIndex + this.CHUNK_SIZE;
     const chunk = this.allMediaList.slice(startIndex, endIndex);
-    
+
     if (this.currentChunk === 0) {
       // First load, replace the list
       this.mediaList = chunk;
@@ -157,13 +157,13 @@ export class UserMediaCollectionComponent implements OnInit {
       // Append to existing list
       this.mediaList = [...this.mediaList, ...chunk];
     }
-    
+
     this.currentChunk++;
   }
 
   onIonInfinite(event: any) {
     const startIndex = this.currentChunk * this.CHUNK_SIZE;
-    
+
     // Check if there are more items to load
     if (startIndex < this.allMediaList.length) {
       this.loadNextChunk();
@@ -194,7 +194,7 @@ export class UserMediaCollectionComponent implements OnInit {
   }
 
   get emptyStateMessage(): string {
-    return this.mediaType === 'ANIME' 
+    return this.mediaType === 'ANIME'
       ? "You don't have any anime in this category yet."
       : "You don't have any manga in this category yet.";
   }

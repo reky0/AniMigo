@@ -1,19 +1,19 @@
 <ion-card class="login-prompt-card ion-padding">
   <ion-card-title class="ion-margin">{{ title }}</ion-card-title>
-  
+
   @if (showImage) {
-    <ion-img 
-      [src]="imageSrc" 
-      [alt]="imageAlt" 
+    <ion-img
+      [src]="imageSrc"
+      [alt]="imageAlt"
       class="img ion-margin" />
   }
-  
+
   <ion-text class="ion-margin">{{ message }}</ion-text>
   <br>
-  
-  <ion-button 
-    class="ion-margin" 
-    color="primary" 
+
+  <ion-button
+    class="ion-margin"
+    color="primary"
     (click)="onLoginClick()">
     <ion-icon slot="start" name="log-in-outline"></ion-icon>
     {{ buttonText }}

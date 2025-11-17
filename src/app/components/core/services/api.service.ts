@@ -457,15 +457,15 @@ export class ApiService {
    * @param query - GraphQL query (defaults to GET_USER_MEDIA_LIST_BY_STATUS)
    * @param showToast - Whether to show error toasts
    * @returns Observable with user's media list data, loading state, and errors
-   * 
+   *
    * @example
    * // Get all anime in user's list
    * fetchUserMediaListByStatus({ userId: 123, type: 'ANIME' })
-   * 
+   *
    * @example
    * // Get user's currently watching anime
    * fetchUserMediaListByStatus({ userId: 123, type: 'ANIME', status: 'CURRENT' })
-   * 
+   *
    * @example
    * // Get user's completed manga
    * fetchUserMediaListByStatus({ userId: 123, type: 'MANGA', status: 'COMPLETED' })
