@@ -1,0 +1,66 @@
+@if (!isAuthenticated) {
+  <am-login-prompt
+    title="Login Required"
+    [message]="'Please log in to view your ' + mediaType.toLowerCase() + ' list.'"
+    [showImage]="true"
+    (loginClick)="goToLogin()">
+  </am-login-prompt>
+} @else {
+  <!-- Status Filter Segment -->
+  <ion-segment
+    [value]="selectedStatus"
+    (ionChange)="onStatusChange($event)"
+    scrollable="true"
+    mode="md"
+    class="status-segment">
+    @for (status of statusOptions; track status.value) {
+      <ion-segment-button [value]="status.value">
+        <ion-label>{{ status.label }}</ion-label>
+      </ion-segment-button>
+    }
+  </ion-segment>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  }
+
+  <!-- Empty State -->
+  @if (!loading && mediaList.length === 0) {
+    <div class="empty-state">
+      <ion-text color="medium">
+        <h3>{{ emptyStateTitle }}</h3>
+        <p>{{ emptyStateMessage }}</p>
+      </ion-text>
+    </div>
+  }
+
+  <!-- Media Grid -->
+  @if (!loading && mediaList.length > 0) {
+    <ion-grid class="media-grid">
+      <ion-row>
+        @for (entry of mediaList; track entry.id) {
+          <ion-col size="12" sizeMd="6" sizeLg="3" (click)="navigateToDetail(entry)">
+            <am-media-list-item
+              [media]="entry.media"
+              [isFavourite]="entry.media.isFavourite">
+            </am-media-list-item>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+
+    <!-- Infinite Scroll -->
+    <ion-infinite-scroll
+      threshold="100px"
+      (ionInfinite)="onIonInfinite($event)"
+      [disabled]="!hasMoreItems">
+      <ion-infinite-scroll-content
+        loadingSpinner="crescent"
+        loadingText="Loading more...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  }
+}

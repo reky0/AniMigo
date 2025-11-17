@@ -1,0 +1,56 @@
+:host {
+  display: block;
+  position: relative;
+  min-height: 100%;
+}
+
+.status-segment {
+  padding: 8px 16px;
+  margin-bottom: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ion-background-color);
+}
+
+.media-grid {
+  padding: 8px;
+  
+  ion-col {
+    padding: 8px;
+    
+    am-media-list-item {
+      display: block;
+      height: 100%;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  
+  ion-spinner {
+    transform: scale(1.5);
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  padding: 20px;
+  text-align: center;
+  
+  h2, h3 {
+    margin-bottom: 8px;
+  }
+  
+  p {
+    margin-bottom: 20px;
+  }
+}

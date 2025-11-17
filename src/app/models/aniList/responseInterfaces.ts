@@ -650,6 +650,26 @@ export interface MediaListCollectionResponse {
   MediaListCollection: MediaListCollection;
 }
 
+// ============================================
+// User Media List Query Interfaces
+// ============================================
+
+/**
+ * Variables for querying user's media list
+ */
+export interface UserMediaListVariables {
+  userId: number;
+  type: 'ANIME' | 'MANGA';
+  status?: 'CURRENT' | 'PLANNING' | 'COMPLETED' | 'DROPPED' | 'PAUSED' | 'REPEATING' | null;
+}
+
+/**
+ * Response structure for user media list query
+ */
+export interface UserMediaListResponse {
+  MediaListCollection: MediaListCollection;
+}
+
 export interface SmallUser {
   id: number;
   name: string;

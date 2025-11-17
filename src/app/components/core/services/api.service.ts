@@ -22,6 +22,8 @@ import {
   StaffResponse,
   UpdateUserResponse,
   UpdateUserSettingsResult,
+  UserMediaListResponse,
+  UserMediaListVariables,
   UserResponse,
   UserSettingsInput,
   ViewerResponse
@@ -442,6 +444,60 @@ export class ApiService {
       catchError(err => {
         if (showToast) {
           const errorMsg = this.formatNetworkError(err, 'Network error loading media list');
+          this.showErrorToast(errorMsg);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+
+  /**
+   * Fetch user's media list with flexible status filtering
+   * @param variables - UserMediaListVariables containing userId, type, and optional status
+   * @param query - GraphQL query (defaults to GET_USER_MEDIA_LIST_BY_STATUS)
+   * @param showToast - Whether to show error toasts
+   * @returns Observable with user's media list data, loading state, and errors
+   * 
+   * @example
+   * // Get all anime in user's list
+   * fetchUserMediaListByStatus({ userId: 123, type: 'ANIME' })
+   * 
+   * @example
+   * // Get user's currently watching anime
+   * fetchUserMediaListByStatus({ userId: 123, type: 'ANIME', status: 'CURRENT' })
+   * 
+   * @example
+   * // Get user's completed manga
+   * fetchUserMediaListByStatus({ userId: 123, type: 'MANGA', status: 'COMPLETED' })
+   */
+  fetchUserMediaListByStatus(
+    variables: UserMediaListVariables,
+    query: any,
+    showToast = true
+  ): Observable<{
+    data: UserMediaListResponse | null;
+    loading: boolean;
+    errors?: any;
+  }> {
+    return this.apollo.query<UserMediaListResponse>({
+      query: query,
+      variables: variables,
+      fetchPolicy: 'network-only',
+    }).pipe(
+      map(result => {
+        if (result.errors && showToast) {
+          const errorMsg = this.formatGraphQLError(result.errors[0], 'Failed to load user media list');
+          this.showErrorToast(errorMsg);
+        }
+        return {
+          data: result.data,
+          loading: result.loading,
+          errors: result.errors ? result.errors[0] : undefined,
+        };
+      }),
+      catchError(err => {
+        if (showToast) {
+          const errorMsg = this.formatNetworkError(err, 'Network error loading user media list');
           this.showErrorToast(errorMsg);
         }
         return throwError(() => err);

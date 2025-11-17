@@ -1212,6 +1212,92 @@ export const GET_USER_MEDIA_LIST = gql`
   }
 `;
 
+/**
+ * Flexible query to retrieve user's media list by type and optional status
+ * @param userId - The user's ID
+ * @param type - Media type (ANIME or MANGA)
+ * @param status - Optional media list status filter (CURRENT, PLANNING, COMPLETED, DROPPED, PAUSED, REPEATING)
+ * @returns User's media list collection with entries matching the criteria
+ */
+export const GET_USER_MEDIA_LIST_BY_STATUS = gql`
+  query GetUserMediaListByStatus($userId: Int!, $type: MediaType!, $status: MediaListStatus) {
+    MediaListCollection(userId: $userId, type: $type, status: $status) {
+      lists {
+        name
+        isCustomList
+        isSplitCompletedList
+        status
+        entries {
+          id
+          mediaId
+          status
+          score
+          progress
+          progressVolumes
+          repeat
+          priority
+          private
+          notes
+          hiddenFromStatusLists
+          startedAt {
+            year
+            month
+            day
+          }
+          completedAt {
+            year
+            month
+            day
+          }
+          updatedAt
+          createdAt
+          media {
+            id
+            title {
+              romaji
+              english
+              native
+              userPreferred
+            }
+            coverImage {
+              extraLarge
+              large
+              medium
+              color
+            }
+            type
+            format
+            status
+            episodes
+            chapters
+            volumes
+            season
+            seasonYear
+            averageScore
+            popularity
+            genres
+            isAdult
+            isFavourite
+            nextAiringEpisode {
+              episode
+              timeUntilAiring
+              airingAt
+            }
+          }
+        }
+      }
+      user {
+        id
+        name
+        avatar {
+          large
+          medium
+        }
+      }
+    }
+  }
+`;
+
 export const GET_USER_PROFILE_DATA = gql`
   query GetUserProfileData($userId: Int!) {
     User(id: $userId) {

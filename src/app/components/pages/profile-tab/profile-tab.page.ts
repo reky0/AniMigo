@@ -7,12 +7,13 @@ import { AuthService } from '@components/core/services/auth.service';
 import { PlatformService } from '@components/core/services/platform.service';
 import { ToastService } from '@components/core/services/toast.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
+import { LoginPromptComponent } from "@components/molecules/login-prompt/login-prompt.component";
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
 import { MediaStatusStatsComponent } from "@components/organisms/media-status-stats/media-status-stats.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { IonAvatar, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonAvatar, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
 import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
 import { Character, User } from 'src/app/models/aniList/responseInterfaces';
@@ -23,7 +24,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent, MediaStatusStatsComponent]
+  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent, MediaStatusStatsComponent, LoginPromptComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
