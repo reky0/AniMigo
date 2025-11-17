@@ -1,0 +1,57 @@
+<div class="content-section">
+  <div class="section-header">
+    <h2>{{ title }}</h2>
+  </div>
+
+  <ion-card class="list-stats-card">
+    <ion-list lines="none">
+      <ion-item>
+        <ion-icon name="play-circle-outline" slot="start" class="status-icon status-current"></ion-icon>
+        <ion-label>
+          <h3>{{ labels.current }}</h3>
+        </ion-label>
+        <ion-badge slot="end" class="status-badge status-current">{{ statusCounts.current }}</ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="checkmark-circle-outline" slot="start" class="status-icon status-completed"></ion-icon>
+        <ion-label>
+          <h3>Completed</h3>
+        </ion-label>
+        <ion-badge slot="end" class="status-badge status-completed">{{ statusCounts.completed }}</ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="pause-circle-outline" slot="start" class="status-icon status-paused"></ion-icon>
+        <ion-label>
+          <h3>On Hold</h3>
+        </ion-label>
+        <ion-badge slot="end" class="status-badge status-paused">{{ statusCounts.onHold }}</ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="close-circle-outline" slot="start" class="status-icon status-dropped"></ion-icon>
+        <ion-label>
+          <h3>Dropped</h3>
+        </ion-label>
+        <ion-badge slot="end" class="status-badge status-dropped">{{ statusCounts.dropped }}</ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="bookmark-outline" slot="start" class="status-icon status-planning"></ion-icon>
+        <ion-label>
+          <h3>{{ labels.planning }}</h3>
+        </ion-label>
+        <ion-badge slot="end" class="status-badge status-planning">{{ statusCounts.planning }}</ion-badge>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="repeat-outline" slot="start" class="status-icon status-repeating"></ion-icon>
+        <ion-label>
+          <h3>{{ labels.repeating }}</h3>
+        </ion-label>
+        <ion-badge slot="end" class="status-badge status-repeating">{{ statusCounts.repeating }}</ion-badge>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</div>

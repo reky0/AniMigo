@@ -78,11 +78,11 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12">
-            <ion-card class="stats-card">
-              <ion-card-content>
-                @if (loading && !userData) {
-                  <div class="loading-placeholder">Loading statistics...</div>
-                } @else {
+            @if (loading && !userData) {
+              <ion-skeleton-text animated class="skeleton" />
+            } @else {
+              <ion-card class="stats-card">
+                <ion-card-content>
                   @if (totalAnime !== 0 || totalManga !== 0 || watchTime !== '0d 0h' || chaptersRead !== 0) {
                     <ion-grid class="ion-no-padding">
                       <ion-row>
@@ -115,9 +115,9 @@
                   } @else {
                     <p class="empty-state">No statistics available. @if (isAuthenticated) { <br> Most stats refresh after 24h. }</p>
                   }
-                }
-              </ion-card-content>
-            </ion-card>
+                </ion-card-content>
+              </ion-card>
+            }
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -143,13 +143,13 @@
               </div>
 
               @if (loading && !userData) {
-                <div class="loading-placeholder">Loading favorites...</div>
+                <ion-skeleton-text animated class="skeleton" />
               } @else if (favoriteAnime.length > 0) {
                 <ion-grid class="favorites-grid ion-margin-bottom">
                   <ion-row>
-                    @for (i of 9 | range; track $index) {
+                    @for (i of (isDesktop() ? 9 : 6) | range; track $index) {
                       @if (favoriteAnime[i-1]) {
-                        <ion-col size="4" sizeMd="1.333">
+                        <ion-col size="4" sizeMd="2" sizeLg="1.3333">
                           <am-catalog-item
                             [title]="favoriteAnime[i-1].title.english || favoriteAnime[i-1].title.romaji"
                             [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
@@ -181,13 +181,13 @@
               </div>
 
               @if (loading && !userData) {
-                <div class="loading-placeholder">Loading favorites...</div>
+                <ion-skeleton-text animated class="skeleton" />
               } @else if (favoriteManga.length > 0) {
                 <ion-grid class="favorites-grid ion-margin-bottom">
                   <ion-row>
-                    @for (i of 9 | range; track $index) {
+                    @for (i of (isDesktop() ? 9 : 6) | range; track $index) {
                       @if (favoriteManga[i-1]) {
-                        <ion-col size="4" sizeMd="1.333">
+                        <ion-col size="4" sizeMd="2" sizeLg="1.3333">
                           <am-catalog-item
                             [title]="favoriteManga[i-1].title.english || favoriteManga[i-1].title.romaji"
                             [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
@@ -219,13 +219,13 @@
               </div>
 
               @if (loading && !userData) {
-                <div class="loading-placeholder">Loading favorites...</div>
+                <ion-skeleton-text animated class="skeleton" />
               } @else if (favoriteCharacters.length > 0) {
                 <ion-grid class="favorites-grid">
                   <ion-row>
-                    @for (i of 9 | range; track $index) {
+                    @for (i of (isDesktop() ? 9 : 6) | range; track $index) {
                       @if (favoriteCharacters[i-1]) {
-                        <ion-col size="4" sizeMd="1.333">
+                        <ion-col size="4" sizeMd="2" sizeLg="1.3333">
                           <am-character-item
                             [name]="favoriteCharacters[i-1].name.full"
                             [image]="favoriteCharacters[i-1].image.large?.replace('medium', 'large') ?? favoriteCharacters[i-1].image.medium"
@@ -252,11 +252,11 @@
                 <h2>Genre Overview</h2>
               </div>
 
-              <ion-card class="genre-card">
-                <ion-card-content>
-                  @if (loading && !userData) {
-                    <div class="loading-placeholder">Loading genre data...</div>
-                  } @else if (topGenres.length > 0) {
+              @if (loading && !userData) {
+                <ion-skeleton-text animated class="skeleton" />
+              } @else if (topGenres.length > 0) {
+                <ion-card class="genre-card">
+                  <ion-card-content>
                     <div class="genre-item" *ngFor="let genreData of topGenres">
                       <div class="genre-info">
                         <span class="genre-name">{{ genreData.genre }}</span>
@@ -264,115 +264,28 @@
                       </div>
                       <ion-progress-bar [value]="genreData.count / totalAnime" color="primary"></ion-progress-bar>
                     </div>
-                  } @else {
-                    <p class="empty-state">No genre data available</p>
-                  }
-                </ion-card-content>
-              </ion-card>
+                  </ion-card-content>
+                </ion-card>
+              } @else {
+                <p class="empty-state">No genre data available</p>
+              }
             </div>
           </ion-col>
 
           <!-- Right Column - Sidebar -->
           <ion-col size="12" sizeLg="4">
             <!-- Watch List Stats -->
-            <div class="content-section">
-              <div class="section-header">
-                <h2>Anime List</h2>
-              </div>
+            <am-media-status-stats
+              title="Anime List"
+              mediaType="ANIME"
+              [statusCounts]="animeStatusCountsForComponent"
+            />
 
-              <ion-card class="list-stats-card">
-                <ion-list lines="none">
-                  <ion-item>
-                    <ion-icon name="play-circle-outline" slot="start" color="success"></ion-icon>
-                    <ion-label>
-                      <h3>Watching</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="success">{{ animeStatusCounts.watching }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="checkmark-circle-outline" slot="start" color="primary"></ion-icon>
-                    <ion-label>
-                      <h3>Completed</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="primary">{{ animeStatusCounts.completed }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="pause-circle-outline" slot="start" color="warning"></ion-icon>
-                    <ion-label>
-                      <h3>On Hold</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="warning">{{ animeStatusCounts.onHold }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="close-circle-outline" slot="start" color="danger"></ion-icon>
-                    <ion-label>
-                      <h3>Dropped</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="danger">{{ animeStatusCounts.dropped }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="bookmark-outline" slot="start" color="medium"></ion-icon>
-                    <ion-label>
-                      <h3>Plan to Watch</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="medium">{{ animeStatusCounts.planToWatch }}</ion-badge>
-                  </ion-item>
-                </ion-list>
-              </ion-card>
-            </div>
-            <div class="content-section">
-              <div class="section-header">
-                <h2>Manga List</h2>
-              </div>
-
-              <ion-card class="list-stats-card">
-                <ion-list lines="none">
-                  <ion-item>
-                    <ion-icon name="play-circle-outline" slot="start" color="success"></ion-icon>
-                    <ion-label>
-                      <h3>Reading</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="success">{{ mangaStatusCounts.reading }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="checkmark-circle-outline" slot="start" color="primary"></ion-icon>
-                    <ion-label>
-                      <h3>Completed</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="primary">{{ mangaStatusCounts.completed }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="pause-circle-outline" slot="start" color="warning"></ion-icon>
-                    <ion-label>
-                      <h3>On Hold</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="warning">{{ mangaStatusCounts.onHold }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="close-circle-outline" slot="start" color="danger"></ion-icon>
-                    <ion-label>
-                      <h3>Dropped</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="danger">{{ mangaStatusCounts.dropped }}</ion-badge>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-icon name="bookmark-outline" slot="start" color="medium"></ion-icon>
-                    <ion-label>
-                      <h3>Plan to Read</h3>
-                    </ion-label>
-                    <ion-badge slot="end" color="medium">{{ mangaStatusCounts.planToRead }}</ion-badge>
-                  </ion-item>
-                </ion-list>
-              </ion-card>
-            </div>
+            <am-media-status-stats
+              title="Manga List"
+              mediaType="MANGA"
+              [statusCounts]="mangaStatusCountsForComponent"
+            />
           </ion-col>
         </ion-row>
       </ion-grid>

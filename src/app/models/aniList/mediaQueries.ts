@@ -1405,6 +1405,13 @@ export const GET_USER_STATUS_COUNTS = gql`
         }
       }
     }
+    animeRepeating: MediaListCollection(userId: $userId, type: ANIME, status: REPEATING) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
     mangaCurrent: MediaListCollection(userId: $userId, type: MANGA, status: CURRENT) {
       lists {
         entries {
@@ -1434,6 +1441,13 @@ export const GET_USER_STATUS_COUNTS = gql`
       }
     }
     mangaPlanning: MediaListCollection(userId: $userId, type: MANGA, status: PLANNING) {
+      lists {
+        entries {
+          id
+        }
+      }
+    }
+    mangaRepeating: MediaListCollection(userId: $userId, type: MANGA, status: REPEATING) {
       lists {
         entries {
           id

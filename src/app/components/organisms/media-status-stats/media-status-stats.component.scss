@@ -1,0 +1,59 @@
+// Status icon colors
+.status-icon {
+  &.status-current {
+    color: var(--custom-color-current);
+  }
+
+  &.status-completed {
+    color: var(--custom-color-completed);
+  }
+
+  &.status-paused {
+    color: var(--custom-color-paused);
+  }
+
+  &.status-dropped {
+    color: var(--custom-color-dropped);
+  }
+
+  &.status-planning {
+    color: var(--custom-color-planning);
+  }
+
+  &.status-repeating {
+    color: var(--custom-color-repeating);
+  }
+}
+
+// Status badge colors
+.status-badge {
+  &.status-current {
+    background: var(--custom-color-current);
+    color: white;
+  }
+
+  &.status-completed {
+    background: var(--custom-color-completed);
+    color: #222;
+  }
+
+  &.status-paused {
+    background: var(--custom-color-paused);
+    color: #222;
+  }
+
+  &.status-dropped {
+    background: var(--custom-color-dropped);
+    color: #222;
+  }
+
+  &.status-planning {
+    background: var(--custom-color-planning);
+    color: white;
+  }
+
+  &.status-repeating {
+    background: var(--custom-color-repeating);
+    color: #222;
+  }
+}

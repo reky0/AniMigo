@@ -1,6 +1,6 @@
 <ion-grid>
   <ion-row>
-    <ion-col size="10">
+    <ion-col [size]="voiceActors && voiceActors.length > 0 ? 10 : 12">
       <am-person-item
         [image]="image"
         [name]="name"

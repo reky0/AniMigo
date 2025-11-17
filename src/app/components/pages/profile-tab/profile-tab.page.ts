@@ -8,10 +8,11 @@ import { PlatformService } from '@components/core/services/platform.service';
 import { ToastService } from '@components/core/services/toast.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
+import { MediaStatusStatsComponent } from "@components/organisms/media-status-stats/media-status-stats.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
-import { IonAvatar, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonItem, IonLabel, IonList, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonAvatar, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
 import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
 import { Character, User } from 'src/app/models/aniList/responseInterfaces';
@@ -22,7 +23,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonLabel, IonItem, IonList, IonBadge, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent]
+  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonCardTitle, IonImg, IonText, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, IonCardSubtitle, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent, MediaStatusStatsComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
@@ -35,7 +36,8 @@ export class ProfileTabPage implements OnInit {
     completed: 0,
     onHold: 0,
     dropped: 0,
-    planToWatch: 0
+    planToWatch: 0,
+    rewatching: 0
   };
 
   actualMangaStatusCounts = {
@@ -43,7 +45,8 @@ export class ProfileTabPage implements OnInit {
     completed: 0,
     onHold: 0,
     dropped: 0,
-    planToRead: 0
+    planToRead: 0,
+    rereading: 0
   };
 
   // Consolidated modal state
@@ -86,6 +89,9 @@ export class ProfileTabPage implements OnInit {
   };
 
   error: any;
+
+  isTabletOrAbove = this.platformService.isTabletOrAbove;
+  isDesktop = this.platformService.isDesktop;
 
   constructor(
     public authService: AuthService,
@@ -182,7 +188,8 @@ export class ProfileTabPage implements OnInit {
           completed: this.countEntries(result.data?.animeCompleted),
           onHold: this.countEntries(result.data?.animePaused),
           dropped: this.countEntries(result.data?.animeDropped),
-          planToWatch: this.countEntries(result.data?.animePlanning)
+          planToWatch: this.countEntries(result.data?.animePlanning),
+          rewatching: this.countEntries(result.data?.animeRepeating)
         };
 
         // Count entries for manga statuses
@@ -191,7 +198,8 @@ export class ProfileTabPage implements OnInit {
           completed: this.countEntries(result.data?.mangaCompleted),
           onHold: this.countEntries(result.data?.mangaPaused),
           dropped: this.countEntries(result.data?.mangaDropped),
-          planToRead: this.countEntries(result.data?.mangaPlanning)
+          planToRead: this.countEntries(result.data?.mangaPlanning),
+          rereading: this.countEntries(result.data?.mangaRepeating)
         };
       },
       error: (err) => {
@@ -222,6 +230,7 @@ export class ProfileTabPage implements OnInit {
       onHold: statuses.find(s => s.status === 'PAUSED')?.count ?? 0,
       dropped: statuses.find(s => s.status === 'DROPPED')?.count ?? 0,
       planToWatch: statuses.find(s => s.status === 'PLANNING')?.count ?? 0,
+      rewatching: statuses.find(s => s.status === 'REPEATING')?.count ?? 0,
     };
   }
 
@@ -240,6 +249,7 @@ export class ProfileTabPage implements OnInit {
       onHold: statuses.find(s => s.status === 'PAUSED')?.count ?? 0,
       dropped: statuses.find(s => s.status === 'DROPPED')?.count ?? 0,
       planToRead: statuses.find(s => s.status === 'PLANNING')?.count ?? 0,
+      rereading: statuses.find(s => s.status === 'REPEATING')?.count ?? 0,
     };
   }
 
@@ -307,6 +317,31 @@ export class ProfileTabPage implements OnInit {
 
   get mangaStatusCounts() {
     return this.getMangaStatusCounts();
+  }
+
+  // Transformed status counts for the media-status-stats component
+  get animeStatusCountsForComponent() {
+    const counts = this.getAnimeStatusCounts();
+    return {
+      current: counts.watching,
+      completed: counts.completed,
+      onHold: counts.onHold,
+      dropped: counts.dropped,
+      planning: counts.planToWatch,
+      repeating: counts.rewatching
+    };
+  }
+
+  get mangaStatusCountsForComponent() {
+    const counts = this.getMangaStatusCounts();
+    return {
+      current: counts.reading,
+      completed: counts.completed,
+      onHold: counts.onHold,
+      dropped: counts.dropped,
+      planning: counts.planToRead,
+      repeating: counts.rereading
+    };
   }
 
   // Top genres

@@ -124,7 +124,7 @@
                       <ion-button
                         class="quick-action-btn"
                         shape="round"
-                        color="primary"
+                        [attr.data-status]="'PLANNING'"
                         (click)="onQuickAction('planning')">
                         <ion-icon slot="icon-only" name="time"></ion-icon>
                       </ion-button>
@@ -132,7 +132,7 @@
                       <ion-button
                         class="quick-action-btn"
                         shape="round"
-                        color="success"
+                        [attr.data-status]="'COMPLETED'"
                         (click)="onQuickAction('completed')">
                         <ion-icon slot="icon-only" name="checkmark-circle"></ion-icon>
                       </ion-button>
@@ -140,7 +140,7 @@
                       <ion-button
                         class="quick-action-btn"
                         shape="round"
-                        color="tertiary"
+                        [attr.data-status]="'CURRENT'"
                         (click)="onQuickAction('watching')">
                         <ion-icon slot="icon-only" name="play"></ion-icon>
                       </ion-button>
@@ -297,7 +297,7 @@
       class="custom-fab-container floating-mode hidden-lg-up"
       [class.fab-open]="isFabOpen"
       [class.touch-device]="isTouchDevice()"
-      [class.tablet-mode]="isTabletOrAbove()">
+      >
       <!-- Hover functionality disabled for now -->
       <!-- (mouseenter)="onFabContainerMouseEnter()"
       (mouseleave)="onFabContainerMouseLeave()"> -->
@@ -307,8 +307,8 @@
         <ion-button
           class="quick-action-btn"
           shape="round"
-          color="primary"
           title="Planning"
+          [attr.data-status]="'PLANNING'"
           (click)="onQuickAction('planning')">
           <ion-icon slot="icon-only" name="time"></ion-icon>
         </ion-button>
@@ -316,8 +316,8 @@
         <ion-button
           class="quick-action-btn"
           shape="round"
-          color="success"
           title="Completed"
+          [attr.data-status]="'COMPLETED'"
           (click)="onQuickAction('completed')">
           <ion-icon slot="icon-only" name="checkmark-circle"></ion-icon>
         </ion-button>
@@ -325,8 +325,8 @@
         <ion-button
           class="quick-action-btn"
           shape="round"
-          color="tertiary"
           title="Watching"
+          [attr.data-status]="'CURRENT'"
           (click)="onQuickAction('watching')">
           <ion-icon slot="icon-only" name="play"></ion-icon>
         </ion-button>
@@ -367,7 +367,7 @@
 
   <!-- Detailed Menu Modal -->
   <ion-modal
-    [isOpen]="showHelloModal"
+    [isOpen]="showListUpdateModal"
     (didDismiss)="closeDetailedMenu()"
     [backdropDismiss]="true"
     class="detailed-menu-modal">
@@ -392,6 +392,7 @@
                 fill="clear"
                 class="action-icon-btn"
                 [class.selected]="modalFormData.status === 'CURRENT'"
+                [attr.data-status]="'CURRENT'"
                 [title]="data?.type === 'ANIME' ? 'Watching' : 'Reading'"
                 (click)="setModalStatus('CURRENT')">
                 <ion-icon slot="icon-only" name="play-circle-outline"></ion-icon>
@@ -400,6 +401,7 @@
                 fill="clear"
                 class="action-icon-btn"
                 [class.selected]="modalFormData.status === 'PLANNING'"
+                [attr.data-status]="'PLANNING'"
                 [title]="data?.type === 'ANIME' ? 'Plan to Watch' : 'Plan to Read'"
                 (click)="setModalStatus('PLANNING')">
                 <ion-icon slot="icon-only" name="time-outline"></ion-icon>
@@ -408,6 +410,7 @@
                 fill="clear"
                 class="action-icon-btn"
                 [class.selected]="modalFormData.status === 'COMPLETED'"
+                [attr.data-status]="'COMPLETED'"
                 title="Completed"
                 (click)="setModalStatus('COMPLETED')">
                 <ion-icon slot="icon-only" name="checkmark-circle-outline"></ion-icon>
@@ -416,6 +419,7 @@
                 fill="clear"
                 class="action-icon-btn"
                 [class.selected]="modalFormData.status === 'DROPPED'"
+                [attr.data-status]="'DROPPED'"
                 title="Dropped"
                 (click)="setModalStatus('DROPPED')">
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
@@ -424,6 +428,7 @@
                 fill="clear"
                 class="action-icon-btn"
                 [class.selected]="modalFormData.status === 'PAUSED'"
+                [attr.data-status]="'PAUSED'"
                 title="On Hold"
                 (click)="setModalStatus('PAUSED')">
                 <ion-icon slot="icon-only" name="pause-circle-outline"></ion-icon>
@@ -432,6 +437,7 @@
                 fill="clear"
                 class="action-icon-btn"
                 [class.selected]="modalFormData.status === 'REPEATING'"
+                [attr.data-status]="'REPEATING'"
                 [title]="data?.type === 'ANIME' ? 'Rewatching' : 'Rereading'"
                 (click)="setModalStatus('REPEATING')">
                 <ion-icon slot="icon-only" name="repeat-outline"></ion-icon>

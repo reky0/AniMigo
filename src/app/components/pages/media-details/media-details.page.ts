@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone, OnDestroy, inject } from '@angular/core';
+import { Component, NgZone, OnDestroy, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -26,15 +26,16 @@ import { RangePipe } from "../../../helpers/range.pipe";
 @Component({
   selector: 'am-profile-tab',
   templateUrl: './media-details.page.html',
-  styleUrls: ['./media-details.page.scss'],
+  styleUrls: ['./media-details.page.scss', './media-details-modals.scss'],
   standalone: true,
   imports: [IonTextarea, IonDatetime, IonToggle, IonCardHeader, IonCardContent, IonCard, IonLabel, IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe, IonBadge],
 })
 export class MediaDetailsPageComponent implements OnDestroy {
   platformService: PlatformService = inject(PlatformService);
 
- // TODO: ADD MEDIA LIST ADD FUNCTIONALITY ON CATALOG ITEM LONG PRESS (PROJECT-WIDE)
+  @ViewChild(IonContent, { static: false }) content?: IonContent;
 
+  // TODO: ADD MEDIA LIST ADD FUNCTIONALITY ON CATALOG ITEM LONG PRESS (PROJECT-WIDE)
   constructor(
     private readonly apiService: ApiService,
     private readonly toastService: ToastService,
@@ -53,7 +54,7 @@ export class MediaDetailsPageComponent implements OnDestroy {
 
   // FAB state
   isFabOpen: boolean = false;
-  showHelloModal: boolean = false;
+  showListUpdateModal: boolean = false;
   private longPressTimer: any;
   private isLongPress: boolean = false;
 
@@ -335,15 +336,25 @@ export class MediaDetailsPageComponent implements OnDestroy {
     // Collapse the FAB when opening modal
     this.isFabOpen = false;
 
+    // Disable background scrolling
+    this.content?.getScrollElement().then((scrollElement) => {
+      scrollElement.style.overflow = 'hidden';
+    });
+
     // Use setTimeout to ensure modal state is properly reset before opening
     // This prevents issues with rapid open/close cycles
     setTimeout(() => {
-      this.showHelloModal = true;
+      this.showListUpdateModal = true;
     }, 50);
   }
 
   closeDetailedMenu() {
-    this.showHelloModal = false;
+    this.showListUpdateModal = false;
+
+    // Re-enable background scrolling
+    this.content?.getScrollElement().then((scrollElement) => {
+      scrollElement.style.overflow = '';
+    });
   }
 
   saveDetailedMenu() {

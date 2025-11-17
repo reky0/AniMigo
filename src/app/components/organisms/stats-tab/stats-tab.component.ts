@@ -29,11 +29,12 @@ export class StatsTabComponent implements OnInit {
 
   ngOnInit() {
     const statusColors = [
-      ["#46e267", "#222"], // current
-      ["#89938b", "white"], // planning
-      ["#a7c8fe", "#222"], // completed
-      ["#feb3ac", "#222"], // dropped
-      ["#e9c206", "#222"], // paused
+      ["#2ecc71", "#222"], // current
+      ["#7f8c8d", "white"], // planning
+      ["#5dade2", "#222"], // completed
+      ["#e74c3c", "white"], // dropped
+      ["#f1c40f", "#222"], // paused
+      ["#9b59b6", "white"], // repeating
     ];
 
     const scoreColors = [

@@ -34,7 +34,8 @@ export class CatalogItemComponent extends LoadingStateComponent {
       'COMPLETED': 'checkmark-circle-outline',
       'PAUSED': 'pause-circle-outline',
       'DROPPED': 'close-circle-outline',
-      'PLANNING': 'bookmark-outline'
+      'PLANNING': 'bookmark-outline',
+      'REPEATING': 'repeat-outline'
     };
     return statusMap[status] || 'bookmark-outline';
   }

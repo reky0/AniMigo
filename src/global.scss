@@ -26,6 +26,20 @@
 @import "@ionic/angular/css/flex-utils.css";
 
 /**
+ * Custom Status Colors
+ * -----------------------------------------------------
+ * Consistent colors for all media status representations
+ */
+:root {
+  --custom-color-current: #2ecc71;
+  --custom-color-planning: #7f8c8d;
+  --custom-color-completed: #5dade2;
+  --custom-color-dropped: #e74c3c;
+  --custom-color-paused: #f1c40f;
+  --custom-color-repeating: #9b59b6;
+}
+
+/**
  * Ionic Dark Mode
  * -----------------------------------------------------
  * For more info, please see:
@@ -155,24 +169,35 @@ ion-skeleton-text {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 4px 8px;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: bold;
+  text-align: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 4px 8px;
   z-index: 2;
+  display: flex;
+  align-items: center;
+
+  ion-icon {
+    font-size: 16px;
+    margin: 0;
+    display: block;
+  }
 }
 .tag-corner-tl {
-  border-radius: 10px 0 10px 0;
+  border-radius: 8px 0 8px 0;
 }
 .tag-corner-tr {
   left: auto;
   right: 0;
-  border-radius: 0 10px 0 10px;
+  border-radius: 0 8px 0 8px;
 }
 .tag-corner-bl {
   top: auto;
   bottom: 0;
   left: 0;
-  border-radius: 0 10px 0 10px;
+  border-radius: 0 8px 0 8px;
 }
 .tag-favorite {
   background-color: var(--ion-color-danger);
@@ -183,34 +208,32 @@ ion-skeleton-text {
   color: var(--ion-color-secondary-contrast);
 }
 .status-tag {
-  padding: 4px 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
   ion-icon {
-    font-size: 16px;
-    color: white !important;
+    color: white;
   }
 
   &[data-status="CURRENT"] {
-    background-color: var(--ion-color-success);
+    background-color: var(--custom-color-current);
   }
 
   &[data-status="COMPLETED"] {
-    background-color: var(--ion-color-primary);
+    background-color: var(--custom-color-completed);
   }
 
   &[data-status="PAUSED"] {
-    background-color: var(--ion-color-warning);
+    background-color: var(--custom-color-paused);
   }
 
   &[data-status="DROPPED"] {
-    background-color: var(--ion-color-danger);
+    background-color: var(--custom-color-dropped);
   }
 
   &[data-status="PLANNING"] {
-    background-color: var(--ion-color-medium);
+    background-color: var(--custom-color-planning);
+  }
+
+  &[data-status="REPEATING"] {
+    background-color: var(--custom-color-repeating);
   }
 }
 
