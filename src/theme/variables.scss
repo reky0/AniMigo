@@ -13,7 +13,7 @@
 
 :root {
   /* ==================== Brand Colors ==================== */
-  
+
   /** primary - Soft Brand Blue **/
   --ion-color-primary: #5D8FDD;
   --ion-color-primary-rgb: 93, 143, 221;
@@ -39,7 +39,7 @@
   --ion-color-tertiary-tint: #8bb1ea;
 
   /* ==================== Status Colors ==================== */
-  
+
   /** success - Soft Green **/
   --ion-color-success: #6BCF8E;
   --ion-color-success-rgb: 107, 207, 142;
@@ -65,7 +65,7 @@
   --ion-color-danger-tint: #f17b7b;
 
   /* ==================== Neutral Colors ==================== */
-  
+
   /** dark - Deep Slate **/
   --ion-color-dark: #2D3748;
   --ion-color-dark-rgb: 45, 55, 72;
@@ -91,7 +91,7 @@
   --ion-color-light-tint: #f8fbfc;
 
   /* ==================== Extended Palette ==================== */
-  
+
   /** accent-purple - Soft Lavender **/
   --ion-color-accent-purple: #B794F6;
   --ion-color-accent-purple-rgb: 183, 148, 246;
@@ -117,22 +117,22 @@
   --ion-color-accent-teal-tint: #6dccca;
 
   /* ==================== Background & Surface Colors ==================== */
-  
+
   --ion-background-color: #FFFFFF;
   --ion-background-color-rgb: 255, 255, 255;
-  
+
   --ion-text-color: #2D3748;
   --ion-text-color-rgb: 45, 55, 72;
-  
+
   --ion-text-color-secondary: #718096;
   --ion-text-color-secondary-rgb: 113, 128, 150;
-  
+
   --ion-border-color: #E2E8F0;
   --ion-border-color-rgb: 226, 232, 240;
-  
+
   --ion-surface-color: #FFFFFF;
   --ion-surface-color-rgb: 255, 255, 255;
-  
+
   --ion-card-background: #FFFFFF;
   --ion-card-background-rgb: 255, 255, 255;
 }
@@ -148,7 +148,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     /* ==================== Brand Colors (Dark Mode) ==================== */
-    
+
     /** primary - Luminous Blue **/
     --ion-color-primary: #7EA8E8;
     --ion-color-primary-rgb: 126, 168, 232;
@@ -174,7 +174,7 @@
     --ion-color-tertiary-tint: #a5c5ef;
 
     /* ==================== Status Colors (Dark Mode) ==================== */
-    
+
     /** success - Mint Green **/
     --ion-color-success: #7EE2A8;
     --ion-color-success-rgb: 126, 226, 168;
@@ -200,7 +200,7 @@
     --ion-color-danger-tint: #ff968d;
 
     /* ==================== Neutral Colors (Dark Mode) ==================== */
-    
+
     /** dark - Almost Black **/
     --ion-color-dark: #0F1419;
     --ion-color-dark-rgb: 15, 20, 25;
@@ -226,7 +226,7 @@
     --ion-color-light-tint: #353e4f;
 
     /* ==================== Extended Palette (Dark Mode) ==================== */
-    
+
     /** accent-purple - Luminous Lavender **/
     --ion-color-accent-purple: #C4A7FF;
     --ion-color-accent-purple-rgb: 196, 167, 255;
@@ -252,22 +252,22 @@
     --ion-color-accent-teal-tint: #7ddddb;
 
     /* ==================== Background & Surface Colors (Dark Mode) ==================== */
-    
+
     --ion-background-color: #0F1419;
     --ion-background-color-rgb: 15, 20, 25;
-    
+
     --ion-text-color: #E2E8F0;
     --ion-text-color-rgb: 226, 232, 240;
-    
+
     --ion-text-color-secondary: #94A3B8;
     --ion-text-color-secondary-rgb: 148, 163, 184;
-    
+
     --ion-border-color: #2D3748;
     --ion-border-color-rgb: 45, 55, 72;
-    
+
     --ion-surface-color: #1A202C;
     --ion-surface-color-rgb: 26, 32, 44;
-    
+
     --ion-card-background: #1E293B;
     --ion-card-background-rgb: 30, 41, 59;
   }
@@ -284,13 +284,13 @@
   --ion-toolbar-background: var(--ion-background-color);
   --ion-toolbar-color: var(--ion-text-color);
   --ion-toolbar-border-color: var(--ion-border-color);
-  
+
   --ion-tab-bar-background: var(--ion-surface-color);
   --ion-tab-bar-border-color: var(--ion-border-color);
-  
+
   --ion-item-background: var(--ion-surface-color);
   --ion-item-border-color: var(--ion-border-color);
-  
+
   --ion-card-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
