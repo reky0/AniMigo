@@ -1,8 +1,34 @@
 ion-grid {
   cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:hover {
+    background-color: rgba(var(--ion-color-tertiary-rgb), 0.1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  ion-ripple-effect {
+    color: var(--ion-color-tertiary);
+    --ripple-color: var(--ion-color-tertiary);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  ion-ripple-effect::part(native) {
+    animation-duration: 150ms;
+  }
 
   .img-loading {
-    border-radius: 100%;
+    border-radius: 10px;
     width: 100%;
     aspect-ratio: 1 / 1;
   }
@@ -14,11 +40,24 @@ ion-grid {
   }
 
   .img::part(image) {
-    border-radius: 100%;
+    border-radius: 10px;
   }
 
   .img.fav::part(image) {
     border: 3px solid var(--ion-color-danger);
+    border-radius: 10px;
+  }
+
+  .name-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3em;
+    height: 2.6em;
+    word-break: break-word;
   }
 
   .note-loading {

@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
-import { IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
+import { IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRippleEffect, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 
 @Component({
   selector: 'am-catalog-item',
   templateUrl: './catalog-item.component.html',
   styleUrls: ['./catalog-item.component.scss'],
-  imports: [IonNote, IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid],
+  imports: [IonNote, IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid, IonRippleEffect],
 })
 export class CatalogItemComponent extends LoadingStateComponent {
   @Input() image: string | null | undefined = null;

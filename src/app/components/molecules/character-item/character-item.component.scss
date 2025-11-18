@@ -1,3 +1,52 @@
+ion-grid {
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(var(--ion-color-tertiary-rgb), 0.1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  ion-ripple-effect {
+    color: var(--ion-color-tertiary);
+    --ripple-color: var(--ion-color-tertiary);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  ion-ripple-effect::part(native) {
+    animation-duration: 150ms;
+  }
+
+  // Disable person-item's own interactive effects when inside character-item
+  am-person-item::ng-deep ion-grid {
+    border-radius: 0;
+    transition: none;
+
+    &:hover {
+      background-color: transparent;
+    }
+
+    &:active {
+      transform: none;
+    }
+
+    ion-ripple-effect {
+      display: none;
+    }
+  }
+}
+
 * {
   padding: 0;
 }
