@@ -13,7 +13,7 @@
             <am-info-chip
               class="chip"
               [icon]="ranking.type === 'RATED' ? 'star-outline' : 'heart-outline'"
-              [iconColor]="ranking.type === 'RATED' ? 'gold' : 'crimson'"
+              [iconColor]="ranking.type === 'RATED' ? '#FFB74D' : '#EF6C6C'"
               [info]="`#${ranking.rank} ${toSentenceCase(ranking.context)} ${ranking.season ? toSentenceCase(ranking.season) : ''} ${ranking.year ?? (ranking.context.includes('all time') ? '' : ' all time') }`"
               type="text"
               horizontal

@@ -39,13 +39,17 @@ ion-grid {
     object-fit: cover;
   }
 
+  .img.fav {
+    border: 3px solid var(--ion-color-danger);
+    border-radius: 10px;
+  }
+
   .img::part(image) {
     border-radius: 10px;
   }
 
   .img.fav::part(image) {
-    border: 3px solid var(--ion-color-danger);
-    border-radius: 10px;
+    border-radius: 7px;
   }
 
   .name-label {

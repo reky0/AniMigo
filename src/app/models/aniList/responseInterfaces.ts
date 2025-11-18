@@ -517,6 +517,7 @@ export interface MediaListEntry {
     genres?: string[] | null;
     nextAiringEpisode?: NextAiringEpisode | null;
     isFavourite?: boolean | null;
+    isAdult?: boolean | null;
   };
 }
 

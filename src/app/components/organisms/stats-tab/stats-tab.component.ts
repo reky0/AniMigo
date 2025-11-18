@@ -29,25 +29,25 @@ export class StatsTabComponent implements OnInit {
 
   ngOnInit() {
     const statusColors = [
-      ["#2ecc71", "#222"], // current
-      ["#7f8c8d", "white"], // planning
-      ["#5dade2", "#222"], // completed
-      ["#e74c3c", "white"], // dropped
-      ["#f1c40f", "#222"], // paused
-      ["#9b59b6", "white"], // repeating
+      ["var(--custom-color-current)", "white"], // current - soft green
+      ["var(--custom-color-planning)", "#222"], // planning - soft gray
+      ["var(--custom-color-completed)", "white"], // completed - sky blue
+      ["var(--custom-color-dropped)", "white"], // dropped - soft red
+      ["var(--custom-color-paused)", "#222"], // paused - gentle amber
+      ["var(--custom-color-repeating)", "white"], // repeating - soft lavender
     ];
 
     const scoreColors = [
-      "#f8b4b4", // 10 - soft red
-      "#f7c3a2", // 20 - light reddish-orange
-      "#f6d390", // 30 - peachy orange
-      "#f5e38b", // 40 - soft yellow-orange
-      "#f3f38a", // 50 - light yellow
-      "#d6ee93", // 60 - yellow-green
-      "#b8e89d", // 70 - pastel green
-      "#9be2a8", // 80 - light green
-      "#7edcb3", // 90 - mint green
-      "#61d6be"  // 100 - soft green
+      "#EF6C6C", // 10 - soft red (danger)
+      "#F5927E", // 20 - coral-red blend
+      "#F29079", // 30 - brand coral/secondary
+      "#F5A591", // 40 - light coral
+      "#FFB74D", // 50 - gentle amber (warning)
+      "#B794F6", // 60 - soft lavender (accent-purple)
+      "#7EA8E8", // 70 - sky blue (tertiary)
+      "#5DC6C4", // 80 - soft teal (accent-teal)
+      "#6BCF8E", // 90 - soft green (success)
+      "#5D8FDD"  // 100 - brand blue (primary)
     ];
 
     if (this.data?.stats) {

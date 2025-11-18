@@ -138,7 +138,12 @@ ion-modal {
     margin-left: 4px;
   }
   .filter-label {
+    color: var(--ion-color-dark);
     margin: 0;
+    
+    @media (prefers-color-scheme: dark) {
+      color: white;
+    }
   }
 }
 .expandable-filter-header ion-icon {

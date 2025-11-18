@@ -95,10 +95,14 @@
     display: flex;
     align-items: center;
     font-size: 11px;
-    color: #ffcc00;
+    color: #F59E0B;
 
     .rating-icon {
       margin-right: 5px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      color: #FDB34D;
     }
   }
 

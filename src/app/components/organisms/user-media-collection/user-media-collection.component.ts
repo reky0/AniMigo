@@ -232,9 +232,12 @@ export class UserMediaCollectionComponent implements OnInit {
     this.loadMediaList();
   }
 
-  navigateToDetail(entry: MediaListEntry) {
-    const route = this.mediaType === 'ANIME' ? 'anime' : 'manga';
-    this.router.navigate([`/${route}`, entry.media.id]);
+  goToDetails(entry: MediaListEntry) {
+    if (entry.media.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
+      this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
+    } else {
+      this.router.navigate(['media', entry.media.type.toLowerCase(), entry.media.id])
+    }
   }
 
   goToLogin() {
@@ -260,5 +263,10 @@ export class UserMediaCollectionComponent implements OnInit {
 
   get emptyStateTitle(): string {
     return this.mediaType === 'ANIME' ? 'No anime found' : 'No manga found';
+  }
+
+  private async showErrorToast(message: string) {
+    // Use ToastService with alerts for reliable notifications
+    await this.toastService.error(message);
   }
 }
