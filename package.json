@@ -11,6 +11,7 @@
     "start:android:live": "ionic capacitor run android -l --external",
     "start:android:prod": "ionic capacitor run android --prod",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "build:android": "ionic capacitor build android",
     "open:android": "ionic capacitor open android",
     "watch": "ng build --watch --configuration development",
