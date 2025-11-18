@@ -7,7 +7,7 @@ import { ApiService } from '@components/core/services/api.service';
 import { AuthService } from '@components/core/services/auth.service';
 import { ToastService } from '@components/core/services/toast.service';
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
-import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonBackButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
 import { toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
@@ -24,7 +24,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
     CommonModule, FormsModule, IonGrid, IonCol,
     MediaListItemComponent, IonInfiniteScroll,
     IonInfiniteScrollContent, IonButtons, IonBackButton,
-    RangePipe, IonSkeletonText
+    RangePipe
   ],
 })
 export class MediaListPage implements OnInit {

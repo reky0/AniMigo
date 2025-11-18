@@ -11,12 +11,9 @@
   <ion-grid>
     @if (mediaEdges.length === 0) {
       <ion-row class="ion-justify-content-center ion-align-items-center ion-margin-top">
-        @for (i of 20 | range; track $index) {
-          <ion-col size="12" sizeMd="6" sizeLg="4">
-            <ion-skeleton-text
-              class="skeleton ion-margin-bottom"
-              animated
-            ></ion-skeleton-text>
+        @for (i of 25 | range; track $index) {
+          <ion-col size="12" sizeMd="6" sizeLg="3">
+            <am-media-list-item [loading]="true" />
           </ion-col>
         }
       </ion-row>

@@ -20,11 +20,24 @@
     }
   </ion-segment>
 
-  <!-- Loading State -->
-  @if (loading) {
-    <div class="loading-container">
-      <ion-spinner name="crescent"></ion-spinner>
-    </div>
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content
+      refreshingSpinner="circles"
+    />
+  </ion-refresher>
+
+  <!-- Loading State with Skeleton -->
+  @if (loading && !hasDataInCache) {
+    <ion-grid class="media-grid">
+      <ion-row>
+        @for (i of 30 | range; track $index) {
+          <ion-col size="12" sizeMd="6" sizeLg="3">
+            <am-media-list-item [loading]="true"></am-media-list-item>
+          </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
   }
 
   <!-- Empty State -->

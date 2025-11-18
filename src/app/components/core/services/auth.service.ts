@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Capacitor } from '@capacitor/core';
+import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
-import { environment } from '../../../../environments/environment';
 import { App, URLOpenListenerEvent } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { GET_CURRENT_USER } from 'src/app/models/aniList/mediaQueries';
 import { User } from 'src/app/models/aniList/responseInterfaces';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +12,12 @@ import { User } from 'src/app/models/aniList/responseInterfaces';
 export class AuthService {
   private readonly TOKEN_KEY = 'anilist_access_token';
   private userData: User | null = null;
+  private isFetchingUserData = false;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private injector: Injector
+  ) {
     // Set up deep link listener for mobile
     if (Capacitor.isNativePlatform()) {
       this.setupDeepLinkListener();
@@ -154,9 +159,21 @@ export class AuthService {
 
   /**
    * Get stored user data
+   * Automatically fetches from API if not already stored and user is authenticated
    */
   getUserData(): User | null {
-    return this.userData;
+    // If data exists, return it immediately
+    if (this.userData) {
+      return this.userData;
+    }
+
+    // If user is authenticated but data is not loaded, trigger fetch
+    if (this.isAuthenticated() && !this.isFetchingUserData) {
+      this.fetchUserDataInBackground();
+    }
+
+    // Return null for now (data will be available on next call after fetch completes)
+    return null;
   }
 
   /**
@@ -179,5 +196,39 @@ export class AuthService {
    */
   clearUserData(): void {
     this.userData = null;
+  }
+
+  /**
+   * Fetch user data in background (internal helper)
+   * This is called automatically by getUserData() when needed
+   */
+  private fetchUserDataInBackground(): void {
+    // Prevent multiple simultaneous fetches
+    if (this.isFetchingUserData) {
+      return;
+    }
+
+    this.isFetchingUserData = true;
+
+    // Dynamically import and get ApiService to avoid circular dependency
+    import('../services/api.service').then(module => {
+      const apiService = this.injector.get(module.ApiService);
+
+      apiService.fetchCurrentUser(GET_CURRENT_USER, false).subscribe({
+        next: (result: any) => {
+          if (result.data?.Viewer) {
+            this.userData = result.data.Viewer;
+          }
+          this.isFetchingUserData = false;
+        },
+        error: (err: any) => {
+          console.error('Error fetching user data in background:', err);
+          this.isFetchingUserData = false;
+        }
+      });
+    }).catch(err => {
+      console.error('Failed to import ApiService:', err);
+      this.isFetchingUserData = false;
+    });
   }
 }

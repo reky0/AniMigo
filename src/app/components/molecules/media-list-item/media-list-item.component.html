@@ -1,43 +1,57 @@
 <ion-row srole="article" class="main ion-activatable">
   <ion-ripple-effect></ion-ripple-effect>
   <ion-col size="3" class="image-container ion-no-padding">
-    <ion-img class="img"
-      [src]="coverImg"
-      (ionError)="onImageError()"
-      />
-    @if (tag) {
-      <div class="rank-tag"> {{ tag }}</div>
-    }
+    @if (loading) {
+      <ion-skeleton-text [animated]="true" class="skeleton-image"></ion-skeleton-text>
+    } @else {
+      <ion-img class="img"
+        [src]="coverImg"
+        (ionError)="onImageError()"
+        />
+      @if (tag) {
+        <div class="rank-tag"> {{ tag }}</div>
+      }
 
-    @if (isFavourite) {
-      <div class="rank-tag favourite" [class.hasTag]="tag ? true : false"> <ion-icon name="heart" class="heart-icon" /></div>
-    }
+      @if (isFavourite) {
+        <div class="rank-tag favourite" [class.hasTag]="tag ? true : false"> <ion-icon name="heart" class="heart-icon" /></div>
+      }
 
-    @if (media.mediaListEntry?.status) {
-      <div class="status-tag tag-corner tag-corner-bl" [attr.data-status]="media.mediaListEntry.status">
-        <ion-icon [name]="getStatusIcon(media.mediaListEntry.status)"></ion-icon>
-      </div>
+      @if (media.mediaListEntry?.status) {
+        <div class="status-tag tag-corner tag-corner-bl" [attr.data-status]="media.mediaListEntry.status">
+          <ion-icon [name]="getStatusIcon(media.mediaListEntry.status)"></ion-icon>
+        </div>
+      }
     }
   </ion-col>
   <ion-col size="9" class="content-container ion-padding">
-    <ion-row class="ion-no-padding ion-align-items-start content-top">
-      <ion-col size="12" class="ion-no-padding">
-        <ion-card-title class="title ion-no-padding">{{ media.title.english ?? media.title.romaji }}</ion-card-title>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-no-padding ion-align-items-center ion-justify-content-center content-middle">
-      <ion-col size="12" class="ion-no-padding">
-        <ion-note>{{ `${role ? toSentenceCase(role) + ' ·' : ''} ${toSentenceCase(media.format)} ${media.seasonYear ? ` · ${media.seasonYear}` : media.startDate ? media.startDate.year ? ` · ${media.startDate.year}` : '' : ''}` }}</ion-note>
-
-      </ion-col>
-    </ion-row>
-    @if (media.averageScore) {
-      <ion-row class="rating-container ion-no-padding ion-align-items-end content-bottom">
+    @if (loading) {
+      <ion-row class="ion-no-padding ion-align-items-start content-top">
         <ion-col size="12" class="ion-no-padding">
-          <ion-icon name="star" class="scoreIcon"></ion-icon>
-          <ion-note>{{ media.averageScore }}%</ion-note>
+          <ion-skeleton-text [animated]="true" class="skeleton-title"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" class="skeleton-text-medium"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" class="skeleton-text-small"></ion-skeleton-text>
         </ion-col>
       </ion-row>
+    } @else {
+      <ion-row class="ion-no-padding ion-align-items-start content-top">
+        <ion-col size="12" class="ion-no-padding">
+          <ion-card-title class="title ion-no-padding">{{ media.title.english ?? media.title.romaji }}</ion-card-title>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-no-padding ion-align-items-center ion-justify-content-center content-middle">
+        <ion-col size="12" class="ion-no-padding">
+          <ion-note>{{ `${role ? toSentenceCase(role) + ' ·' : ''} ${toSentenceCase(media.format)} ${media.seasonYear ? ` · ${media.seasonYear}` : media.startDate ? media.startDate.year ? ` · ${media.startDate.year}` : '' : ''}` }}</ion-note>
+
+        </ion-col>
+      </ion-row>
+      @if (media.averageScore) {
+        <ion-row class="rating-container ion-no-padding ion-align-items-end content-bottom">
+          <ion-col size="12" class="ion-no-padding">
+            <ion-icon name="star" class="scoreIcon"></ion-icon>
+            <ion-note>{{ media.averageScore }}%</ion-note>
+          </ion-col>
+        </ion-row>
+      }
     }
   </ion-col>
 </ion-row>

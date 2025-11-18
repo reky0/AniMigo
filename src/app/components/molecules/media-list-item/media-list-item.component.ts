@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
+import { IonCardTitle, IonCol, IonIcon, IonImg, IonNote, IonRippleEffect, IonRow, IonSkeletonText } from '@ionic/angular/standalone';
 import { toSentenceCase } from 'src/app/helpers/utils';
 
 @Component({
@@ -7,9 +8,9 @@ import { toSentenceCase } from 'src/app/helpers/utils';
   templateUrl: './media-list-item.component.html',
   styleUrls: ['./media-list-item.component.scss'],
   standalone: true,
-  imports: [IonicModule]
+  imports: [IonSkeletonText, IonCardTitle, IonCol, IonIcon, IonImg, IonNote, IonRippleEffect, IonRow]
 })
-export class MediaListItemComponent  implements OnInit {
+export class MediaListItemComponent extends LoadingStateComponent implements OnInit {
   @Input() media: any;
   @Input() tag: string | undefined;
   @Input() isFavourite: boolean | null | undefined = false;
@@ -19,14 +20,20 @@ export class MediaListItemComponent  implements OnInit {
 
   toSentenceCase = toSentenceCase;
 
-  constructor() { }
+  constructor() {
+    super();
+  }
 
   ngOnInit() {
-    this.coverImg = this.media.coverImage.large?.replace('medium', 'large') ?? this.media.coverImage.medium;
+    if (!this.loading && this.media) {
+      this.coverImg = this.media.coverImage.large?.replace('medium', 'large') ?? this.media.coverImage.medium;
+    }
   }
 
   onImageError() {
-    this.coverImg = this.media.coverImage.large;
+    if (this.media) {
+      this.coverImg = this.media.coverImage.large;
+    }
   }
 
   getStatusIcon(status: string): string {

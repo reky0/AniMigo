@@ -13,14 +13,16 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonLabel,
+  IonRefresher,
+  IonRefresherContent,
   IonRow,
   IonSegment,
   IonSegmentButton,
-  IonSpinner,
   IonText
 } from '@ionic/angular/standalone';
 import { GET_USER_MEDIA_LIST_BY_STATUS } from 'src/app/models/aniList/mediaQueries';
 import { MediaListEntry } from 'src/app/models/aniList/responseInterfaces';
+import { RangePipe } from "../../../helpers/range.pipe";
 
 type MediaType = 'ANIME' | 'MANGA';
 type MediaListStatus = 'CURRENT' | 'PLANNING' | 'COMPLETED' | 'DROPPED' | 'PAUSED' | 'REPEATING';
@@ -36,10 +38,11 @@ interface StatusOption {
   styleUrls: ['./user-media-collection.component.scss'],
   standalone: true,
   imports: [
+    IonRefresherContent,
+    IonRefresher,
     IonInfiniteScrollContent,
     IonInfiniteScroll,
     IonText,
-    IonSpinner,
     IonCol,
     IonRow,
     IonGrid,
@@ -49,8 +52,9 @@ interface StatusOption {
     CommonModule,
     FormsModule,
     MediaListItemComponent,
-    LoginPromptComponent
-  ]
+    LoginPromptComponent,
+    RangePipe
+]
 })
 export class UserMediaCollectionComponent implements OnInit {
   @Input() mediaType: MediaType = 'ANIME';
@@ -61,9 +65,15 @@ export class UserMediaCollectionComponent implements OnInit {
   loading = false;
   isAuthenticated = false;
 
+  // Retry counter for getUserData()
+  private loadMediaListRetryCount = 0;
+
   // Pagination for chunked rendering
   private readonly CHUNK_SIZE = 20; // Load 20 items at a time
   private currentChunk = 0;
+
+  // Data cache to store previously loaded data per status
+  private dataCache: Map<MediaListStatus, MediaListEntry[]> = new Map();
 
   statusOptions: StatusOption[] = [];
 
@@ -108,10 +118,37 @@ export class UserMediaCollectionComponent implements OnInit {
     }
   }
 
-  loadMediaList() {
+  loadMediaList(forceRefresh: boolean = false) {
     const userData = this.authService.getUserData();
     if (!userData?.id) {
-      console.error('No user data available');
+      // User data is not yet available - it may be loading in background
+      // Retry after a short delay (up to 3 times)
+      if (!this.loadMediaListRetryCount) {
+        this.loadMediaListRetryCount = 0;
+      }
+
+      if (this.loadMediaListRetryCount < 3) {
+        this.loadMediaListRetryCount++;
+        setTimeout(() => {
+          this.loadMediaList(forceRefresh);
+        }, 300); // Wait 300ms before retrying
+        return;
+      } else {
+        console.error('No user data available after retries');
+        this.loadMediaListRetryCount = 0; // Reset counter
+        return;
+      }
+    }
+
+    // Reset retry counter on successful call
+    this.loadMediaListRetryCount = 0;
+
+    // Check cache first if not forcing refresh
+    if (!forceRefresh && this.dataCache.has(this.selectedStatus)) {
+      const cachedData = this.dataCache.get(this.selectedStatus)!;
+      this.allMediaList = cachedData;
+      this.currentChunk = 0;
+      this.loadNextChunk();
       return;
     }
 
@@ -127,13 +164,20 @@ export class UserMediaCollectionComponent implements OnInit {
     ).subscribe({
       next: (result) => {
         if (result.data?.MediaListCollection?.lists && result.data.MediaListCollection.lists.length > 0) {
-          this.allMediaList = result.data.MediaListCollection.lists[0].entries;
+          // Sort by createdAt timestamp (newer first) - create a copy first to avoid modifying read-only array
+          this.allMediaList = [...result.data.MediaListCollection.lists[0].entries].sort((a, b) => {
+            return (b.createdAt || 0) - (a.createdAt || 0);
+          });
+          // Store in cache
+          this.dataCache.set(this.selectedStatus, this.allMediaList);
           // Reset pagination and load first chunk
           this.currentChunk = 0;
           this.loadNextChunk();
         } else {
           this.allMediaList = [];
           this.mediaList = [];
+          // Store empty array in cache
+          this.dataCache.set(this.selectedStatus, []);
         }
         this.loading = false;
       },
@@ -179,6 +223,10 @@ export class UserMediaCollectionComponent implements OnInit {
     return this.mediaList.length < this.allMediaList.length;
   }
 
+  get hasDataInCache(): boolean {
+    return this.dataCache.has(this.selectedStatus);
+  }
+
   onStatusChange(event: any) {
     this.selectedStatus = event.detail.value;
     this.loadMediaList();
@@ -191,6 +239,17 @@ export class UserMediaCollectionComponent implements OnInit {
 
   goToLogin() {
     this.router.navigate(['/profile']);
+  }
+
+  handleRefresh(event: any) {
+    // Force refresh by clearing cache and reloading
+    this.dataCache.delete(this.selectedStatus);
+    this.loadMediaList(true);
+
+    // Complete the refresh after a short delay to ensure smooth animation
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
   }
 
   get emptyStateMessage(): string {

@@ -3,10 +3,7 @@
     <ion-row>
       @for (i of 10 | range; track i) {
         <ion-col size="12">
-          <ion-skeleton-text
-            class="skeleton ion-margin-bottom"
-            animated
-          ></ion-skeleton-text>
+          <am-media-list-item [loading]="true" />
         </ion-col>
       }
     </ion-row>
