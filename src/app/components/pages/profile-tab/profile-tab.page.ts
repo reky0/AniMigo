@@ -99,7 +99,7 @@ export class ProfileTabPage implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private readonly toastService: ToastService,
-    private readonly platformService: PlatformService
+    readonly platformService: PlatformService
   ) { }
 
   ngOnInit() {
@@ -444,14 +444,39 @@ export class ProfileTabPage implements OnInit {
         break;
     }
 
-    // Reset pagination and trigger initial load
+    // Initialize pagination from existing data
     const paginationKey = type as 'anime' | 'manga' | 'characters';
-    this.favouritesPagination[paginationKey].currentPage = 0;
-    this.favouritesPagination[paginationKey].hasNextPage = true;
-    this.favouritesPagination[paginationKey].idSet.clear();
+    const existingNodes = this.userData?.favourites?.[paginationKey]?.nodes ?? [];
 
-    // Trigger initial load
-    this.loadMoreFavourites(null);
+    // If we have existing data, initialize from it
+    if (existingNodes.length > 0) {
+      this.favouritesPagination[paginationKey].currentPage = 1; // Already have page 1
+      this.favouritesPagination[paginationKey].idSet.clear();
+
+      // Pre-populate idSet with existing IDs to avoid duplicates
+      existingNodes.forEach((node: any) => {
+        if (node?.id) {
+          this.favouritesPagination[paginationKey].idSet.add(node.id);
+        }
+      });
+
+      // Check if we need to load more (if we have exactly 9 items, there might be more)
+      if (existingNodes.length >= 9) {
+        this.favouritesPagination[paginationKey].hasNextPage = true;
+        // Trigger load of next page
+        this.loadMoreFavourites(null);
+      } else {
+        // We have all the data already
+        this.favouritesPagination[paginationKey].hasNextPage = false;
+      }
+    } else {
+      // No existing data, start fresh
+      this.favouritesPagination[paginationKey].currentPage = 0;
+      this.favouritesPagination[paginationKey].hasNextPage = true;
+      this.favouritesPagination[paginationKey].idSet.clear();
+      // Trigger initial load
+      this.loadMoreFavourites(null);
+    }
   }
 
   async loadMoreFavourites(event: any) {

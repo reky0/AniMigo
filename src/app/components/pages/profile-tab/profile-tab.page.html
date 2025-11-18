@@ -1,3 +1,11 @@
+@if (platformService.isHybrid()) {
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Profile</ion-title>
+    </ion-toolbar>
+  </ion-header>
+}
+
 <ion-content [fullscreen]="false">
   @if (!isAuthenticated) {
     <am-login-prompt (loginClick)="login()"></am-login-prompt>
