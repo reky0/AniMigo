@@ -5,7 +5,18 @@
       @if (loading) {
         <ion-skeleton-text class="img-loading" animated/>
       } @else {
-        <ion-img class="img" [class.fav]="isFavourite" [src]="image" (ionError)="onImageError()" />
+        <div class="img-container">
+          @if (!imageLoaded) {
+            <ion-skeleton-text class="img-loading" animated/>
+          }
+          <ion-img
+            class="img"
+            [class.fav]="isFavourite"
+            [class.loaded]="imageLoaded"
+            [src]="image"
+            (ionImgDidLoad)="onImageLoad()"
+            (ionError)="onImageError()" />
+        </div>
       }
     </ion-col>
   </ion-row>

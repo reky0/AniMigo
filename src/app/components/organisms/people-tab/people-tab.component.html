@@ -98,19 +98,21 @@
         </ion-buttons>
 
         <ion-buttons slot="end">
-          <ion-button
-            (click)="isCharacter(modalData) ? toggleCharacterFavorite() : toggleStaffFavorite()"
-            [disabled]="isTogglingFavorite">
-            @if (isTogglingFavorite) {
-              <ion-spinner name="dots" slot="icon-only"></ion-spinner>
-            } @else {
-              <ion-icon
-                slot="icon-only"
-                [name]="modalData?.isFavourite ? 'heart' : 'heart-outline'"
-                [color]="modalData?.isFavourite ? 'danger' : 'medium'">
-              </ion-icon>
-            }
-          </ion-button>
+          @if (authService.isAuthenticated()) {
+            <ion-button
+              (click)="isCharacter(modalData) ? toggleCharacterFavorite() : toggleStaffFavorite()"
+              [disabled]="isTogglingFavorite">
+              @if (isTogglingFavorite) {
+                <ion-spinner name="dots" slot="icon-only"></ion-spinner>
+              } @else {
+                <ion-icon
+                  slot="icon-only"
+                  [name]="modalData?.isFavourite ? 'heart' : 'heart-outline'"
+                  [color]="modalData?.isFavourite ? 'danger' : 'medium'">
+                </ion-icon>
+              }
+            </ion-button>
+          }
 
           <ion-button>
             <ion-icon slot="icon-only" name="share-social"></ion-icon>

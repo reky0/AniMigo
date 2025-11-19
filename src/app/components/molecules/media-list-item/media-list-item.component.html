@@ -50,7 +50,9 @@
       <ion-row class="ion-no-padding ion-align-items-center ion-justify-content-center content-middle">
         <ion-col size="12" class="ion-no-padding">
           <ion-note>{{ `${role ? toSentenceCase(role) + ' ·' : ''} ${toSentenceCase(media.format)} ${media.seasonYear ? ` · ${media.seasonYear}` : media.startDate ? media.startDate.year ? ` · ${media.startDate.year}` : '' : ''}` }}</ion-note>
-
+          @if (isAdult) {
+            <am-badge-adult />
+          }
         </ion-col>
       </ion-row>
       @if (media.averageScore) {

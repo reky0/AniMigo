@@ -1,0 +1,9 @@
+.adult-badge {
+  --background: #DC2626;
+  --color: #ffffff;
+
+  @media (prefers-color-scheme: dark) {
+    --background: #EF4444;
+    --color: #ffffff;
+  }
+}

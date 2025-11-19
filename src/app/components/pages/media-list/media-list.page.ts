@@ -160,9 +160,12 @@ export class MediaListPage implements OnInit {
       variables.status = this.config.status;
     }
 
+    // Determine if we should hide adult content
+    const hideAdultContent = this.authService.getUserData()?.options?.displayAdultContent !== true;
+
     // Use search method which has network-only fetch policy for proper pagination
     this.apiService
-      .search(GET_MEDIA_LIST, variables, true, !this.authService.getUserData()?.options?.displayAdultContent)
+      .search(GET_MEDIA_LIST, variables, true, hideAdultContent)
       .pipe(take(1))
       .subscribe({
         next: ({ data, errors }) => {

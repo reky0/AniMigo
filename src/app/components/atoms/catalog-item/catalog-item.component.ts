@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { BadgeAdultComponent } from '@components/atoms/badge-adult/badge-adult.component';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
 import { IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRippleEffect, IonRow, IonSkeletonText, IonText } from "@ionic/angular/standalone";
 
@@ -6,7 +7,7 @@ import { IonCol, IonGrid, IonIcon, IonImg, IonNote, IonRippleEffect, IonRow, Ion
   selector: 'am-catalog-item',
   templateUrl: './catalog-item.component.html',
   styleUrls: ['./catalog-item.component.scss'],
-  imports: [IonNote, IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid, IonRippleEffect],
+  imports: [BadgeAdultComponent, IonNote, IonSkeletonText, IonIcon, IonRow, IonImg, IonText, IonCol, IonGrid, IonRippleEffect],
 })
 export class CatalogItemComponent extends LoadingStateComponent {
   @Input() image: string | null | undefined = null;
@@ -17,6 +18,7 @@ export class CatalogItemComponent extends LoadingStateComponent {
   @Input() recommendation: any = null;
   @Input() isFavourite: boolean | null | undefined = false;
   @Input() mediaStatus: string | null | undefined = null;
+  @Input() isAdult: boolean | null | undefined = false;
 
   imageLoaded: boolean = false;
 

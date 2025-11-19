@@ -25,7 +25,7 @@ export const GET_MEDIA_LIST = gql`
     $context: String,
     $isAdult: Boolean
   ) {
-    Page(page: $page, perPage: $perPage) @connection (key: "mediaList", filter: ["context", "sort"]) {
+    Page(page: $page, perPage: $perPage) @connection (key: "mediaList", filter: ["context", "sort", "isAdult"]) {
       pageInfo {
         currentPage
         hasNextPage
@@ -613,6 +613,7 @@ export const SEARCH_MEDIA = gql`
         }
         averageScore
         isFavourite
+        isAdult
         type
         format
         startDate {

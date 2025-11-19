@@ -5,17 +5,19 @@
     </ion-buttons>
 
     <ion-buttons slot="end">
-      <ion-button (click)="toggleMediaFavorite()" [disabled]="isTogglingFavorite">
-        @if (isTogglingFavorite) {
-          <ion-spinner name="dots" slot="icon-only"></ion-spinner>
-        } @else {
-          <ion-icon
-            slot="icon-only"
-            [color]="data?.isFavourite ? 'danger' : 'medium'"
-            [name]="data?.isFavourite ? 'heart' : 'heart-outline'"
-            />
-        }
-      </ion-button>
+      @if (authService.isAuthenticated()) {
+        <ion-button (click)="toggleMediaFavorite()" [disabled]="isTogglingFavorite">
+          @if (isTogglingFavorite) {
+            <ion-spinner name="dots" slot="icon-only"></ion-spinner>
+          } @else {
+            <ion-icon
+              slot="icon-only"
+              [color]="data?.isFavourite ? 'danger' : 'medium'"
+              [name]="data?.isFavourite ? 'heart' : 'heart-outline'"
+              />
+          }
+        </ion-button>
+      }
 
       <ion-button>
         <ion-icon slot="icon-only" name="share-social" color="medium"></ion-icon>

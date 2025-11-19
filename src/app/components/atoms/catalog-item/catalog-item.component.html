@@ -1,4 +1,4 @@
-<ion-grid class="main ion-activatable" [title]="title">
+<ion-grid class="main ion-activatable" [class.has-adult-badge]="isAdult" [title]="title">
   <ion-ripple-effect></ion-ripple-effect>
   @if (loading) {
     <ion-row class="img-container">
@@ -53,6 +53,13 @@
       <ion-row class="note">
         <ion-col>
           <ion-note>{{ note }}</ion-note>
+        </ion-col>
+      </ion-row>
+    }
+    @if (isAdult) {
+      <ion-row class="adult-badge-row">
+        <ion-col>
+          <am-badge-adult />
         </ion-col>
       </ion-row>
     }

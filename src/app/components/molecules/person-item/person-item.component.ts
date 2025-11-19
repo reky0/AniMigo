@@ -17,11 +17,18 @@ export class PersonItemComponent {
   @Input() note: string = "";
   @Input() isFavourite: boolean | null | undefined = false;
 
+  imageLoaded: boolean = false;
+
   toSentenceCase = toSentenceCase;
 
   constructor() { }
 
+  onImageLoad() {
+    this.imageLoaded = true;
+  }
+
   onImageError() {
+    this.imageLoaded = true;
     if (this.image !== this.fallbackImage) {
       this.image = this.fallbackImage;
     }

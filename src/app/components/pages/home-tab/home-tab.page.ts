@@ -54,6 +54,9 @@ export class HomeTabPage implements OnInit {
 
   error: any;
 
+  private loadDataRetryCount = 0;
+  private readonly MAX_RETRIES = 5;
+
   private dataSections: DataSection[] = [
     {
       data: null,
@@ -179,6 +182,23 @@ export class HomeTabPage implements OnInit {
   }
 
   private loadAllData() {
+    // Check if user is authenticated
+    if (this.authService.isAuthenticated()) {
+      const userData = this.authService.getUserData();
+
+      // If user data is not yet available, retry with backoff
+      if (!userData && this.loadDataRetryCount < this.MAX_RETRIES) {
+        this.loadDataRetryCount++;
+        setTimeout(() => {
+          this.loadAllData();
+        }, 200 * this.loadDataRetryCount); // Exponential backoff: 200ms, 400ms, 600ms, etc.
+        return;
+      }
+
+      // Reset retry counter for future calls
+      this.loadDataRetryCount = 0;
+    }
+
     this.fetchData();
   }
 
@@ -189,17 +209,22 @@ export class HomeTabPage implements OnInit {
   private fetchData(onComplete?: () => void) {
     // Create an object of observables for forkJoin
     const requests: { [key: string]: any } = {};
+    const displayAdultContent = this.authService.getUserData()?.options?.displayAdultContent === true;
 
     this.dataSections.forEach(section => {
       this.setLoadingState(section.key, true);
 
-      if (this.authService.getUserData()?.options?.displayAdultContent === undefined ||
-          this.authService.getUserData()?.options?.displayAdultContent === false) {
-        section.variables.isAdult = false;
+      // Create a copy of variables to avoid mutating the original
+      const variables = { ...section.variables };
+
+      if (!displayAdultContent) {
+        // Hide adult content
+        variables.isAdult = false;
       }
+      // If displayAdultContent is true, don't include isAdult parameter (will return all content)
 
       // Wait for loading to be false before taking the result
-      requests[section.key] = this.apiService.fetchBasicData(section.query, section.variables, this.authService.getUserData()?.options?.displayAdultContent).pipe(
+      requests[section.key] = this.apiService.fetchBasicData(section.query, variables, displayAdultContent).pipe(
         filter(result => !result.loading),
         take(1)
       );

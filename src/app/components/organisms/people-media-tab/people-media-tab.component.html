@@ -9,14 +9,19 @@
     </ion-row>
   } @else {
     @if (data && mediaEdges && mediaEdges.length > 0) {
-      @for (media of mediaEdges; track $index) {
-        <am-media-list-item
-          [media]="media.node"
-          [isFavourite]="media.node.isFavourite"
-          [role]="media.characterRole ?? media.staffRole"
-          (click)="triggerNavigationEvent(media.node.type, media.node.id, media.node.isAdult)"
-          />
-      }
+      <ion-row>
+        @for (media of mediaEdges; track $index) {
+          <ion-col size="12">
+            <am-media-list-item
+              [media]="media.node"
+              [isFavourite]="media.node.isFavourite"
+              [role]="media.characterRole ?? media.staffRole"
+              [isAdult]="media.node.isAdult"
+              (click)="triggerNavigationEvent(media.node.type, media.node.id, media.node.isAdult)"
+              />
+          </ion-col>
+        }
+      </ion-row>
       <ion-infinite-scroll
         (ionInfinite)="loadMore($event)"
         [disabled]="!hasNextPage"

@@ -408,6 +408,7 @@
                       <am-media-list-item
                         [title]="anime.title.english ?? anime.title.romaji"
                         [media]="anime"
+                        [isAdult]="anime.isAdult"
                         (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
                         />
                     </ion-col>
@@ -419,6 +420,7 @@
                       <am-media-list-item
                         [title]="manga.title.english ?? manga.title.romaji"
                         [media]="manga"
+                        [isAdult]="manga.isAdult"
                         (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
                         />
                     </ion-col>

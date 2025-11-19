@@ -38,6 +38,8 @@ export class CalendarPage implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private cancelRequest$ = new Subject<void>();
+  private loadSchedulesRetryCount = 0;
+  private readonly MAX_RETRIES = 5;
 
   loadedData: Array<AiringSchedule[] | null> = [null, null, null, null, null, null, null, null];
 
@@ -61,6 +63,23 @@ export class CalendarPage implements OnInit, OnDestroy {
       return;
     }
 
+    // Check if user is authenticated and wait for user data if needed
+    if (this.authService.isAuthenticated()) {
+      const userData = this.authService.getUserData();
+
+      // If user data is not yet available, retry with backoff
+      if (!userData && this.loadSchedulesRetryCount < this.MAX_RETRIES) {
+        this.loadSchedulesRetryCount++;
+        setTimeout(() => {
+          this.fetchAiringSchedules(day);
+        }, 200 * this.loadSchedulesRetryCount); // Exponential backoff
+        return;
+      }
+
+      // Reset retry counter for future calls
+      this.loadSchedulesRetryCount = 0;
+    }
+
     // Cancel any ongoing request
     this.cancelRequest$.next();
 
@@ -73,7 +92,9 @@ export class CalendarPage implements OnInit, OnDestroy {
       to: ts.to
     };
 
-    this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true, this.authService.getUserData()?.options?.displayAdultContent).pipe(
+    const displayAdultContent = this.authService.getUserData()?.options?.displayAdultContent === true;
+
+    this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true, displayAdultContent).pipe(
       take(1), // Only take the first emission to avoid multiple updates
       takeUntil(this.cancelRequest$),
       takeUntil(this.destroy$)

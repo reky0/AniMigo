@@ -27,16 +27,31 @@ ion-grid {
     animation-duration: 150ms;
   }
 
+  .img-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+  }
+
   .img-loading {
     border-radius: 10px;
     width: 100%;
     aspect-ratio: 1 / 1;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
 
   .img {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .img.loaded {
+    opacity: 1;
   }
 
   .img.fav {

@@ -73,7 +73,7 @@ export class PeopleTabComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private router: Router,
-    private readonly authService: AuthService,
+    readonly authService: AuthService,
     private readonly toastService: ToastService
   ) {
     this.isModalOpen = false;

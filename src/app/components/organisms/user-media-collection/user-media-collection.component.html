@@ -58,7 +58,8 @@
           <ion-col size="12" sizeMd="6" sizeLg="3" (click)="goToDetails(entry)">
             <am-media-list-item
               [media]="entry.media"
-              [isFavourite]="entry.media.isFavourite">
+              [isFavourite]="entry.media.isFavourite"
+              [isAdult]="entry.media.isAdult">
             </am-media-list-item>
           </ion-col>
         }

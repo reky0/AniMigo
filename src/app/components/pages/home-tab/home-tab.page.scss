@@ -12,7 +12,7 @@
   gap: 10px;
   scroll-snap-type: x mandatory;
   background-color: transparent;
-  height: 300px;
+  height: 320px;
 }
 
 am-catalog-item {
@@ -20,6 +20,11 @@ am-catalog-item {
   width: 150px;
   height: 100%;
   scroll-snap-align: start;
+
+  .main {
+    height: 100%;
+    max-height: 100%;
+  }
 }
 
 

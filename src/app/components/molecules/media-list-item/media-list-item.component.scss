@@ -1,3 +1,8 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
 .main {
   cursor: pointer;
   align-items: stretch;
@@ -164,5 +169,12 @@
   .scoreIcon {
     vertical-align: bottom;
     padding-right: 5px;
+  }
+
+  .content-middle {
+    am-badge-adult {
+      margin-left: 8px;
+      vertical-align: middle;
+    }
   }
 }

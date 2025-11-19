@@ -60,6 +60,7 @@
               [title]="schedule.media.title.english ?? schedule.media.title.romaji"
               [note]="`Ep ${schedule.episode} airing at ${(schedule.airingAt * 1000) | date:'HH:mm'}`"
               [mediaStatus]="schedule.media.mediaListEntry?.status"
+              [isAdult]="schedule.media.isAdult"
               (click)="goToDetails(schedule.media.id, schedule.media.isAdult)"
               />
           </ion-col>

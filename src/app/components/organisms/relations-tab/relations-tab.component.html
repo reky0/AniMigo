@@ -4,7 +4,7 @@
     (data.recommendations && data.recommendations.nodes && data.recommendations.nodes.length > 0))
   ) {
     @if (data.relations && data.relations.edges && data.relations.edges.length > 0) {
-      <ion-row>
+      <ion-row class="relations">
         <ion-col>
           <ion-row>
             <ion-col>
@@ -23,6 +23,7 @@
                       [note]="toSentenceCase(related.relationType)"
                       [isFavourite]="related.node.isFavourite"
                       [mediaStatus]="related.node.mediaListEntry?.status"
+                      [isAdult]="related.node.isAdult"
                       (click)="goToDetails(related.node.id, related.node.type, related.node.isAdult)"
                       />
                   </ion-col>
@@ -42,7 +43,7 @@
       </ion-row>
     }
     @if (data.recommendations && data.recommendations.nodes && data.recommendations.nodes.length > 0) {
-      <ion-row>
+      <ion-row class="recommendations ion-margin-bottom">
         <ion-col>
           <ion-row>
             <ion-col>
@@ -61,6 +62,7 @@
                       recommendation="true"
                       [isFavourite]="recommendation.mediaRecommendation.isFavourite"
                       [mediaStatus]="recommendation.mediaRecommendation.mediaListEntry?.status"
+                      [isAdult]="recommendation.mediaRecommendation.isAdult"
                       (click)="goToDetails(recommendation.mediaRecommendation.id, recommendation.mediaRecommendation.type, recommendation.mediaRecommendation.isAdult)"
                       />
                   </ion-col>

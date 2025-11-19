@@ -412,7 +412,10 @@ export class ExploreTabPage {
     const query = queryMap[this.category];
     const variables = variablesMap[this.category];
 
-    this.apiService.search(query, variables, true, this.authService.getUserData()?.options?.displayAdultContent ?? false).subscribe({
+    const displayAdultContent = this.authService.getUserData()?.options?.displayAdultContent === true;
+    const filterAdult = !displayAdultContent; // Invert: if we want to display adult, don't filter it
+
+    this.apiService.search(query, variables, true, filterAdult).subscribe({
       next: ({ data, loading, errors }) => {
         const newResults = data?.Page?.media ?? data?.Page?.characters ?? data?.Page?.staff ?? [];
         this.hasNextPage = !!data?.Page?.pageInfo?.hasNextPage;
