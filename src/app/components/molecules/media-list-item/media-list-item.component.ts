@@ -17,6 +17,7 @@ export class MediaListItemComponent extends LoadingStateComponent implements OnI
   @Input() role: string | undefined;
 
   coverImg: string = '';
+  imageLoaded: boolean = false;
 
   toSentenceCase = toSentenceCase;
 
@@ -28,6 +29,10 @@ export class MediaListItemComponent extends LoadingStateComponent implements OnI
     if (!this.loading && this.media) {
       this.coverImg = this.media.coverImage.large?.replace('medium', 'large') ?? this.media.coverImage.medium;
     }
+  }
+
+  onImageLoad() {
+    this.imageLoaded = true;
   }
 
   onImageError() {

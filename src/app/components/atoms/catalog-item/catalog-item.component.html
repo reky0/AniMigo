@@ -3,18 +3,30 @@
   @if (loading) {
     <ion-row class="img-container">
       <ion-col>
-        <ion-skeleton-text animated class="img-loading skeleton-circle"></ion-skeleton-text>
+        <div class="image-wrapper">
+          <ion-skeleton-text [animated]="true" class="skeleton-image"></ion-skeleton-text>
+        </div>
       </ion-col>
     </ion-row>
-    <ion-row class="label-loading-container">
+    <ion-row class="label-container">
       <ion-col>
-        <ion-skeleton-text animated class="label-loading"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" class="skeleton-label-line1"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="rating bottom-row">
+      <ion-col>
+        <ion-skeleton-text [animated]="true" class="skeleton-rating"></ion-skeleton-text>
       </ion-col>
     </ion-row>
   } @else {
     <ion-row class="img-container pos-relative">
       <ion-col>
-        <ion-img [src]="image" class="img" (ionError)="onImageError()"></ion-img>
+        <div class="image-wrapper">
+          @if (!imageLoaded) {
+            <ion-skeleton-text [animated]="true" class="skeleton-image"></ion-skeleton-text>
+          }
+          <ion-img [src]="image" class="img" [class.loaded]="imageLoaded" (ionImgDidLoad)="onImageLoad()" (ionError)="onImageError()"></ion-img>
+        </div>
         @if (isFavourite) {
           <div class="favorite-tag tag-corner tag-corner-tl tag-favorite"> <ion-icon name="heart" class="heart-icon"></ion-icon></div>
         }

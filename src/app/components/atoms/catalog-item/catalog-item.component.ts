@@ -18,13 +18,20 @@ export class CatalogItemComponent extends LoadingStateComponent {
   @Input() isFavourite: boolean | null | undefined = false;
   @Input() mediaStatus: string | null | undefined = null;
 
+  imageLoaded: boolean = false;
+
   constructor() {
     super();
+  }
+
+  onImageLoad() {
+    this.imageLoaded = true;
   }
 
   onImageError() {
     if (this.image !== this.fallbackImage) {
       this.image = this.fallbackImage;
+      this.imageLoaded = false;
     }
   }
 

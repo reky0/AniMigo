@@ -2,12 +2,21 @@
   <ion-ripple-effect></ion-ripple-effect>
   <ion-col size="3" class="image-container ion-no-padding">
     @if (loading) {
-      <ion-skeleton-text [animated]="true" class="skeleton-image"></ion-skeleton-text>
+      <div class="image-wrapper">
+        <ion-skeleton-text [animated]="true" class="skeleton-image"></ion-skeleton-text>
+      </div>
     } @else {
-      <ion-img class="img"
-        [src]="coverImg"
-        (ionError)="onImageError()"
-        />
+      <div class="image-wrapper">
+        @if (!imageLoaded) {
+          <ion-skeleton-text [animated]="true" class="skeleton-image"></ion-skeleton-text>
+        }
+        <ion-img class="img"
+          [class.loaded]="imageLoaded"
+          [src]="coverImg"
+          (ionImgDidLoad)="onImageLoad()"
+          (ionError)="onImageError()"
+          />
+      </div>
       @if (tag) {
         <div class="rank-tag"> {{ tag }}</div>
       }
@@ -23,7 +32,7 @@
       }
     }
   </ion-col>
-  <ion-col size="9" class="content-container ion-padding">
+  <ion-col size="9" class="content-container">
     @if (loading) {
       <ion-row class="ion-no-padding ion-align-items-start content-top">
         <ion-col size="12" class="ion-no-padding">
