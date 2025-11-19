@@ -105,133 +105,123 @@
       }
 
       @if (mainStudios && mainStudios.length > 0) {
-        <ion-row class="main-studios">
-          <ion-col>
-            <ion-note>Studios</ion-note>
-          </ion-col>
-          <ion-col size="12">
-            <ion-row>
-              @for (studio of mainStudios; track $index) {
-                <ion-col size="6" sizeLg="3">
-                  <am-info-chip type="text" outline [info]="studio.node.name" />
-                </ion-col>
-              }
-            </ion-row>
-          </ion-col>
-        </ion-row>
-      }
-
-      @if (otherStudios && otherStudios.length > 0) {
-        <ion-row class="other-studios">
-          <ion-col>
-            <ion-note>Producers</ion-note>
-          </ion-col>
-          <ion-col size="12">
-            <ion-row>
-              @for (studio of otherStudios; track $index) {
-                <ion-col size="6" sizeLg="3">
-                  <am-info-chip type="text" outline [info]="studio.node.name"></am-info-chip>
-                </ion-col>
-              }
-            </ion-row>
-          </ion-col>
-        </ion-row>
-      }
-
-      @if (data.tags && data.tags.length > 0) {
-        <ion-row class="tags">
-          <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
-            <ion-card-title style="margin: 0;">Tags</ion-card-title>
-            @if (hasSpoilerTags) {
-              <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
-                {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
-              </ion-button>
-            }
-          </div>
-
-          <am-collapsible [thresholdHeight]="100">
-            <ion-row>
-              @for (tag of data.tags; track $index) {
-                @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
-                  @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
-                    <ion-col size="6" sizeLg="3">
-                      <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
-                    </ion-col>
-                  }
-                }
-              }
-            </ion-row>
-          </am-collapsible>
-        </ion-row>
-      }
-
-      @if (data.trailer && trailerURL) {
-        <ion-row class="streaming-episodes">
-          <ion-card-title class="ion-margin-top ion-margin-bottom">Trailer</ion-card-title>
-
-          <am-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeLg]="5"></am-media-thumbnail>
-        </ion-row>
-      }
-
-      @if (data.streamingEpisodes && data.streamingEpisodes.length > 0) {
-        <ion-row class="streaming-episodes">
-          <ion-card-title class="ion-margin-top ion-margin-bottom">Episodes</ion-card-title>
-
-          <am-collapsible [thresholdHeight]="100">
-            <ion-row>
-              @for (episode of data.streamingEpisodes; track $index) {
-                <ion-col size="4" sizeLg="3">
-                  <am-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></am-media-thumbnail>
-                  <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
-                </ion-col>
-              }
-            </ion-row>
-          </am-collapsible>
-        </ion-row>
-      }
-
-      @if (streamingSites && streamingSites.length > 0) {
-        <ion-row class="streaming-sites">
-          <ion-card-title class="ion-margin-top ion-margin-bottom">Streaming sites</ion-card-title>
-
+        <ion-col>
+          <ion-note>Studios</ion-note>
+        </ion-col>
+        <ion-col size="12">
           <ion-row>
-            @for (site of streamingSites; track $index) {
-              <ion-col size="6" sizeLg="4">
-                <am-info-chip
-                  [img]="site?.icon"
-                  [note]="site.site"
-                  outline
-                  horizontal
-                  clickable
-                  (click)="openUrl(site.url)"
-                  />
+            @for (studio of mainStudios; track $index) {
+              <ion-col size="6" sizeLg="3">
+                <am-info-chip type="text" outline [info]="studio.node.name" />
               </ion-col>
             }
           </ion-row>
+        </ion-col>
+      }
+
+      @if (otherStudios && otherStudios.length > 0) {
+        <ion-col>
+          <ion-note>Producers</ion-note>
+        </ion-col>
+        <ion-col size="12">
+          <ion-row>
+            @for (studio of otherStudios; track $index) {
+              <ion-col size="6" sizeLg="3">
+                <am-info-chip type="text" outline [info]="studio.node.name"></am-info-chip>
+              </ion-col>
+            }
+          </ion-row>
+        </ion-col>
+      }
+
+      @if (data.tags && data.tags.length > 0) {
+        <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
+          <ion-card-title style="margin: 0;">Tags</ion-card-title>
+          @if (hasSpoilerTags) {
+            <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
+              {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
+            </ion-button>
+          }
+        </div>
+
+        <am-collapsible [thresholdHeight]="100">
+          <ion-row>
+            @for (tag of data.tags; track $index) {
+              @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
+                @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
+                  <ion-col size="6" sizeLg="3">
+                    <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
+                  </ion-col>
+                }
+              }
+            }
+          </ion-row>
+        </am-collapsible>
+      }
+
+      @if (data.trailer && trailerURL) {
+        <ion-card-title class="ion-margin-top ion-margin-bottom">Trailer</ion-card-title>
+
+        <am-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeLg]="5"></am-media-thumbnail>
+      }
+
+      @if (data.streamingEpisodes && data.streamingEpisodes.length > 0) {
+        <ion-card-title class="ion-margin-top ion-margin-bottom">Episodes</ion-card-title>
+
+        <am-collapsible [thresholdHeight]="100">
+          <ion-row>
+            @for (episode of data.streamingEpisodes; track $index) {
+              <ion-col size="4" sizeLg="3">
+                <am-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></am-media-thumbnail>
+                <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
+              </ion-col>
+            }
+          </ion-row>
+        </am-collapsible>
+      }
+
+      @if (streamingSites && streamingSites.length > 0) {
+        <ion-card-title class="ion-margin-top ion-margin-bottom">Streaming sites</ion-card-title>
+
+        <ion-row>
+          @for (site of streamingSites; track $index) {
+            <ion-col size="6" sizeLg="4">
+              <am-info-chip
+                [img]="site?.icon"
+                [note]="site.site"
+                outline
+                horizontal
+                clickable
+                (click)="openUrl(site.url)"
+                />
+            </ion-col>
+          }
         </ion-row>
       }
 
       @if (externalLinks && externalLinks.length > 0) {
-        <ion-row class="external-links ion-margin-bottom">
-          <ion-card-title class="ion-margin-top ion-margin-bottom">External links</ion-card-title>
+        <ion-row class="external-links ion-margin-bottom ion-no-padding">
+          <ion-col class="ion-no-padding">
+            <ion-card-title class="ion-margin-top ion-margin-bottom">External links</ion-card-title>
 
-          <am-collapsible [thresholdHeight]="150">
-            <ion-row>
-              @for (link of externalLinks; track $index) {
-                <ion-col size="6" sizeLg="4">
-                  <am-info-chip type="text"
-                    [img]="link?.icon"
-                    [info]="link.site"
-                    [note]="getLangCode(link.language)"
-                    vertical
-                    outline
-                    clickable
-                    (click)="openUrl(link.url)"
-                    />
-                </ion-col>
-              }
-            </ion-row>
-          </am-collapsible>
+            <am-collapsible [thresholdHeight]="200">
+              <ion-row>
+                @for (link of externalLinks; track $index) {
+                  <ion-col size="6" sizeLg="4">
+                    <am-info-chip type="text"
+                      [img]="link?.icon"
+                      [info]="link.site"
+                      [note]="getLangCode(link.language)"
+                      vertical
+                      outline
+                      clickable
+                      (click)="openUrl(link.url)"
+                      />
+                  </ion-col>
+                }
+              </ion-row>
+            </am-collapsible>
+          </ion-col>
         </ion-row>
       }
     }

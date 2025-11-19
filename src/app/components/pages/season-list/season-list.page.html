@@ -1,0 +1,141 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"/>
+    </ion-buttons>
+    <ion-title>{{ pageTitle }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleViewMode()">
+        <ion-icon slot="icon-only" [name]="isGridView ? 'list-outline' : 'grid-outline'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    @if (mediaEdges.length === 0) {
+      <ion-row class="ion-justify-content-center ion-align-items-center ion-margin-top">
+        @for (i of 25 | range; track $index) {
+          @if (isGridView) {
+            <ion-col size="4" sizeMd="2" sizeLg="1.333">
+              <am-catalog-item [loading]="true" />
+            </ion-col>
+          } @else {
+            <ion-col size="12" sizeMd="6" sizeLg="3">
+              <am-media-list-item [loading]="true" />
+            </ion-col>
+          }
+        }
+      </ion-row>
+    } @else {
+      <ion-row>
+        @for (media of mediaEdges; track media.id) {
+          @if (isGridView) {
+            <ion-col size="4" sizeMd="2" sizeLg="1.333">
+              <am-catalog-item
+                class="media-item ion-activatable"
+                [image]="media.coverImage.large"
+                [fallbackImage]="media.coverImage.medium"
+                [title]="media.title.english ?? media.title.romaji"
+                [rating]="media.averageScore"
+                [isFavourite]="media.isFavourite"
+                [mediaStatus]="media.mediaListEntry?.status"
+                [isAdult]="media.isAdult"
+                (click)="goToDetails(media.id, media.isAdult)"
+              />
+            </ion-col>
+          } @else {
+            <ion-col size="12" sizeMd="6" sizeLg="3">
+              <am-media-list-item
+                class="media-item ion-activatable"
+                [media]="media"
+                (click)="goToDetails(media.id, media.isAdult)"
+                [isFavourite]="media.isFavourite"
+                [isAdult]="media.isAdult"
+              />
+            </ion-col>
+          }
+        }
+      </ion-row>
+      <ion-infinite-scroll
+        (ionInfinite)="loadMore($event)"
+        threshold="0px"
+      >
+        <ion-infinite-scroll-content loadingSpinner="bubbles"/>
+      </ion-infinite-scroll>
+    }
+  </ion-grid>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openFilterModal()">
+      <ion-icon name="options-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-modal [isOpen]="isFilterModalOpen" [breakpoints]="[0.6]" [initialBreakpoint]="0.6" [canDismiss]="true" [backdropDismiss]="true" (didDismiss)="isFilterModalOpen = false">
+    <ng-template>
+      <ion-content>
+        <div class="filter-modal-content">
+          <!-- Season Selector -->
+          <div class="filter-section">
+            <h3 class="filter-title">Season</h3>
+            <div class="season-chips">
+              @for (seasonOption of availableSeasons; track seasonOption) {
+                <ion-chip
+                  [class.selected]="selectedSeason === seasonOption"
+                  (click)="selectedSeason = seasonOption"
+                >
+                  <ion-icon
+                    [name]="seasonOption === 'WINTER' ? 'snow' : seasonOption === 'SPRING' ? 'flower' : seasonOption === 'SUMMER' ? 'sunny' : 'rainy'"
+                  ></ion-icon>
+                </ion-chip>
+              }
+            </div>
+          </div>
+
+          <!-- Year Selector -->
+          <div class="filter-section">
+            <h3 class="filter-title">Year</h3>
+            <div class="year-chips">
+              @for (yearOption of availableYears; track yearOption) {
+                <ion-chip
+                  [class.selected]="selectedYear === yearOption"
+                  (click)="selectedYear = yearOption"
+                >
+                  <ion-label>{{ yearOption }}</ion-label>
+                </ion-chip>
+              }
+            </div>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="filter-section">
+            <h3 class="filter-title">Sort By</h3>
+            <div class="sort-chips">
+              @for (sortOption of sortOptions; track sortOption.value) {
+                <ion-chip
+                  [class.selected]="selectedSort === sortOption.value"
+                  (click)="selectedSort = sortOption.value"
+                >
+                  <ion-icon [name]="sortOption.icon"></ion-icon>
+                  <ion-label>{{ sortOption.label }}</ion-label>
+                </ion-chip>
+              }
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="filter-actions">
+            <ion-button expand="block" fill="clear" (click)="cancelFilters()">
+              Cancel
+            </ion-button>
+            <ion-button expand="block" (click)="applyFilters()">
+              Apply
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

@@ -105,6 +105,10 @@ export const routes: Routes = [
       } as MediaListConfig
     }
   },
+  {
+    path: 'explore/season-list',
+    loadComponent: () => import('./components/pages/season-list/season-list.page').then(m => m.SeasonListPage),
+  },
   // Add this wildcard route at the END
   {
     path: '**',

@@ -1,0 +1,99 @@
+.media-item {
+  cursor: pointer;
+}
+
+// Filter Modal Styles
+.filter-modal-content {
+  padding: 24px 16px;
+}
+
+.filter-section {
+  margin-bottom: 24px;
+}
+
+.filter-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--ion-text-color);
+}
+
+.season-chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  ion-chip {
+    min-width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    padding: 0;
+    
+    ion-icon {
+      margin: 0;
+      font-size: 24px;
+    }
+  }
+}
+
+.year-chips {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--ion-color-medium);
+    border-radius: 2px;
+  }
+}
+
+.sort-chips {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+ion-chip {
+  --background: var(--ion-color-light);
+  --color: var(--ion-text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  flex-shrink: 0;
+
+  &.selected {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  ion-icon {
+    margin: 0;
+    margin-right: 6px;
+  }
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  padding-bottom: 16px;
+
+  ion-button {
+    flex: 1;
+  }
+}

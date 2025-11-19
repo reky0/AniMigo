@@ -461,6 +461,13 @@ export class ExploreTabPage {
     this.router.navigate([target]);
   }
 
+  navigateToSeason(season: string) {
+    const currentYear = new Date().getFullYear();
+    this.router.navigate(['/explore/season-list'], {
+      queryParams: { season, year: currentYear }
+    });
+  }
+
   goToDetails(data: { id: number, type: string, isAdult: boolean }) {
     if (data.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
       this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
