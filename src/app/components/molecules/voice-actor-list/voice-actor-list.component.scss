@@ -1,3 +1,25 @@
+.va-modal-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.va-modal-header {
+  flex-shrink: 0;
+  padding: 16px;
+  border-bottom: 1px solid var(--ion-color-light-shade);
+
+  ion-title {
+    padding: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.va-modal-content {
+  flex-shrink: 0;
+}
+
 ion-grid {
   width: 100%;
 }

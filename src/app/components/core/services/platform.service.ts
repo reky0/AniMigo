@@ -13,15 +13,16 @@ export class PlatformService {
   }
 
   isTouchDevice(): boolean {
-    return ('ontouchstart' in window) ||
-           (navigator.maxTouchPoints > 0) ||
-           this.platform.is('mobile') ||
+    // Prioritize platform-specific checks over browser touch capabilities
+    // This prevents desktop browsers with touch emulation from being detected as touch devices
+    return this.platform.is('mobile') ||
            this.platform.is('mobileweb') ||
            this.platform.is('tablet') ||
            this.platform.is('ipad') ||
            this.platform.is('android') ||
            this.platform.is('ios') ||
-           this.platform.is('hybrid');
+           this.platform.is('hybrid') ||
+           (('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth < 992);
   }
 
   isDesktop(): boolean {

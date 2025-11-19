@@ -50,16 +50,66 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
-.va-modal {
-  --border-radius: 24px;
-  --background: var(--ion-color-light);
-  --backdrop-opacity: 0;
-  overflow-y: scroll;
+// Prevent background scroll when va-modal is open
+body.modal-open {
+  overflow: hidden;
 
-  --height: auto;
+  ion-content {
+    --overflow: hidden;
+  }
+
+  ion-app {
+    pointer-events: none;
+  }
+}
+
+.va-modal {
+  --border-radius: 24px 24px 0px 0px;
+  --background: var(--ion-color-light);
+  --backdrop-opacity: 0.4;
+
+  // Allow content to determine height, not constrained by breakpoint
+  --height: 90vh;
+
+  // Re-enable pointer events for the modal itself
+  pointer-events: auto;
+
+  &::part(backdrop) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    pointer-events: auto;
+  }
 
   &::part(content) {
-    transform: translateZ(0);
+    height: 90vh;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    pointer-events: auto;
+  }
+
+  .va-modal-wrapper {
+    height: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .va-modal-content {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  &.va-modal-desktop {
+    --height: 90vh;
+    --max-height: 90vh;
+    --width: 600px;
   }
 }
 

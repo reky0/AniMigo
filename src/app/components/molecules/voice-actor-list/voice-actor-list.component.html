@@ -1,20 +1,22 @@
-<ion-grid class="ion-padding">
-  <ion-row>
-    <ion-col>
-      <ion-title>Voice Actors</ion-title>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    @for (voiceActor of data; track $index) {
-        <ion-col size="4">
-          <am-person-item
-            [image]="voiceActor.image.large ?? voiceActor.image.medium"
-            [name]="voiceActor.name.full"
-            [note]="voiceActor.language"
-            [isFavourite]="voiceActor.isFavourite"
-            (click)="openModal(voiceActor.id)"
-            />
-        </ion-col>
-    }
-  </ion-row>
-</ion-grid>
+<div class="va-modal-wrapper">
+  <div class="va-modal-header">
+    <ion-title>Voice Actors</ion-title>
+  </div>
+  <div class="va-modal-content">
+    <ion-grid class="ion-padding">
+      <ion-row>
+        @for (voiceActor of data; track $index) {
+            <ion-col size="4">
+              <am-person-item
+                [image]="voiceActor.image.large ?? voiceActor.image.medium"
+                [name]="voiceActor.name.full"
+                [note]="voiceActor.language"
+                [isFavourite]="voiceActor.isFavourite"
+                (click)="openModal(voiceActor.id)"
+                />
+            </ion-col>
+        }
+      </ion-row>
+    </ion-grid>
+  </div>
+</div>
