@@ -67,7 +67,7 @@ import { RangePipe } from '../../../helpers/range.pipe';
 })
 export class SeasonListPage implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
-  
+
   toSentenceCase = toSentenceCase;
 
   mediaEdges: SeasonalMedia[] = [];
@@ -328,7 +328,7 @@ export class SeasonListPage implements OnInit {
       // Load new data
       this.loading = true;
       this.loadMore();
-      
+
       // Scroll to top
       this.content?.scrollToTop(300);
     }
