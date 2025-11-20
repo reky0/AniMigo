@@ -38,16 +38,16 @@ export class StatsTabComponent implements OnInit {
     ];
 
     const scoreColors = [
-      "#EF6C6C", // 10 - soft red (danger)
-      "#F5927E", // 20 - coral-red blend
-      "#F29079", // 30 - brand coral/secondary
-      "#F5A591", // 40 - light coral
-      "#FFB74D", // 50 - gentle amber (warning)
-      "#B794F6", // 60 - soft lavender (accent-purple)
-      "#7EA8E8", // 70 - sky blue (tertiary)
-      "#5DC6C4", // 80 - soft teal (accent-teal)
-      "#6BCF8E", // 90 - soft green (success)
-      "#5D8FDD"  // 100 - brand blue (primary)
+      "#DC3545", // 10 - red
+      "#E8564A", // 20 - red-orange
+      "#F07746", // 30 - orange-red
+      "#F5984F", // 40 - orange
+      "#FFB74D", // 50 - yellow-orange
+      "#E8C85E", // 60 - yellow
+      "#C8D96F", // 70 - yellow-green
+      "#A0D880", // 80 - light green
+      "#7BCF8E", // 90 - green
+      "#5BC77A"  // 100 - vibrant green
     ];
 
     if (this.data?.stats) {

@@ -76,7 +76,7 @@
         </ion-col>
       </ion-row>
 
-      <ion-row>
+      <ion-row class="ion-margin-bottom">
         <ion-col size="4">
           <ion-note>Native</ion-note>
         </ion-col>
@@ -86,7 +86,7 @@
       </ion-row>
 
       @if (data.synonyms && data.synonyms.length > 0) {
-        <ion-row class="synonyms">
+        <ion-row class="synonyms ion-margin-bottom">
           <ion-col size="4">
             <ion-note>Synonyms</ion-note>
           </ion-col>
@@ -105,85 +105,98 @@
       }
 
       @if (mainStudios && mainStudios.length > 0) {
-        <ion-col>
-          <ion-note>Studios</ion-note>
-        </ion-col>
-        <ion-col size="12">
-          <ion-row>
-            @for (studio of mainStudios; track $index) {
-              <ion-col size="6" sizeLg="3">
-                <am-info-chip type="text" outline [info]="studio.node.name" />
-              </ion-col>
-            }
-          </ion-row>
-        </ion-col>
+        <ion-row class="ion-margin-bottom">
+          <ion-col>
+            <ion-note>Studios</ion-note>
+          </ion-col>
+          <ion-col size="12">
+            <ion-row>
+              @for (studio of mainStudios; track $index) {
+                <ion-col size="6" sizeLg="3">
+                  <am-info-chip type="text" outline [info]="studio.node.name" />
+                </ion-col>
+              }
+            </ion-row>
+          </ion-col>
+        </ion-row>
       }
 
       @if (otherStudios && otherStudios.length > 0) {
-        <ion-col>
-          <ion-note>Producers</ion-note>
-        </ion-col>
-        <ion-col size="12">
-          <ion-row>
-            @for (studio of otherStudios; track $index) {
-              <ion-col size="6" sizeLg="3">
-                <am-info-chip type="text" outline [info]="studio.node.name"></am-info-chip>
-              </ion-col>
-            }
-          </ion-row>
-        </ion-col>
+        <ion-row class="ion-margin-bottom">
+          <ion-col>
+            <ion-note>Producers</ion-note>
+          </ion-col>
+          <ion-col size="12">
+            <ion-row>
+              @for (studio of otherStudios; track $index) {
+                <ion-col size="6" sizeLg="3">
+                  <am-info-chip type="text" outline [info]="studio.node.name"></am-info-chip>
+                </ion-col>
+              }
+            </ion-row>
+          </ion-col>
+        </ion-row>
       }
 
       @if (data.tags && data.tags.length > 0) {
-        <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
-          <ion-card-title style="margin: 0;">Tags</ion-card-title>
-          @if (hasSpoilerTags) {
-            <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
-              {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
-            </ion-button>
-          }
-        </div>
+        <ion-row>
+          <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
+            <ion-card-title style="margin: 0;">Tags</ion-card-title>
+            @if (hasSpoilerTags) {
+              <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
+                {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
+              </ion-button>
+            }
+          </div>
 
-        <am-collapsible [thresholdHeight]="100">
-          <ion-row>
-            @for (tag of data.tags; track $index) {
-              @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
-                @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
-                  <ion-col size="6" sizeLg="3">
-                    <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
-                  </ion-col>
+          <am-collapsible [thresholdHeight]="100">
+            <ion-row>
+              @for (tag of data.tags; track $index) {
+                @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
+                  @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
+                    <ion-col size="6" sizeLg="3">
+                      <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
+                    </ion-col>
+                  }
                 }
               }
-            }
-          </ion-row>
-        </am-collapsible>
+            </ion-row>
+          </am-collapsible>
+        </ion-row>
       }
 
       @if (data.trailer && trailerURL) {
-        <ion-card-title class="ion-margin-top ion-margin-bottom">Trailer</ion-card-title>
-
-        <am-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeLg]="5"></am-media-thumbnail>
+        <ion-row class="ion-margin-bottom">
+          <ion-col size="12">
+            <ion-card-title class="ion-margin-top ion-margin-bottom">Trailer</ion-card-title>
+          </ion-col>
+          <ion-col size="12">
+            <am-media-thumbnail [thumbnail]="data.trailer.thumbnail" [mediaUrl]="trailerURL" [size]="7" [sizeLg]="5"></am-media-thumbnail>
+          </ion-col>
+        </ion-row>
       }
 
       @if (data.streamingEpisodes && data.streamingEpisodes.length > 0) {
-        <ion-card-title class="ion-margin-top ion-margin-bottom">Episodes</ion-card-title>
+        <ion-row class="ion-margin-bottom ion-no-padding">
+          <ion-card-title class="ion-margin-top ion-margin-bottom">Episodes</ion-card-title>
 
-        <am-collapsible [thresholdHeight]="100">
-          <ion-row>
-            @for (episode of data.streamingEpisodes; track $index) {
-              <ion-col size="4" sizeLg="3">
-                <am-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></am-media-thumbnail>
-                <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
-              </ion-col>
-            }
-          </ion-row>
-        </am-collapsible>
+          <am-collapsible [thresholdHeight]="100">
+            <ion-row>
+              @for (episode of data.streamingEpisodes; track $index) {
+                <ion-col size="4" sizeLg="3">
+                  <am-media-thumbnail [thumbnail]="episode.thumbnail" [mediaUrl]="episode.url" [size]="12" [sizeLg]="12"></am-media-thumbnail>
+                  <ion-card-subtitle class="mediaTitle">{{ episode.title }}</ion-card-subtitle>
+                </ion-col>
+              }
+            </ion-row>
+          </am-collapsible>
+        </ion-row>
       }
 
       @if (streamingSites && streamingSites.length > 0) {
         <ion-card-title class="ion-margin-top ion-margin-bottom">Streaming sites</ion-card-title>
 
-        <ion-row>
+        <ion-row class="ion-margin-bottom">
           @for (site of streamingSites; track $index) {
             <ion-col size="6" sizeLg="4">
               <am-info-chip

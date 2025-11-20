@@ -282,6 +282,22 @@
                 </ion-card>
               }
             </div>
+          </ion-col>
+
+          <!-- Right Column - Sidebar -->
+          <ion-col size="12" sizeLg="4">
+            <!-- Watch List Stats -->
+            <am-media-status-stats
+              title="Anime List"
+              mediaType="ANIME"
+              [statusCounts]="animeStatusCountsForComponent"
+            />
+
+            <am-media-status-stats
+              title="Manga List"
+              mediaType="MANGA"
+              [statusCounts]="mangaStatusCountsForComponent"
+            />
 
             <!-- Genre Distribution -->
             <div class="content-section">
@@ -307,22 +323,6 @@
                 <p class="empty-state">No genre data available</p>
               }
             </div>
-          </ion-col>
-
-          <!-- Right Column - Sidebar -->
-          <ion-col size="12" sizeLg="4">
-            <!-- Watch List Stats -->
-            <am-media-status-stats
-              title="Anime List"
-              mediaType="ANIME"
-              [statusCounts]="animeStatusCountsForComponent"
-            />
-
-            <am-media-status-stats
-              title="Manga List"
-              mediaType="MANGA"
-              [statusCounts]="mangaStatusCountsForComponent"
-            />
           </ion-col>
         </ion-row>
       </ion-grid>

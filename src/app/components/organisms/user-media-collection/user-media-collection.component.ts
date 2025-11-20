@@ -8,17 +8,17 @@ import { ToastService } from '@components/core/services/toast.service';
 import { LoginPromptComponent } from '@components/molecules/login-prompt/login-prompt.component';
 import { MediaListItemComponent } from '@components/molecules/media-list-item/media-list-item.component';
 import {
-  IonCol,
-  IonGrid,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonLabel,
-  IonRefresher,
-  IonRefresherContent,
-  IonRow,
-  IonSegment,
-  IonSegmentButton,
-  IonText
+    IonCol,
+    IonGrid,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonLabel,
+    IonRefresher,
+    IonRefresherContent,
+    IonRow,
+    IonSegment,
+    IonSegmentButton,
+    IonText
 } from '@ionic/angular/standalone';
 import { GET_USER_MEDIA_LIST_BY_STATUS } from 'src/app/models/aniList/mediaQueries';
 import { MediaListEntry } from 'src/app/models/aniList/responseInterfaces';
@@ -241,7 +241,7 @@ export class UserMediaCollectionComponent implements OnInit {
   }
 
   goToLogin() {
-    this.router.navigate(['/profile']);
+    this.authService.login();
   }
 
   handleRefresh(event: any) {
