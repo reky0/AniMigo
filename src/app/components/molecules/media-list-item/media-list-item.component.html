@@ -1,4 +1,4 @@
-<ion-row srole="article" class="main ion-activatable">
+<ion-row srole="article" class="main ion-activatable" [title]="media?.title?.english ?? media?.title?.romaji">
   <ion-ripple-effect></ion-ripple-effect>
   <ion-col size="3" class="image-container ion-no-padding">
     @if (loading) {
