@@ -19,7 +19,7 @@
                     <am-person-item
                       (click)="openModal('staff', staff.node.id)"
                       [image]="staff.node.image.medium"
-                      [name]="staff.node.name.full"
+                      [name]="getPreferredCharacterName(staff.node.name, authService.getUserData()?.options?.staffNameLanguage)"
                       [note]="staff.role"
                       [isFavourite]="staff.node.isFavourite"
                       />
@@ -57,7 +57,7 @@
                     <am-character-item
                       (click)="openModal('character', character.node.id)"
                       [image]="character.node.image.large"
-                      [name]="character.node.name.full"
+                      [name]="getPreferredCharacterName(character.node.name, authService.getUserData()?.options?.staffNameLanguage)"
                       [note]="character.role"
                       [isFavourite]="character.node.isFavourite"
                       [voiceActors]="character.voiceActors"

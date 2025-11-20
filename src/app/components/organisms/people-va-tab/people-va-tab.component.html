@@ -16,7 +16,7 @@
           <ion-col size="4" sizeMd="3">
             <am-character-item
               [image]="character.node.image.large"
-              [name]="character.node.name.full"
+              [name]="getPreferredCharacterName(character.node.name, authService.getUserData()?.options?.staffNameLanguage)"
               [note]="character.role"
               [isFavourite]="character.node.isFavourite"
               (click)="onCharacterClick(character.node.id)"

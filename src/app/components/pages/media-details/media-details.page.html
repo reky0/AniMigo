@@ -58,7 +58,7 @@
               }
               <ion-row>
                 <ion-col>
-                  <am-section-title [loading]="loading" [title]="data?.title?.english ?? data?.title?.romaji"/>
+                  <am-section-title [loading]="loading" [title]="getPreferredTitle(data?.title, authService.getUserData()?.options?.titleLanguage)"/>
                 </ion-col>
               </ion-row>
 

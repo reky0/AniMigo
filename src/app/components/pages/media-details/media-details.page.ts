@@ -18,7 +18,7 @@ import { RelationsTabComponent } from "@components/organisms/relations-tab/relat
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
 import { IonBackButton, IonBackdrop, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonDatetime, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonModal, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTextarea, IonToggle, IonToolbar } from '@ionic/angular/standalone';
 import { Subscription, take } from 'rxjs';
-import { toSentenceCase } from 'src/app/helpers/utils';
+import { getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
@@ -34,6 +34,8 @@ export class MediaDetailsPageComponent implements OnDestroy {
   platformService: PlatformService = inject(PlatformService);
 
   @ViewChild(IonContent, { static: false }) content?: IonContent;
+
+  getPreferredTitle = getPreferredTitle;
 
   // TODO: ADD MEDIA LIST ADD FUNCTIONALITY ON CATALOG ITEM LONG PRESS (PROJECT-WIDE)
   constructor(
@@ -108,7 +110,8 @@ export class MediaDetailsPageComponent implements OnDestroy {
 
           // Set title after data is loaded
           if (data?.Media) {
-            const title = `${data.Media.title.romaji}${data.Media.title.english ? ` (${data.Media.title.english})` : ''} · AniMigo`;
+            const preferredTitle = getPreferredTitle(data.Media.title, this.authService.getUserData()?.options?.titleLanguage);
+            const title = `${preferredTitle} · AniMigo`;
             this.titleService.setTitle(title);
           }
         }

@@ -36,7 +36,7 @@
             @for (media of trendingAnimes; track $index) {
               <am-catalog-item
                 (click)="goToDetails(media.id, media.type, media.isAdult)"
-                [title]="media.title.english ?? media.title.romaji"
+                [title]="getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage)"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
                 [isFavourite]="media.isFavourite"
                 [fallbackImage]="media.coverImage?.large"
@@ -68,7 +68,7 @@
             @for (media of nextSeasonAnimes; track $index) {
               <am-catalog-item
                 (click)="goToDetails(media.id, media.type, media.isAdult)"
-                [title]="media.title.english ?? media.title.romaji"
+                [title]="getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage)"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
                 [isFavourite]="media.isFavourite"
                 [fallbackImage]="media.coverImage?.large"
@@ -99,7 +99,7 @@
             @for (media of trendingMangas; track $index) {
               <am-catalog-item
                 (click)="goToDetails(media.id, media.type, media.isAdult)"
-                [title]="media.title.english ?? media.title.romaji"
+                [title]="getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage)"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
                 [isFavourite]="media.isFavourite"
                 [fallbackImage]="media.coverImage?.large"
@@ -131,7 +131,7 @@
             @for (media of newlyAddedAnimes; track $index) {
               <am-catalog-item
                 (click)="goToDetails(media.id, media.type, media.isAdult)"
-                [title]="media.title.english ?? media.title.romaji"
+                [title]="getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage)"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
                 [isFavourite]="media.isFavourite"
                 [fallbackImage]="media.coverImage?.large"
@@ -163,7 +163,7 @@
             @for (media of newlyAddedMangas; track $index) {
               <am-catalog-item
                 (click)="goToDetails(media.id, media.type, media.isAdult)"
-                [title]="media.title.english ?? media.title.romaji"
+                [title]="getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage)"
                 [image]="media.coverImage?.large?.replace('medium', 'large') ?? media.coverImage?.medium"
                 [isFavourite]="media.isFavourite"
                 [fallbackImage]="media.coverImage?.large"

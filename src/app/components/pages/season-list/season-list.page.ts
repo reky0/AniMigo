@@ -9,27 +9,27 @@ import { AuthService } from '@components/core/services/auth.service';
 import { ToastService } from '@components/core/services/toast.service';
 import { MediaListItemComponent } from '@components/molecules/media-list-item/media-list-item.component';
 import {
-  IonBackButton,
-  IonButton,
-  IonButtons,
-  IonChip,
-  IonCol,
-  IonContent,
-  IonFab,
-  IonFabButton,
-  IonGrid,
-  IonHeader,
-  IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
-  IonLabel,
-  IonModal,
-  IonRow,
-  IonTitle,
-  IonToolbar
+    IonBackButton,
+    IonButton,
+    IonButtons,
+    IonChip,
+    IonCol,
+    IonContent,
+    IonFab,
+    IonFabButton,
+    IonGrid,
+    IonHeader,
+    IonIcon,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonLabel,
+    IonModal,
+    IonRow,
+    IonTitle,
+    IonToolbar
 } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
-import { AnimeSeason, getCurrentSeason, toSentenceCase } from 'src/app/helpers/utils';
+import { AnimeSeason, getCurrentSeason, getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { SeasonListParams, SeasonalMedia } from 'src/app/models/season-list.interface';
 import { RangePipe } from '../../../helpers/range.pipe';
@@ -69,6 +69,7 @@ export class SeasonListPage implements OnInit {
   @ViewChild(IonContent) content!: IonContent;
 
   toSentenceCase = toSentenceCase;
+  getPreferredTitle = getPreferredTitle;
 
   mediaEdges: SeasonalMedia[] = [];
   private mediaIdSet = new Set<number>();
@@ -109,7 +110,7 @@ export class SeasonListPage implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly titleService: Title,
     private readonly router: Router,
-    private readonly authService: AuthService,
+    public readonly authService: AuthService,
     private readonly toastService: ToastService
   ) {}
 

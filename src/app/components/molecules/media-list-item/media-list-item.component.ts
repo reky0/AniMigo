@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BadgeAdultComponent } from '@components/atoms/badge-adult/badge-adult.component';
 import { LoadingStateComponent } from '@components/core/loading-state/loading-state.component';
+import { AuthService } from '@components/core/services/auth.service';
 import { IonCardTitle, IonCol, IonIcon, IonImg, IonNote, IonRippleEffect, IonRow, IonSkeletonText } from '@ionic/angular/standalone';
-import { toSentenceCase } from 'src/app/helpers/utils';
+import { getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
 
 @Component({
   selector: 'am-media-list-item',
@@ -22,8 +23,9 @@ export class MediaListItemComponent extends LoadingStateComponent implements OnI
   imageLoaded: boolean = false;
 
   toSentenceCase = toSentenceCase;
+  getPreferredTitle = getPreferredTitle;
 
-  constructor() {
+  constructor(public authService: AuthService) {
     super();
   }
 

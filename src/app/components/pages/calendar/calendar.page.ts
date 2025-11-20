@@ -9,6 +9,7 @@ import { ToastService } from '@components/core/services/toast.service';
 import { IonBackButton, IonCol, IonContent, IonGrid, IonHeader, IonRow, IonSegment, IonSegmentButton, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { getPreferredTitle } from 'src/app/helpers/utils';
 import { GET_AIRING_SCHEDULES } from 'src/app/models/aniList/mediaQueries';
 import { AiringSchedule } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
@@ -22,10 +23,12 @@ import { RangePipe } from "../../../helpers/range.pipe";
 })
 export class CalendarPage implements OnInit, OnDestroy {
 
+  getPreferredTitle = getPreferredTitle;
+
   constructor(
     private readonly apiService: ApiService,
     private readonly router: Router,
-    private readonly authService: AuthService,
+    public readonly authService: AuthService,
     private readonly toastService: ToastService
   ) { }
 

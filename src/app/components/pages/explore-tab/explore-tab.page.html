@@ -655,7 +655,7 @@
                       } @else if (category === 'characters') {
                         <ion-col size="4" sizeMd="2" sizeLg="1">
                           <am-person-item
-                            [name]="result.name.full ?? result.name.native"
+                            [name]="getPreferredCharacterName(result.name, authService.getUserData()?.options?.staffNameLanguage)"
                             [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
                             [fallbackImage]="result.image.large"
                             [isFavourite]="result.isFavourite"
@@ -665,7 +665,7 @@
                       } @else if (category === 'staff') {
                         <ion-col size="4" sizeMd="2" sizeLg="1">
                           <am-person-item
-                            [name]="result.name.full ?? result.name.native"
+                            [name]="getPreferredCharacterName(result.name, authService.getUserData()?.options?.staffNameLanguage)"
                             [image]="result.image.large?.replace('medium', 'large') ?? result.image.medium"
                             [fallbackImage]="result.image.large"
                             [isFavourite]="result.isFavourite"

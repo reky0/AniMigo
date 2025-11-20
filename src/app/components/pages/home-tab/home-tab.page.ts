@@ -13,7 +13,7 @@ import { ToastService } from '@components/core/services/toast.service';
 import { forkJoin } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { RangePipe } from 'src/app/helpers/range.pipe';
-import { getNextSeason } from 'src/app/helpers/utils';
+import { getNextSeason, getPreferredTitle } from 'src/app/helpers/utils';
 import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { BasicMedia } from 'src/app/models/aniList/responseInterfaces';
 
@@ -35,6 +35,7 @@ interface DataSection {
 export class HomeTabPage implements OnInit {
   platformService: PlatformService = inject(PlatformService);
 
+  getPreferredTitle = getPreferredTitle;
   loadItems = 10;
 
   trendingAnimes: BasicMedia[] | null | undefined = null;
@@ -132,7 +133,7 @@ export class HomeTabPage implements OnInit {
   constructor(
     private readonly apiService: ApiService,
     private readonly router: Router,
-    private readonly authService: AuthService,
+    public readonly authService: AuthService,
     private readonly toastService: ToastService
   ) { }
 

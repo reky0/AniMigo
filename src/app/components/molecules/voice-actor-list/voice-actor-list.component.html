@@ -9,7 +9,7 @@
             <ion-col size="4">
               <am-person-item
                 [image]="voiceActor.image.large ?? voiceActor.image.medium"
-                [name]="voiceActor.name.full"
+                [name]="getPreferredCharacterName(voiceActor.name, authService.getUserData()?.options?.staffNameLanguage)"
                 [note]="voiceActor.language"
                 [isFavourite]="voiceActor.isFavourite"
                 (click)="openModal(voiceActor.id)"

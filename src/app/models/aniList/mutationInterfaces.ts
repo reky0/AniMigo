@@ -70,10 +70,12 @@ export interface FavoriteToggleResult {
 // ============================================
 
 export type TitleLanguage = 'ROMAJI' | 'ENGLISH' | 'NATIVE' | 'ROMAJI_STYLISED' | 'ENGLISH_STYLISED' | 'NATIVE_STYLISED';
+export type StaffNameLanguage = 'ROMAJI_WESTERN' | 'ROMAJI' | 'NATIVE';
 export type ProfileColor = 'blue' | 'purple' | 'pink' | 'orange' | 'red' | 'green' | 'gray';
 
 export interface UserSettingsInput {
   titleLanguage?: TitleLanguage;
+  staffNameLanguage?: StaffNameLanguage;
   displayAdultContent?: boolean;
   airingNotifications?: boolean;
   profileColor?: ProfileColor;
@@ -85,6 +87,7 @@ export interface UpdateUserResponse {
     name: string;
     options: {
       titleLanguage?: string | null;
+      staffNameLanguage?: string | null;
       displayAdultContent?: boolean;
       airingNotifications?: boolean;
       profileColor?: string | null;

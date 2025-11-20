@@ -6,7 +6,7 @@ import { AuthService } from '@components/core/services/auth.service';
 import { ToastService } from '@components/core/services/toast.service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { IonCol, IonGrid, IonRow, IonTitle } from "@ionic/angular/standalone";
-import { toSentenceCase } from 'src/app/helpers/utils';
+import { getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
 import { DetailedMedia } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 
@@ -21,10 +21,11 @@ export class RelationsTabComponent implements OnInit {
   @Input() loading: boolean = true;
 
   toSentenceCase = toSentenceCase;
+  getPreferredTitle = getPreferredTitle;
 
   constructor(
     private router: Router,
-    private readonly authService: AuthService,
+    public readonly authService: AuthService,
     private readonly toastService: ToastService
   ) { }
 

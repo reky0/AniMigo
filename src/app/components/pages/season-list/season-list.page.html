@@ -37,7 +37,7 @@
                 class="media-item ion-activatable"
                 [image]="media.coverImage.large"
                 [fallbackImage]="media.coverImage.medium"
-                [title]="media.title.english ?? media.title.romaji"
+                [title]="getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage)"
                 [rating]="media.averageScore"
                 [isFavourite]="media.isFavourite"
                 [mediaStatus]="media.mediaListEntry?.status"

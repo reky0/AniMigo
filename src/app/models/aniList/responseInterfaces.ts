@@ -7,11 +7,7 @@ export interface PageInfo {
 
 export interface BasicMedia {
   id: number;
-  title: {
-    romaji: string;
-    english?: string | null;
-    native?: string | null;
-  };
+  title: Title;
   averageScore?: number | null; // Rating as a percentage (0-100)
   coverImage?: {
     medium: string;
@@ -235,7 +231,7 @@ export interface DetailedMedia {
   }> | null;
 
   streamingEpisodes?: Array<{
-    title: string;
+    title: Title;
     thumbnail: string;
     url: string;
     site: string;
@@ -604,6 +600,7 @@ export interface User {
   isBlocked?: boolean;
   options?: {
     titleLanguage?: string | null;
+    staffNameLanguage?: string | null;
     displayAdultContent?: boolean;
     airingNotifications?: boolean;
     profileColor?: string | null;

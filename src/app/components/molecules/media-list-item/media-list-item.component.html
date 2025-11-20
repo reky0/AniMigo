@@ -44,7 +44,7 @@
     } @else {
       <ion-row class="ion-no-padding ion-align-items-start content-top">
         <ion-col size="12" class="ion-no-padding">
-          <ion-card-title class="title ion-no-padding">{{ media.title.english ?? media.title.romaji }}</ion-card-title>
+          <ion-card-title class="title ion-no-padding">{{ getPreferredTitle(media.title, authService.getUserData()?.options?.titleLanguage) }}</ion-card-title>
         </ion-col>
       </ion-row>
       <ion-row class="ion-no-padding ion-align-items-center ion-justify-content-center content-middle">

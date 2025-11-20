@@ -9,22 +9,23 @@ import { CharacterItemComponent } from "@components/molecules/character-item/cha
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
 import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonIcon,
-  IonModal,
-  IonRow,
-  IonSegment,
-  IonSegmentButton,
-  IonSpinner,
-  IonToolbar
+    IonButton,
+    IonButtons,
+    IonCol,
+    IonContent,
+    IonGrid,
+    IonHeader,
+    IonIcon,
+    IonModal,
+    IonRow,
+    IonSegment,
+    IonSegmentButton,
+    IonSpinner,
+    IonToolbar
 } from "@ionic/angular/standalone";
 import { take } from 'rxjs';
 import { RangePipe } from 'src/app/helpers/range.pipe';
+import { getPreferredCharacterName } from 'src/app/helpers/utils';
 import { GET_CHARACTER_BY_ID, GET_STAFF_BY_ID } from 'src/app/models/aniList/mediaQueries';
 import { Character, DetailedMedia, Staff } from 'src/app/models/aniList/responseInterfaces';
 import { PeopleInfoTabComponent } from "../people-info-tab/people-info-tab.component";
@@ -63,6 +64,8 @@ export class PeopleTabComponent implements OnInit {
   @Input() data: DetailedMedia | null | undefined = undefined;
   @Input() loading: boolean = true;
   @ViewChild(IonModal) modal!: IonModal;
+
+  getPreferredCharacterName = getPreferredCharacterName;
 
   isModalOpen: boolean;
   modalSelectedTab: string; // info | media | va

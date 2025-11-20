@@ -166,6 +166,7 @@ export const DELETE_MEDIA_LIST_ENTRY = gql`
 /**
  * Update user settings
  * @param titleLanguage - Preferred title language (ROMAJI, ENGLISH, NATIVE, ROMAJI_STYLISED, ENGLISH_STYLISED, NATIVE_STYLISED)
+ * @param staffNameLanguage - Preferred staff/character name language (ROMAJI_WESTERN, ROMAJI, NATIVE)
  * @param displayAdultContent - Whether to display adult content
  * @param airingNotifications - Whether to receive airing notifications
  * @param profileColor - Profile color (blue, purple, pink, orange, red, green, gray)
@@ -174,12 +175,14 @@ export const DELETE_MEDIA_LIST_ENTRY = gql`
 export const UPDATE_USER_SETTINGS = gql`
   mutation UpdateUser(
     $titleLanguage: UserTitleLanguage
+    $staffNameLanguage: UserStaffNameLanguage
     $displayAdultContent: Boolean
     $airingNotifications: Boolean
     $profileColor: String
   ) {
     UpdateUser(
       titleLanguage: $titleLanguage
+      staffNameLanguage: $staffNameLanguage
       displayAdultContent: $displayAdultContent
       airingNotifications: $airingNotifications
       profileColor: $profileColor
@@ -188,6 +191,7 @@ export const UPDATE_USER_SETTINGS = gql`
       name
       options {
         titleLanguage
+        staffNameLanguage
         displayAdultContent
         airingNotifications
         profileColor

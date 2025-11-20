@@ -46,6 +46,7 @@ export const GET_MEDIA_LIST = gql`
           romaji
           english
           native
+          userPreferred
         }
         coverImage {
           medium
@@ -76,6 +77,7 @@ export const GET_MEDIA_BY_ID = gql`
         romaji
         english
         native
+        userPreferred
       }
       coverImage {
         large
@@ -170,6 +172,7 @@ export const GET_MEDIA_BY_ID = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -189,6 +192,7 @@ export const GET_MEDIA_BY_ID = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -320,6 +324,7 @@ export const GET_CHARACTER_BY_ID = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -372,6 +377,7 @@ export const GET_STAFF_BY_ID = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -397,6 +403,7 @@ export const GET_STAFF_BY_ID = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -440,6 +447,7 @@ export const GET_CHARACTER_MEDIA = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -483,6 +491,7 @@ export const GET_STAFF_MEDIA_STAFF = gql`
             title {
               romaji
               english
+              userPreferred
             }
             coverImage {
               medium
@@ -553,6 +562,7 @@ export const GET_AIRING_SCHEDULES = gql`
           title {
             romaji
             english
+            userPreferred
           }
           coverImage {
             medium
@@ -606,6 +616,7 @@ export const SEARCH_MEDIA = gql`
           romaji
           english
           native
+          userPreferred
         }
         coverImage {
           large
@@ -680,6 +691,7 @@ export const SEARCH_CHARACTER = gql`
               title {
                 romaji
                 english
+                userPreferred
               }
               coverImage {
                 medium
@@ -775,6 +787,7 @@ export const SEARCH_STAFF = gql`
               title {
                 romaji
                 english
+                userPreferred
               }
               coverImage {
                 medium
@@ -814,6 +827,7 @@ export const GET_CURRENT_USER = gql`
       bannerImage
       options {
         titleLanguage
+        staffNameLanguage
         displayAdultContent
         airingNotifications
         profileColor
@@ -879,6 +893,7 @@ export const GET_USER_BY_ID = gql`
       isBlocked
       options {
         titleLanguage
+        staffNameLanguage
         displayAdultContent
         profileColor
       }
@@ -1043,6 +1058,7 @@ export const GET_USER_FAVOURITES = gql`
               romaji
               english
               native
+              userPreferred
             }
             coverImage {
               large
@@ -1073,6 +1089,7 @@ export const GET_USER_FAVOURITES = gql`
               romaji
               english
               native
+              userPreferred
             }
             coverImage {
               large
@@ -1315,6 +1332,7 @@ export const GET_USER_PROFILE_DATA = gql`
       isBlocked
       options {
         titleLanguage
+        staffNameLanguage
         displayAdultContent
         profileColor
       }
@@ -1394,6 +1412,7 @@ export const GET_USER_PROFILE_DATA = gql`
               romaji
               english
               native
+              userPreferred
             }
             coverImage {
               large
@@ -1416,6 +1435,7 @@ export const GET_USER_PROFILE_DATA = gql`
               romaji
               english
               native
+              userPreferred
             }
             coverImage {
               large
@@ -1432,6 +1452,19 @@ export const GET_USER_PROFILE_DATA = gql`
           }
         }
         characters(page: 1, perPage: 9) {
+          nodes {
+            id
+            name {
+              full
+              native
+            }
+            image {
+              large
+              medium
+            }
+          }
+        }
+        staff(page: 1, perPage: 9) {
           nodes {
             id
             name {

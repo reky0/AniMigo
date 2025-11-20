@@ -150,7 +150,7 @@
                       @if (favoriteAnime[i-1]) {
                         <ion-col size="4" sizeMd="2" sizeLg="1.3333">
                           <am-catalog-item
-                            [title]="favoriteAnime[i-1].title.english || favoriteAnime[i-1].title.romaji"
+                            [title]="getPreferredTitle(favoriteAnime[i-1].title, authService.getUserData()?.options?.titleLanguage)"
                             [image]="favoriteAnime[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteAnime[i-1].coverImage.medium"
                             [fallbackImage]="favoriteAnime[i-1].coverImage.large"
                             [mediaStatus]="favoriteAnime[i-1].mediaListEntry?.status"
@@ -188,7 +188,7 @@
                       @if (favoriteManga[i-1]) {
                         <ion-col size="4" sizeMd="2" sizeLg="1.3333">
                           <am-catalog-item
-                            [title]="favoriteManga[i-1].title.english || favoriteManga[i-1].title.romaji"
+                            [title]="getPreferredTitle(favoriteManga[i-1].title, authService.getUserData()?.options?.titleLanguage)"
                             [image]="favoriteManga[i-1].coverImage.large?.replace('medium', 'large') ?? favoriteManga[i-1].coverImage.medium"
                             [fallbackImage]="favoriteManga[i-1].coverImage.large"
                             [mediaStatus]="favoriteManga[i-1].mediaListEntry?.status"
@@ -226,7 +226,7 @@
                       @if (favoriteCharacters[i-1]) {
                         <ion-col size="4" sizeMd="2" sizeLg="1.3333">
                           <am-character-item
-                            [name]="favoriteCharacters[i-1].name.full"
+                            [name]="getPreferredCharacterName(favoriteCharacters[i-1].name, authService.getUserData()?.options?.staffNameLanguage)"
                             [image]="favoriteCharacters[i-1].image.large?.replace('medium', 'large') ?? favoriteCharacters[i-1].image.medium"
                             [fallbackImage]="favoriteCharacters[i-1].image.large"
                             (click)="openModal('character', favoriteCharacters[i-1].id)"
@@ -240,6 +240,44 @@
                 <ion-card>
                   <ion-card-content>
                     <p class="empty-state">No favorite characters yet. @if (isAuthenticated) { <br> Add favorites on <a href="https://anilist.co/" target="_blank">AniList!</a> }</p>
+                  </ion-card-content>
+                </ion-card>
+              }
+
+              <div class="section-header">
+                <h2>Favorite Staff</h2>
+                @if (isAuthenticated) {
+                  <ion-button fill="clear" size="small" (click)="openFavouritesModal('staff')">
+                    View All
+                    <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+                  </ion-button>
+                }
+              </div>
+
+              @if (loading && !userData) {
+                <ion-skeleton-text animated class="skeleton" />
+              } @else if (favoriteStaff.length > 0) {
+                <ion-grid class="favorites-grid">
+                  <ion-row>
+                    @for (i of (isDesktop() ? 9 : 6) | range; track $index) {
+                      @if (favoriteStaff[i-1]) {
+                        <ion-col size="4" sizeMd="2" sizeLg="1.3333">
+                          <am-person-item
+                            [name]="getPreferredCharacterName(favoriteStaff[i-1].name, authService.getUserData()?.options?.staffNameLanguage)"
+                            [image]="favoriteStaff[i-1].image.large?.replace('medium', 'large') ?? favoriteStaff[i-1].image.medium"
+                            [fallbackImage]="favoriteStaff[i-1].image.large"
+                            [isFavourite]="favoriteStaff[i-1].isFavourite"
+                            (click)="openModal('staff', favoriteStaff[i-1].id)"
+                            />
+                        </ion-col>
+                      }
+                    }
+                  </ion-row>
+                </ion-grid>
+              } @else {
+                <ion-card>
+                  <ion-card-content>
+                    <p class="empty-state">No favorite staff yet. @if (isAuthenticated) { <br> Add favorites on <a href="https://anilist.co/" target="_blank">AniList!</a> }</p>
                   </ion-card-content>
                 </ion-card>
               }
@@ -340,11 +378,11 @@
                     <ion-icon name="film"></ion-icon>
                   </ion-segment-button>
 
-                  <!-- @if (modalState.data?.voiceActingRoles) {
+                  @if (isModalDataStaff) {
                     <ion-segment-button value="va" layout="icon-top">
                       <ion-icon name="mic"></ion-icon>
                     </ion-segment-button>
-                  } -->
+                  }
                 </ion-segment>
               </ion-col>
             </ion-row>
@@ -406,7 +444,7 @@
                   @for (anime of favoriteAnime; track $index) {
                     <ion-col size="12" sizeMd="6">
                       <am-media-list-item
-                        [title]="anime.title.english ?? anime.title.romaji"
+                        [title]="getPreferredTitle(anime.title, authService.getUserData()?.options?.titleLanguage)"
                         [media]="anime"
                         [isAdult]="anime.isAdult"
                         (click)="goToDetails({id: anime.id, type: anime.type, isAdult: anime.isAdult})"
@@ -418,7 +456,7 @@
                   @for (manga of favoriteManga; track $index) {
                     <ion-col size="12" sizeMd="6">
                       <am-media-list-item
-                        [title]="manga.title.english ?? manga.title.romaji"
+                        [title]="getPreferredTitle(manga.title, authService.getUserData()?.options?.titleLanguage)"
                         [media]="manga"
                         [isAdult]="manga.isAdult"
                         (click)="goToDetails({id: manga.id, type: manga.type, isAdult: manga.isAdult})"
@@ -430,10 +468,23 @@
                   @for (character of favoriteCharacters; track $index) {
                     <ion-col size="4" sizeMd="3">
                       <am-character-item
-                        [name]="character.name.full"
+                        [name]="getPreferredCharacterName(character.name, authService.getUserData()?.options?.staffNameLanguage)"
                         [image]="character.image.large?.replace('medium', 'large') ?? character.image.medium"
                         [fallbackImage]="character.image.large"
                         (click)="openModal('character', character.id)"
+                        />
+                    </ion-col>
+                  }
+                }
+                @case ('staff') {
+                  @for (staff of favoriteStaff; track $index) {
+                    <ion-col size="4" sizeMd="3">
+                      <am-person-item
+                        [name]="getPreferredCharacterName(staff.name, authService.getUserData()?.options?.staffNameLanguage)"
+                        [image]="staff.image.large?.replace('medium', 'large') ?? staff.image.medium"
+                        [fallbackImage]="staff.image.large"
+                        [isFavourite]="staff.isFavourite"
+                        (click)="openModal('staff', staff.id)"
                         />
                     </ion-col>
                   }

@@ -14,6 +14,7 @@ import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
 import { IonBadge, IonButton, IonButtons, IonCardSubtitle, IonCheckbox, IonChip, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonLabel, IonModal, IonRadio, IonRadioGroup, IonRange, IonRow, IonSearchbar, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
+import { getPreferredCharacterName } from 'src/app/helpers/utils';
 import { GET_GENRES_AND_TAGS, SEARCH_CHARACTER, SEARCH_MEDIA, SEARCH_STAFF } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 
@@ -27,6 +28,8 @@ import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 export class ExploreTabPage {
   @ViewChild('searchBar') searchBar!: IonSearchbar;
   @ViewChild('resultsContent') resultsContent!: IonContent;
+
+  getPreferredCharacterName = getPreferredCharacterName;
 
   isSearchActive = false;
   searchQuery = '';

@@ -9,14 +9,16 @@ import { ToastService } from '@components/core/services/toast.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { LoginPromptComponent } from "@components/molecules/login-prompt/login-prompt.component";
 import { MediaListItemComponent } from "@components/molecules/media-list-item/media-list-item.component";
+import { PersonItemComponent } from "@components/molecules/person-item/person-item.component";
 import { MediaStatusStatsComponent } from "@components/organisms/media-status-stats/media-status-stats.component";
 import { PeopleInfoTabComponent } from "@components/organisms/people-info-tab/people-info-tab.component";
 import { PeopleMediaTabComponent } from "@components/organisms/people-media-tab/people-media-tab.component";
 import { PeopleVATabComponent } from "@components/organisms/people-va-tab/people-va-tab.component";
 import { IonAvatar, IonButton, IonButtons, IonCard, IonCardContent, IonCardSubtitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInfiniteScroll, IonInfiniteScrollContent, IonModal, IonProgressBar, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
-import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
-import { Character, User } from 'src/app/models/aniList/responseInterfaces';
+import { getPreferredCharacterName, getPreferredTitle } from 'src/app/helpers/utils';
+import { GET_CHARACTER_BY_ID, GET_CURRENT_USER, GET_STAFF_BY_ID, GET_USER_FAVOURITES, GET_USER_PROFILE_DATA, GET_USER_STATUS_COUNTS } from 'src/app/models/aniList/mediaQueries';
+import { Character, Staff, User } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
 
 @Component({
@@ -24,12 +26,15 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './profile-tab.page.html',
   styleUrls: ['./profile-tab.page.scss'],
   standalone: true,
-  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent, MediaStatusStatsComponent, LoginPromptComponent]
+  imports: [IonInfiniteScrollContent, IonInfiniteScroll, IonSegmentButton, IonToolbar, IonHeader, IonModal, IonSkeletonText, IonProgressBar, IonAvatar, IonCardContent, IonCard, IonRow, IonCol, IonGrid, IonIcon, IonButton, IonContent, CommonModule, IonButtons, CatalogItemComponent, IonTitle, IonCardSubtitle, IonSpinner, IonSegment, PeopleInfoTabComponent, PeopleMediaTabComponent, PeopleVATabComponent, MediaListItemComponent, RangePipe, CharacterItemComponent, PersonItemComponent, MediaStatusStatsComponent, LoginPromptComponent]
 })
 export class ProfileTabPage implements OnInit {
   token: string | null = null;
   userData: User | null = null;
   loading: boolean = false;
+
+  getPreferredTitle = getPreferredTitle;
+  getPreferredCharacterName = getPreferredCharacterName;
 
   // Store accurate status counts for both anime and manga
   actualAnimeStatusCounts = {
@@ -56,8 +61,8 @@ export class ProfileTabPage implements OnInit {
     isFavouritesOpen: false,
     selectedTab: 'info' as 'info' | 'media' | 'va',
     favouriteCategory: 'media' as 'media' | 'people',
-    favouriteType: 'anime' as 'anime' | 'manga' | 'characters',
-    data: undefined as Character | undefined,
+    favouriteType: 'anime' as 'anime' | 'manga' | 'characters' | 'staff',
+    data: undefined as Character | Staff | undefined,
     isTogglingFavorite: false
   };
 
@@ -80,6 +85,14 @@ export class ProfileTabPage implements OnInit {
       idSet: new Set<number>()
     },
     characters: {
+      currentPage: 0,
+      perPage: 25,
+      hasNextPage: true,
+      loadingMore: false,
+      firstLoading: false,
+      idSet: new Set<number>()
+    },
+    staff: {
       currentPage: 0,
       perPage: 25,
       hasNextPage: true,
@@ -363,6 +376,14 @@ export class ProfileTabPage implements OnInit {
     return this.userData?.favourites?.characters?.nodes ?? [];
   }
 
+  get favoriteStaff() {
+    return this.userData?.favourites?.staff?.nodes ?? [];
+  }
+
+  get isModalDataStaff(): boolean {
+    return this.isStaff(this.modalState.data);
+  }
+
   // TODO: RETRIEVE USER FOLLOWERS AND FOLLOWING DATA IN USER LOGIN PROCESS AND ADD DATA TO USER VARIABLES
   // Social stats (placeholder - would need additional API call)
   get followersCount(): number {
@@ -398,6 +419,21 @@ export class ProfileTabPage implements OnInit {
 
     switch (type) {
       case ('staff'):
+        this.apiService.fetchStaffById(GET_STAFF_BY_ID, variables).subscribe({
+          next: ({ data, loading, errors }) => {
+            this.loading = loading;
+            if (errors) {
+              this.error = errors[0];
+            } else {
+              this.modalState.data = data?.Staff;
+              this.modalState.isOpen = true;
+            }
+          },
+          error: (err) => {
+            this.error = err;
+            this.loading = false;
+          }
+        });
         break;
       case ('character'):
         this.apiService.fetchCharacterById(GET_CHARACTER_BY_ID, variables).subscribe({
@@ -434,6 +470,9 @@ export class ProfileTabPage implements OnInit {
         this.modalState.isFavouritesOpen = true;
         break;
       case ('staff'):
+        this.modalState.favouriteCategory = 'people';
+        this.modalState.favouriteType = type;
+        this.modalState.isFavouritesOpen = true;
         break;
       case ('characters'):
         this.modalState.favouriteCategory = 'people';
@@ -445,7 +484,7 @@ export class ProfileTabPage implements OnInit {
     }
 
     // Initialize pagination from existing data
-    const paginationKey = type as 'anime' | 'manga' | 'characters';
+    const paginationKey = type as 'anime' | 'manga' | 'characters' | 'staff';
     const existingNodes = this.userData?.favourites?.[paginationKey]?.nodes ?? [];
 
     // If we have existing data, initialize from it
@@ -480,7 +519,7 @@ export class ProfileTabPage implements OnInit {
   }
 
   async loadMoreFavourites(event: any) {
-    const favouriteType = this.modalState.favouriteType as 'anime' | 'manga' | 'characters';
+    const favouriteType = this.modalState.favouriteType as 'anime' | 'manga' | 'characters' | 'staff';
     const pagination = this.favouritesPagination[favouriteType];
 
     if (pagination.loadingMore || !pagination.hasNextPage || !this.userData?.id) {
@@ -509,6 +548,9 @@ export class ProfileTabPage implements OnInit {
         break;
       case 'characters':
         variables.charactersPage = pagination.currentPage + 1;
+        break;
+      case 'staff':
+        variables.staffPage = pagination.currentPage + 1;
         break;
     }
 
@@ -567,7 +609,7 @@ export class ProfileTabPage implements OnInit {
     });
   }
 
-  private completeLoadMoreFavourites(event: any, favouriteType: 'anime' | 'manga' | 'characters') {
+  private completeLoadMoreFavourites(event: any, favouriteType: 'anime' | 'manga' | 'characters' | 'staff') {
     const pagination = this.favouritesPagination[favouriteType];
     pagination.loadingMore = false;
     pagination.firstLoading = false;
@@ -590,7 +632,7 @@ export class ProfileTabPage implements OnInit {
 
     // Reset pagination states when closing favourites modal
     Object.keys(this.favouritesPagination).forEach(key => {
-      const paginationKey = key as 'anime' | 'manga' | 'characters';
+      const paginationKey = key as 'anime' | 'manga' | 'characters' | 'staff';
       this.favouritesPagination[paginationKey].currentPage = 0;
       this.favouritesPagination[paginationKey].hasNextPage = true;
       this.favouritesPagination[paginationKey].loadingMore = false;
@@ -604,8 +646,13 @@ export class ProfileTabPage implements OnInit {
 
     this.modalState.isTogglingFavorite = true;
     const previousState = this.modalState.data.isFavourite;
+    const isStaff = this.isStaff(this.modalState.data);
 
-    this.apiService.toggleFavoriteCharacter(this.modalState.data.id, true, previousState as boolean)
+    const toggleObservable = isStaff
+      ? this.apiService.toggleFavoriteStaff(this.modalState.data.id, true, previousState as boolean)
+      : this.apiService.toggleFavoriteCharacter(this.modalState.data.id, true, previousState as boolean);
+
+    toggleObservable
       .pipe(take(1))
       .subscribe({
         next: (result) => {
@@ -622,6 +669,11 @@ export class ProfileTabPage implements OnInit {
           this.modalState.isTogglingFavorite = false;
         }
       });
+  }
+
+  private isStaff(data: Character | Staff | undefined): data is Staff {
+    if (!data) return false;
+    return 'characters' in data || 'staffMedia' in data;
   }
 
   private async showErrorToast(message: string) {

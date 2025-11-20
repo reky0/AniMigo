@@ -57,7 +57,7 @@
               class="catalogItemContainer"
               [image]="schedule.media.coverImage?.large?.replace('medium', 'large') ?? schedule.media.coverImage?.medium"
               [fallbackImage]="schedule.media.coverImage?.large"
-              [title]="schedule.media.title.english ?? schedule.media.title.romaji"
+              [title]="getPreferredTitle(schedule.media.title, authService.getUserData()?.options?.titleLanguage)"
               [note]="`Ep ${schedule.episode} airing at ${(schedule.airingAt * 1000) | date:'HH:mm'}`"
               [mediaStatus]="schedule.media.mediaListEntry?.status"
               [isAdult]="schedule.media.isAdult"

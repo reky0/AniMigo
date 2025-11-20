@@ -1,4 +1,77 @@
-import { FuzzyDate } from "../models/aniList/responseInterfaces";
+import { TitleLanguage } from "../models/aniList/mutationInterfaces";
+import { FuzzyDate, Title } from "../models/aniList/responseInterfaces";
+
+// ============================================
+// Title Preference Helpers
+// ============================================
+
+/**
+ * Get the preferred title based on user preference settings
+ * Falls back to romaji if the preferred language is not available
+ * @param title - The title object containing romaji, english, native, and userPreferred
+ * @param userTitlePreference - The user's title language preference (ROMAJI, ENGLISH, NATIVE, etc.)
+ * @returns The title in the preferred language, or romaji as fallback
+ */
+export function getPreferredTitle(
+  title: Title | null | undefined,
+  userTitlePreference?: TitleLanguage | string | null
+): string {
+  if (!title) return '';
+
+  // If userPreferred is available and populated, use it (AniList's server-side preference handling)
+  if (title.userPreferred) {
+    return title.userPreferred;
+  }
+
+  // Otherwise, handle client-side based on preference
+  const preference = userTitlePreference?.toUpperCase();
+
+  switch (preference) {
+    case 'ENGLISH':
+    case 'ENGLISH_STYLISED':
+      return title.english || title.romaji || title.native || '';
+
+    case 'NATIVE':
+    case 'NATIVE_STYLISED':
+      return title.native || title.romaji || title.english || '';
+
+    case 'ROMAJI':
+    case 'ROMAJI_STYLISED':
+    default:
+      // Default to romaji, fallback to english, then native
+      return title.romaji || title.english || title.native || '';
+  }
+}
+
+/**
+ * Get the preferred character name based on user preference
+ * Falls back to full name if the preferred language is not available
+ * @param name - The character/staff name object
+ * @param userStaffNamePreference - The user's staff/character name language preference
+ * @returns The name in the preferred format
+ */
+export function getPreferredCharacterName(
+  name: { full?: string | null; native?: string | null; alternative?: string[] | null } | null | undefined,
+  userStaffNamePreference?: TitleLanguage | string | null
+): string {
+  if (!name) return '';
+
+  const preference = userStaffNamePreference?.toUpperCase();
+
+  switch (preference) {
+    case 'NATIVE':
+    case 'NATIVE_STYLISED':
+      return name.native || name.full || '';
+
+    case 'ENGLISH':
+    case 'ENGLISH_STYLISED':
+    case 'ROMAJI':
+    case 'ROMAJI_STYLISED':
+    default:
+      // Default to full name (which is typically in romaji/english)
+      return name.full || name.native || '';
+  }
+}
 
 export function openUrl(url: string | undefined): void {
   if (url) {
@@ -88,7 +161,7 @@ export function getCurrentSeason(): SeasonInfo {
   const now = new Date();
   const month = now.getMonth() + 1; // getMonth() returns 0-11
   const year = now.getFullYear();
-  
+
   return {
     season: getSeasonFromMonth(month),
     year: year
@@ -104,10 +177,10 @@ export function getNextSeason(): SeasonInfo {
   const month = now.getMonth() + 1;
   const year = now.getFullYear();
   const currentSeason = getSeasonFromMonth(month);
-  
+
   const seasonOrder: AnimeSeason[] = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
   const currentIndex = seasonOrder.indexOf(currentSeason);
-  
+
   // If we're in Fall, next season is Winter of next year
   if (currentIndex === 3) {
     return {
@@ -115,7 +188,7 @@ export function getNextSeason(): SeasonInfo {
       year: year + 1
     };
   }
-  
+
   // Otherwise, next season is in the same year
   return {
     season: seasonOrder[currentIndex + 1],
@@ -131,19 +204,19 @@ export function getUpcomingSeason(): SeasonInfo {
   const now = new Date();
   const month = now.getMonth() + 1;
   const dayOfMonth = now.getDate();
-  
+
   // If we're in the first half of the first month of a season, show current season
   // Otherwise show next season
   const currentSeason = getCurrentSeason();
-  const isFirstMonthOfSeason = 
+  const isFirstMonthOfSeason =
     (currentSeason.season === 'WINTER' && (month === 1 || month === 12)) ||
     (currentSeason.season === 'SPRING' && month === 3) ||
     (currentSeason.season === 'SUMMER' && month === 6) ||
     (currentSeason.season === 'FALL' && month === 9);
-  
+
   if (isFirstMonthOfSeason && dayOfMonth <= 15) {
     return currentSeason;
   }
-  
+
   return getNextSeason();
 }

@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from '@components/core/services/api.service';
+import { AuthService } from '@components/core/services/auth.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { IonicModule } from "@ionic/angular";
 import { take } from 'rxjs';
-import { toSentenceCase } from 'src/app/helpers/utils';
+import { getPreferredCharacterName, toSentenceCase } from 'src/app/helpers/utils';
 import { GET_STAFF_VA_CHARACTERS } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
@@ -19,6 +20,7 @@ export class PeopleVATabComponent implements OnInit {
   @Output() characterSelected = new EventEmitter<number>(); // Emit character ID to open modal
 
   toSentenceCase = toSentenceCase;
+  getPreferredCharacterName = getPreferredCharacterName;
 
   // Accumulative state
   characterEdges: Array<any> = [];
@@ -31,7 +33,10 @@ export class PeopleVATabComponent implements OnInit {
   loadingMore = false;
   firstLoading = false;
 
-  constructor(private readonly apiService: ApiService) { }
+  constructor(
+    private readonly apiService: ApiService,
+    public readonly authService: AuthService
+  ) { }
 
   ngOnInit() {
     // Start from page 0 so first loadMore fetches page 1
