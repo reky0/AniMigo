@@ -8,17 +8,21 @@ import { ToastService } from '@components/core/services/toast.service';
 import { LoginPromptComponent } from '@components/molecules/login-prompt/login-prompt.component';
 import { MediaListItemComponent } from '@components/molecules/media-list-item/media-list-item.component';
 import {
-    IonCol,
-    IonGrid,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
-    IonLabel,
-    IonRefresher,
-    IonRefresherContent,
-    IonRow,
-    IonSegment,
-    IonSegmentButton,
-    IonText
+  IonBadge,
+  IonCol,
+  IonFab,
+  IonFabButton,
+  IonGrid,
+  IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonLabel,
+  IonRefresher,
+  IonRefresherContent,
+  IonRow,
+  IonSegment,
+  IonSegmentButton,
+  IonText
 } from '@ionic/angular/standalone';
 import { GET_USER_MEDIA_LIST_BY_STATUS } from 'src/app/models/aniList/mediaQueries';
 import { MediaListEntry } from 'src/app/models/aniList/responseInterfaces';
@@ -49,6 +53,10 @@ interface StatusOption {
     IonLabel,
     IonSegmentButton,
     IonSegment,
+    IonBadge,
+    IonFab,
+    IonFabButton,
+    IonIcon,
     CommonModule,
     FormsModule,
     MediaListItemComponent,
@@ -64,6 +72,8 @@ export class UserMediaCollectionComponent implements OnInit {
   mediaList: MediaListEntry[] = []; // Currently displayed entries
   loading = false;
   isAuthenticated = false;
+  isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  private initialLoadComplete = false;
 
   // Retry counter for getUserData()
   private loadMediaListRetryCount = 0;
@@ -74,6 +84,7 @@ export class UserMediaCollectionComponent implements OnInit {
 
   // Data cache to store previously loaded data per status
   private dataCache: Map<MediaListStatus, MediaListEntry[]> = new Map();
+  statusCounts: Map<MediaListStatus, number> = new Map();
 
   statusOptions: StatusOption[] = [];
 
@@ -114,8 +125,80 @@ export class UserMediaCollectionComponent implements OnInit {
   checkAuthAndLoadData() {
     this.isAuthenticated = this.authService.isAuthenticated();
     if (this.isAuthenticated) {
-      this.loadMediaList();
+      this.loadAllStatuses();
     }
+  }
+
+  private loadAllStatuses() {
+    const userData = this.authService.getUserData();
+    if (!userData?.id) {
+      if (this.loadMediaListRetryCount < 3) {
+        this.loadMediaListRetryCount++;
+        setTimeout(() => {
+          this.loadAllStatuses();
+        }, 300);
+        return;
+      } else {
+        console.error('No user data available after retries');
+        this.loadMediaListRetryCount = 0;
+        return;
+      }
+    }
+
+    this.loadMediaListRetryCount = 0;
+
+    // If initial load is already complete, just load the selected status
+    if (this.initialLoadComplete) {
+      this.loadMediaList();
+      return;
+    }
+
+    this.loading = true;
+
+    // Load all statuses at once
+    const statuses: MediaListStatus[] = ['CURRENT', 'PLANNING', 'COMPLETED', 'PAUSED', 'DROPPED', 'REPEATING'];
+    const requests = statuses.map(status =>
+      this.apiService.fetchUserMediaListByStatus(
+        {
+          userId: userData.id,
+          type: this.mediaType,
+          status: status
+        },
+        GET_USER_MEDIA_LIST_BY_STATUS,
+        false
+      )
+    );
+
+    // Use Promise.all to wait for all requests
+    Promise.all(requests.map(req => req.toPromise())).then(results => {
+      results.forEach((result, index) => {
+        const status = statuses[index];
+        if (result?.data?.MediaListCollection?.lists && result.data.MediaListCollection.lists.length > 0) {
+          const entries = [...result.data.MediaListCollection.lists[0].entries].sort((a, b) => {
+            return (b.createdAt || 0) - (a.createdAt || 0);
+          });
+          this.dataCache.set(status, entries);
+          this.statusCounts.set(status, entries.length);
+        } else {
+          this.dataCache.set(status, []);
+          this.statusCounts.set(status, 0);
+        }
+      });
+
+      // Mark initial load as complete
+      this.initialLoadComplete = true;
+
+      // Load the current status data into view
+      const cachedData = this.dataCache.get(this.selectedStatus)!;
+      this.allMediaList = cachedData;
+      this.currentChunk = 0;
+      this.loadNextChunk();
+      this.loading = false;
+    }).catch(err => {
+      console.error(`Error loading ${this.mediaType.toLowerCase()} list:`, err);
+      this.loading = false;
+      this.toastService.error(`Failed to load ${this.mediaType.toLowerCase()} list`);
+    });
   }
 
   loadMediaList(forceRefresh: boolean = false) {
@@ -170,6 +253,8 @@ export class UserMediaCollectionComponent implements OnInit {
           });
           // Store in cache
           this.dataCache.set(this.selectedStatus, this.allMediaList);
+          // Update count for this status
+          this.statusCounts.set(this.selectedStatus, this.allMediaList.length);
           // Reset pagination and load first chunk
           this.currentChunk = 0;
           this.loadNextChunk();
@@ -178,6 +263,8 @@ export class UserMediaCollectionComponent implements OnInit {
           this.mediaList = [];
           // Store empty array in cache
           this.dataCache.set(this.selectedStatus, []);
+          // Update count for this status
+          this.statusCounts.set(this.selectedStatus, 0);
         }
         this.loading = false;
       },
@@ -232,6 +319,20 @@ export class UserMediaCollectionComponent implements OnInit {
     this.loadMediaList();
   }
 
+  getMediaWithEntry(entry: MediaListEntry) {
+    // Merge the media with its mediaListEntry to provide progress data
+    return {
+      ...entry.media,
+      mediaListEntry: {
+        id: entry.id,
+        status: entry.status,
+        progress: entry.progress,
+        progressVolumes: entry.progressVolumes,
+        score: entry.score
+      }
+    };
+  }
+
   goToDetails(entry: MediaListEntry) {
     if (entry.media.isAdult && !this.authService.getUserData()?.options?.displayAdultContent) {
       this.showErrorToast("Oops, your settings don't allow me to show you that! (Adult content warning)")
@@ -245,14 +346,22 @@ export class UserMediaCollectionComponent implements OnInit {
   }
 
   handleRefresh(event: any) {
-    // Force refresh by clearing cache and reloading
-    this.dataCache.delete(this.selectedStatus);
-    this.loadMediaList(true);
+    // Force refresh by clearing all cache and reloading all statuses
+    this.dataCache.clear();
+    this.statusCounts.clear();
+    this.initialLoadComplete = false;
+    this.loadAllStatuses();
 
     // Complete the refresh after a short delay to ensure smooth animation
     setTimeout(() => {
       event.target.complete();
     }, 500);
+  }
+
+  reloadCurrentTab() {
+    // Only refresh the current status tab
+    this.dataCache.delete(this.selectedStatus);
+    this.loadMediaList(true);
   }
 
   get emptyStateMessage(): string {
@@ -263,6 +372,10 @@ export class UserMediaCollectionComponent implements OnInit {
 
   get emptyStateTitle(): string {
     return this.mediaType === 'ANIME' ? 'No anime found' : 'No manga found';
+  }
+
+  getStatusCount(status: MediaListStatus): number | null {
+    return this.statusCounts.get(status) ?? null;
   }
 
   private async showErrorToast(message: string) {

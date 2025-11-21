@@ -11,6 +11,14 @@
   top: 0;
   z-index: 10;
   background: var(--ion-background-color);
+
+  .status-badge {
+    margin-left: 6px;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    vertical-align: middle;
+  }
 }
 
 .media-grid {
@@ -52,5 +60,16 @@
 
   p {
     margin-bottom: 20px;
+  }
+}
+
+ion-fab {
+  position: fixed;
+  bottom: 16px;
+  right: 24px;
+  z-index: 999;
+
+  ion-fab-button {
+    --border-radius: 20px;
   }
 }

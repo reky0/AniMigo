@@ -15,7 +15,12 @@
     class="status-segment">
     @for (status of statusOptions; track status.value) {
       <ion-segment-button [value]="status.value">
-        <ion-label>{{ status.label }}</ion-label>
+        <ion-label>
+          {{ status.label }}
+          @if (getStatusCount(status.value) !== null) {
+            <ion-badge class="status-badge">{{ getStatusCount(status.value) }}</ion-badge>
+          }
+        </ion-label>
       </ion-segment-button>
     }
   </ion-segment>
@@ -57,7 +62,7 @@
         @for (entry of mediaList; track entry.id) {
           <ion-col size="12" sizeMd="6" sizeLg="3" (click)="goToDetails(entry)">
             <am-media-list-item
-              [media]="entry.media"
+              [media]="getMediaWithEntry(entry)"
               [isFavourite]="entry.media.isFavourite"
               [isAdult]="entry.media.isAdult">
             </am-media-list-item>
@@ -77,4 +82,11 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   }
+
+  <!-- FAB for reload -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="reloadCurrentTab()">
+      <ion-icon name="reload-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 }

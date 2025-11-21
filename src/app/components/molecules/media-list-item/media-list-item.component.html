@@ -55,11 +55,13 @@
           }
         </ion-col>
       </ion-row>
-      @if (media.averageScore) {
-        <ion-row class="rating-container ion-no-padding ion-align-items-end content-bottom">
+      @if (hasProgress()) {
+        <ion-row class="progress-container ion-no-padding ion-align-items-end content-bottom">
           <ion-col size="12" class="ion-no-padding">
-            <ion-icon name="star" class="scoreIcon"></ion-icon>
-            <ion-note>{{ media.averageScore }}%</ion-note>
+            <div class="progress-wrapper">
+              <ion-progress-bar [value]="getProgressPercentage()" class="progress-bar"></ion-progress-bar>
+              <ion-note class="progress-text">{{ getProgressText() }}</ion-note>
+            </div>
           </ion-col>
         </ion-row>
       }
