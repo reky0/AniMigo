@@ -95,9 +95,9 @@ export class CalendarPage implements OnInit, OnDestroy {
       to: ts.to
     };
 
-    const displayAdultContent = this.authService.getUserData()?.options?.displayAdultContent === true;
+    const filterAdult = !this.authService.getUserData()?.options?.displayAdultContent === true;
 
-    this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true, displayAdultContent).pipe(
+    this.apiService.fetchAiringSchedules(GET_AIRING_SCHEDULES, variables, true, filterAdult).pipe(
       take(1), // Only take the first emission to avoid multiple updates
       takeUntil(this.cancelRequest$),
       takeUntil(this.destroy$)
