@@ -79,6 +79,18 @@ ion-grid {
     word-break: break-word;
   }
 
+  ion-note {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2em;
+    max-height: 3.6em;
+    word-break: break-word;
+  }
+
   .note-loading {
     width: 50%;
   }

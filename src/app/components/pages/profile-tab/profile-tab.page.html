@@ -401,7 +401,7 @@
                   <am-people-media-tab [data]="modalState.data" (navigate)="goToDetails($event)" />
                 }
                 @case ('va') {
-                  <am-people-va-tab [data]="modalState.data" (navigate)="goToDetails($event)" />
+                  <am-people-va-tab [data]="modalState.data" (navigate)="goToDetails($event)" (characterSelected)="openModal('character', $event)" />
                 }
               }
             } <!-- @else {

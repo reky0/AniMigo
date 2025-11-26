@@ -10,18 +10,22 @@
       }
     </ion-row>
   } @else {
-    @if (data && characterEdges && characterEdges.length > 0) {
+    @if (data && characterMediaEdges && characterMediaEdges.length > 0) {
       <ion-row>
-        @for (character of characterEdges; track $index) {
-          <ion-col size="4" sizeMd="3">
-            <am-character-item
-              [image]="character.node.image.large"
-              [name]="getPreferredCharacterName(character.node.name, authService.getUserData()?.options?.staffNameLanguage)"
-              [note]="character.role"
-              [isFavourite]="character.node.isFavourite"
-              (click)="onCharacterClick(character.node.id)"
-              />
-          </ion-col>
+        @for (edge of characterMediaEdges; track $index) {
+          @if (edge.characters && edge.characters.length > 0) {
+            @for (character of edge.characters; let charIdx = $index; track character.id) {
+              <ion-col size="4" sizeMd="3">
+                <am-character-item
+                  [image]="character.image.large"
+                  [name]="getPreferredCharacterName(character.name, authService.getUserData()?.options?.staffNameLanguage)"
+                  [note]="getCharacterNote(edge)"
+                  [isFavourite]="character.isFavourite"
+                  (click)="onCharacterClick(character.id)"
+                  />
+              </ion-col>
+            }
+          }
         }
       </ion-row>
       <ion-infinite-scroll

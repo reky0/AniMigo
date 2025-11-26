@@ -329,6 +329,14 @@ export interface Staff {
       node: BasicMedia;
     }>;
   } | null;
+  characterMedia?: {
+    pageInfo: PageInfo,
+    edges: Array<{
+      characterRole?: string | null;
+      characters?: Character[] | null;
+      node: BasicMedia;
+    }>;
+  } | null;
 }
 
 export interface StaffResponse {

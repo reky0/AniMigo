@@ -1,11 +1,11 @@
-<ion-grid [title]="name" class="ion-activatable">
+<ion-grid class="ion-activatable">
   <ion-ripple-effect></ion-ripple-effect>
   <ion-row>
     <ion-col>
       @if (loading) {
         <ion-skeleton-text class="img-loading" animated/>
       } @else {
-        <div class="img-container">
+        <div class="img-container" [title]="name">
           @if (!imageLoaded) {
             <ion-skeleton-text class="img-loading" animated/>
           }
@@ -27,16 +27,14 @@
           @if (loading) {
             <ion-skeleton-text class="name-loading" animated/>
           } @else {
-            <ion-label class="name-label">{{ name }}</ion-label>
+            <ion-label class="name-label" [title]="name">{{ name }}</ion-label>
           }
         </ion-col>
         <ion-col size="12">
           @if (loading) {
             <ion-skeleton-text class="note-loading" animated/>
           } @else {
-            <am-collapsible [thresholdHeight]="80">
-              <ion-note>{{ toSentenceCase(note) }}</ion-note>
-            </am-collapsible>
+            <ion-note [title]="toSentenceCase(note)">{{ toSentenceCase(note) }}</ion-note>
           }
         </ion-col>
       </ion-row>

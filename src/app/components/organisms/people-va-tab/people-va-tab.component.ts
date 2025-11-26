@@ -4,7 +4,7 @@ import { AuthService } from '@components/core/services/auth.service';
 import { CharacterItemComponent } from "@components/molecules/character-item/character-item.component";
 import { IonicModule } from "@ionic/angular";
 import { take } from 'rxjs';
-import { getPreferredCharacterName, toSentenceCase } from 'src/app/helpers/utils';
+import { getPreferredCharacterName, getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
 import { GET_STAFF_VA_CHARACTERS } from 'src/app/models/aniList/mediaQueries';
 import { Character, Staff } from 'src/app/models/aniList/responseInterfaces';
 import { RangePipe } from "../../../helpers/range.pipe";
@@ -21,10 +21,10 @@ export class PeopleVATabComponent implements OnInit {
 
   toSentenceCase = toSentenceCase;
   getPreferredCharacterName = getPreferredCharacterName;
+  getPreferredTitle = getPreferredTitle;
 
-  // Accumulative state
-  characterEdges: Array<any> = [];
-  private characterIdSet = new Set<number>();
+  // Accumulative state - now stores character-media pairs instead of unique characters
+  characterMediaEdges: Array<any> = [];
 
   // Pagination state (read from initial data if present)
   currentPage = 1;
@@ -78,8 +78,8 @@ export class PeopleVATabComponent implements OnInit {
       .subscribe({
         next: ({ data, errors }) => {
           this.handleCharacterResponse(
-            data?.Staff?.characters?.edges,
-            data?.Staff?.characters?.pageInfo,
+            data?.Staff?.characterMedia?.edges,
+            data?.Staff?.characterMedia?.pageInfo,
             errors,
             event
           );
@@ -92,14 +92,8 @@ export class PeopleVATabComponent implements OnInit {
     if (!errors) {
       const newEdges = edges ?? [];
 
-      // Add unique edges to accumulated list
-      for (const edge of newEdges) {
-        const id = edge?.node?.id;
-        if (id && !this.characterIdSet.has(id)) {
-          this.characterIdSet.add(id);
-          this.characterEdges.push(edge);
-        }
-      }
+      // Add all edges to accumulated list (allowing duplicates for same character in different media)
+      this.characterMediaEdges.push(...newEdges);
 
       // Update pagination state
       this.currentPage = pageInfo?.currentPage ?? this.currentPage + 1;
@@ -116,5 +110,18 @@ export class PeopleVATabComponent implements OnInit {
     if (!this.hasNextPage && event?.target) {
       event.target.disabled = true;
     }
+  }
+
+  getCharacterNote(edge: any): string {
+    const mediaTitle = this.getPreferredTitle(
+      edge.node?.title,
+      this.authService.getUserData()?.options?.titleLanguage
+    );
+    const role = edge.characterRole ? this.toSentenceCase(edge.characterRole) : '';
+
+    if (role && mediaTitle) {
+      return `${role} • ${mediaTitle}`;
+    }
+    return mediaTitle || role || '';
   }
 }

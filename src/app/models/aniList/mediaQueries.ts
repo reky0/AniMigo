@@ -513,13 +513,13 @@ export const GET_STAFF_MEDIA_STAFF = gql`
 `;
 
 export const GET_STAFF_VA_CHARACTERS = gql`
-  query StaffMedia($id: Int!, $page: Int = 1, $perPage: Int = 25) {
+  query StaffVACharacters($id: Int!, $page: Int = 1, $perPage: Int = 25) {
     Staff(id: $id) {
       id
-      characters(
+      characterMedia(
         page: $page,
         perPage: $perPage,
-        sort: [RELEVANCE, ID],
+        sort: [START_DATE_DESC],
       ) {
         pageInfo {
           currentPage
@@ -528,8 +528,8 @@ export const GET_STAFF_VA_CHARACTERS = gql`
           total
         }
         edges {
-          role
-          node {
+          characterRole
+          characters {
             id
             name {
               full
@@ -542,6 +542,27 @@ export const GET_STAFF_VA_CHARACTERS = gql`
               medium
             }
             isFavourite
+          }
+          node {
+            id
+            type
+            title {
+              romaji
+              english
+              userPreferred
+            }
+            coverImage {
+              medium
+              large
+            }
+            isAdult
+            format
+            seasonYear
+            averageScore
+            isFavourite
+            startDate {
+              year
+            }
           }
         }
       }

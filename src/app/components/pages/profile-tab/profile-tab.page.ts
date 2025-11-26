@@ -443,6 +443,7 @@ export class ProfileTabPage implements OnInit {
               this.error = errors[0];
             } else {
               this.modalState.data = data?.Character;
+              this.modalState.selectedTab = 'info';
               this.modalState.isOpen = true;
             }
           },
