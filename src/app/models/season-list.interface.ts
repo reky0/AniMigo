@@ -51,13 +51,26 @@ export interface SeasonalMedia {
     month: number | null;
     day: number | null;
   };
-  type: string;
+  type: 'ANIME' | 'MANGA';
   format: string;
   isFavourite: boolean;
   isAdult: boolean;
   popularity: number;
+  episodes?: number | null;
+  chapters?: number | null;
+  volumes?: number | null;
   mediaListEntry?: {
-    status: string;
+    id?: number;
+    status?: string;
+    score?: number | null;
+    progress?: number | null;
+    progressVolumes?: number | null;
+    repeat?: number | null;
+    private?: boolean | null;
+    hiddenFromStatusLists?: boolean | null;
+    notes?: string | null;
+    startedAt?: { year?: number | null; month?: number | null; day?: number | null } | null;
+    completedAt?: { year?: number | null; month?: number | null; day?: number | null } | null;
   } | null;
 }
 

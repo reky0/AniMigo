@@ -1,4 +1,9 @@
-<ion-grid class="main ion-activatable" [class.has-adult-badge]="isAdult" [title]="title">
+<ion-grid class="main ion-activatable"
+  [class.has-adult-badge]="isAdult"
+  [title]="title"
+  [class.hovered]="isHovered"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
   <ion-ripple-effect></ion-ripple-effect>
   @if (loading) {
     <ion-row class="img-container">
@@ -35,6 +40,62 @@
             <ion-icon [name]="getStatusIcon(mediaStatus)"></ion-icon>
           </div>
         }
+
+        <!-- FAB for quick add - shown on hover -->
+        @if (authService.isAuthenticated() && mediaId && isHovered) {
+          <div class="catalog-fab-container" [class.fab-open]="isFabOpen">
+            <!-- Quick Actions Buttons (shown when expanded - at top) -->
+            <div class="quick-actions-list" [class.visible]="isFabOpen">
+              <ion-button
+                class="quick-action-btn"
+                shape="round"
+                [attr.data-status]="'PLANNING'"
+                (click)="onQuickAction($event, 'planning')">
+                <ion-icon slot="icon-only" name="time"></ion-icon>
+              </ion-button>
+
+              <ion-button
+                class="quick-action-btn"
+                shape="round"
+                [attr.data-status]="'COMPLETED'"
+                (click)="onQuickAction($event, 'completed')">
+                <ion-icon slot="icon-only" name="checkmark-circle"></ion-icon>
+              </ion-button>
+
+              <ion-button
+                class="quick-action-btn"
+                shape="round"
+                [attr.data-status]="'CURRENT'"
+                (click)="onQuickAction($event, 'watching')">
+                <ion-icon slot="icon-only" name="play"></ion-icon>
+              </ion-button>
+            </div>
+
+            <!-- Main FAB Container -->
+            <div class="main-fab-wrapper">
+              <!-- Main Action Button (Add to List) -->
+              <ion-button
+                class="main-fab-button"
+                shape="round"
+                color="primary"
+                (click)="onFabClick($event)">
+                <ion-icon slot="icon-only" [name]="getMainButtonIcon()"></ion-icon>
+              </ion-button>
+
+              <!-- Quick Actions Toggle Button (Arrow) -->
+              <ion-button
+                class="toggle-fab-button"
+                shape="round"
+                color="primary"
+                (click)="onToggleClick($event)">
+                <ion-icon
+                  slot="icon-only"
+                  [name]="getChevronIcon()">
+                </ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        }
       </ion-col>
     </ion-row>
     <ion-row class="label-container">
@@ -65,3 +126,12 @@
     }
   }
 </ion-grid>
+
+<!-- Media List Modal -->
+<am-media-list-modal
+  [isOpen]="showListUpdateModal"
+  [mediaInfo]="getMediaInfo()"
+  [currentEntry]="mediaListEntry"
+  (closed)="closeDetailedMenu()"
+  (entrySaved)="onEntrySaved($event)"
+/>

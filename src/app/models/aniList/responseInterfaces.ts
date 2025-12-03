@@ -19,8 +19,21 @@ export interface BasicMedia {
   startDate?: FuzzyDate;
   format?: string | null;
   isFavourite?: boolean | null;
+  episodes?: number | null;
+  chapters?: number | null;
+  volumes?: number | null;
   mediaListEntry?: {
+    id: number;
     status: string;
+    score?: number | null;
+    progress?: number | null;
+    progressVolumes?: number | null;
+    repeat?: number | null;
+    private?: boolean | null;
+    hiddenFromStatusLists?: boolean | null;
+    notes?: string | null;
+    startedAt?: FuzzyDate | null;
+    completedAt?: FuzzyDate | null;
   } | null;
 }
 

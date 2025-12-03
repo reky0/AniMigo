@@ -12,11 +12,12 @@ import { AuthService } from '@components/core/services/auth.service';
 import { PlatformService } from '@components/core/services/platform.service';
 import { ToastService } from '@components/core/services/toast.service';
 import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
+import { MediaInfo, MediaListEntry, MediaListModalComponent } from '@components/molecules/media-list-modal/media-list-modal.component';
 import { InfoTabComponent } from "@components/organisms/info-tab/info-tab.component";
 import { PeopleTabComponent } from "@components/organisms/people-tab/people-tab.component";
 import { RelationsTabComponent } from "@components/organisms/relations-tab/relations-tab.component";
 import { StatsTabComponent } from "@components/organisms/stats-tab/stats-tab.component";
-import { IonBackButton, IonBackdrop, IonBadge, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonDatetime, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonModal, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonTextarea, IonToggle, IonToolbar } from '@ionic/angular/standalone';
+import { IonBackButton, IonBackdrop, IonBadge, IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonLabel, IonModal, IonRow, IonSegment, IonSegmentButton, IonSkeletonText, IonSpinner, IonText, IonToolbar } from '@ionic/angular/standalone';
 import { Subscription, take } from 'rxjs';
 import { getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_BY_ID } from 'src/app/models/aniList/mediaQueries';
@@ -28,7 +29,7 @@ import { RangePipe } from "../../../helpers/range.pipe";
   templateUrl: './media-details.page.html',
   styleUrls: ['./media-details.page.scss', './media-details-modals.scss'],
   standalone: true,
-  imports: [IonTextarea, IonDatetime, IonToggle, IonCardHeader, IonCardContent, IonCard, IonLabel, IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe, IonBadge],
+  imports: [IonLabel, IonSpinner, IonModal, IonSegmentButton, IonSegment, IonBackdrop, IonImg, IonRow, IonGrid, IonIcon, IonBackButton, IonButtons, IonButton, IonSkeletonText, IonCol, IonText, IonContent, IonHeader, IonToolbar, CommonModule, FormsModule, SectionTitleComponent, InfoChipComponent, MetaItemComponent, CoverImageComponent, CollapsibleComponent, MediaListModalComponent, InfoTabComponent, PeopleTabComponent, RelationsTabComponent, StatsTabComponent, RangePipe, IonBadge],
 })
 export class MediaDetailsPageComponent implements OnDestroy {
   platformService: PlatformService = inject(PlatformService);
@@ -59,26 +60,6 @@ export class MediaDetailsPageComponent implements OnDestroy {
   showListUpdateModal: boolean = false;
   private longPressTimer: any;
   private isLongPress: boolean = false;
-
-  // Date picker state
-  showStartDatePicker: boolean = false;
-  showEndDatePicker: boolean = false;
-  startDateISO: string = '';
-  endDateISO: string = '';
-
-  // Modal form data
-  modalFormData: {
-    status?: string;
-    score?: number;
-    progress?: number;
-    progressVolumes?: number | null;
-    repeat?: number;
-    private?: boolean;
-    hiddenFromStatusLists?: boolean;
-    notes?: string | null;
-    startedAt?: { year?: number | null; month?: number | null; day?: number | null };
-    completedAt?: { year?: number | null; month?: number | null; day?: number | null };
-  } = {};
 
   ionViewWillEnter() {
     this.toastService.setTabBarVisibility(false);
@@ -305,120 +286,23 @@ export class MediaDetailsPageComponent implements OnDestroy {
       return;
     }
 
-    // Initialize form data with current entry or defaults
-    if (this.data?.mediaListEntry) {
-      const entry = this.data.mediaListEntry;
-      this.modalFormData = {
-        status: entry.status,
-        score: entry.score,
-        progress: entry.progress,
-        progressVolumes: entry.progressVolumes,
-        repeat: entry.repeat,
-        private: entry.private,
-        hiddenFromStatusLists: entry.hiddenFromStatusLists,
-        notes: entry.notes,
-        startedAt: entry.startedAt ? { ...entry.startedAt } : undefined,
-        completedAt: entry.completedAt ? { ...entry.completedAt } : undefined
-      };
-    } else {
-      // Reset for new entry - set default values
-      this.modalFormData = {
-        status: undefined,
-        score: 0,
-        progress: 0,
-        progressVolumes: 0,
-        repeat: 0,
-        private: false,
-        hiddenFromStatusLists: false,
-        notes: '',
-        startedAt: undefined,
-        completedAt: undefined
-      };
-    }
-
     // Collapse the FAB when opening modal
     this.isFabOpen = false;
-
-    // Disable background scrolling
-    this.content?.getScrollElement().then((scrollElement) => {
-      scrollElement.style.overflow = 'hidden';
-    });
-
-    // Use setTimeout to ensure modal state is properly reset before opening
-    // This prevents issues with rapid open/close cycles
-    setTimeout(() => {
-      this.showListUpdateModal = true;
-    }, 50);
+    this.showListUpdateModal = true;
   }
 
   closeDetailedMenu() {
     this.showListUpdateModal = false;
-
-    // Re-enable background scrolling
-    this.content?.getScrollElement().then((scrollElement) => {
-      scrollElement.style.overflow = '';
-    });
   }
 
-  saveDetailedMenu() {
-    if (!this.data?.id) return;
-
-    // Check if any data changed from current to avoid unnecessary API calls
-    const entry = this.data.mediaListEntry;
-    const hasChanges =
-      entry?.status !== this.modalFormData.status ||
-      entry?.score !== this.modalFormData.score ||
-      entry?.progress !== this.modalFormData.progress ||
-      entry?.progressVolumes !== this.modalFormData.progressVolumes ||
-      entry?.repeat !== this.modalFormData.repeat ||
-      entry?.private !== this.modalFormData.private ||
-      entry?.hiddenFromStatusLists !== this.modalFormData.hiddenFromStatusLists ||
-      entry?.notes !== this.modalFormData.notes ||
-      this.hasDateChanged(entry?.startedAt ?? undefined, this.modalFormData.startedAt) ||
-      this.hasDateChanged(entry?.completedAt ?? undefined, this.modalFormData.completedAt);
-
-    if (!hasChanges && entry) {
-      this.closeDetailedMenu();
-      return;
-    }
-
-    // Convert null to undefined for API
-    const convertDate = (date?: { year?: number | null; month?: number | null; day?: number | null }) => {
-      if (!date) return undefined;
-      return {
-        year: date.year ?? undefined,
-        month: date.month ?? undefined,
-        day: date.day ?? undefined
+  onEntrySaved(entry: MediaListEntry | undefined) {
+    // Update local data to reflect changes immediately - create new reference for change detection
+    if (this.data) {
+      this.data = {
+        ...this.data,
+        mediaListEntry: entry as any
       };
-    };
-
-    this.apiService.saveMediaListEntry({
-      mediaId: this.data.id,
-      status: this.modalFormData.status as any,
-      score: this.modalFormData.score,
-      progress: this.modalFormData.progress,
-      progressVolumes: this.modalFormData.progressVolumes ?? undefined,
-      repeat: this.modalFormData.repeat,
-      private: this.modalFormData.private,
-      hiddenFromStatusLists: this.modalFormData.hiddenFromStatusLists,
-      notes: this.modalFormData.notes ?? undefined,
-      startedAt: convertDate(this.modalFormData.startedAt),
-      completedAt: convertDate(this.modalFormData.completedAt)
-    }).subscribe({
-      next: (response) => {
-        // Update local data to reflect changes immediately - create new reference for change detection
-        if (this.data) {
-          this.data = {
-            ...this.data,
-            mediaListEntry: response.data
-          };
-        }
-        this.closeDetailedMenu();
-      },
-      error: (error) => {
-        console.error('Failed to save media list entry:', error);
-      }
-    });
+    }
   }
 
   isTabletOrAbove(): boolean {
@@ -449,6 +333,17 @@ export class MediaDetailsPageComponent implements OnDestroy {
     return this.data?.mediaListEntry ? 'pencil' : 'add';
   }
 
+  getMediaInfo(): MediaInfo | undefined {
+    if (!this.data?.id || !this.data?.type) return undefined;
+    return {
+      id: this.data.id,
+      type: this.data.type,
+      episodes: this.data.episodes,
+      chapters: this.data.chapters,
+      volumes: this.data.volumes
+    };
+  }
+
   getMainButtonLabel(): string {
     if (!this.data?.mediaListEntry) {
       return 'Add';
@@ -468,60 +363,6 @@ export class MediaDetailsPageComponent implements OnDestroy {
     };
 
     return statusMap[status] || this.toSentenceCase(status);
-  }
-
-  // Counter methods for modal
-  incrementProgress() {
-    const current = this.modalFormData.progress || 0;
-    const max = this.data?.type === 'ANIME' ? this.data?.episodes : this.data?.chapters;
-    if (max && current >= max) return;
-    this.modalFormData.progress = current + 1;
-  }
-
-  decrementProgress() {
-    const current = this.modalFormData.progress || 0;
-    if (current <= 0) return;
-    this.modalFormData.progress = current - 1;
-  }
-
-  incrementVolumes() {
-    const current = this.modalFormData.progressVolumes || 0;
-    const max = this.data?.volumes;
-    if (max && current >= max) return;
-    this.modalFormData.progressVolumes = current + 1;
-  }
-
-  decrementVolumes() {
-    const current = this.modalFormData.progressVolumes || 0;
-    if (current <= 0) return;
-    this.modalFormData.progressVolumes = current - 1;
-  }
-
-  incrementScore() {
-    const current = this.modalFormData.score || 0;
-    if (current >= 10) return;
-    this.modalFormData.score = current + 1;
-  }
-
-  decrementScore() {
-    const current = this.modalFormData.score || 0;
-    if (current <= 0) return;
-    this.modalFormData.score = current - 1;
-  }
-
-  incrementRepeat() {
-    const current = this.modalFormData.repeat || 0;
-    this.modalFormData.repeat = current + 1;
-  }
-
-  decrementRepeat() {
-    const current = this.modalFormData.repeat || 0;
-    if (current <= 0) return;
-    this.modalFormData.repeat = current - 1;
-  }
-
-  setModalStatus(status: 'CURRENT' | 'PLANNING' | 'COMPLETED' | 'DROPPED' | 'PAUSED' | 'REPEATING') {
-    this.modalFormData.status = status;
   }
 
   deleteEntry() {
@@ -545,94 +386,5 @@ export class MediaDetailsPageComponent implements OnDestroy {
         console.error('Failed to delete entry:', error);
       }
     });
-  }
-
-  // Date picker methods
-  openStartDatePicker() {
-    // Convert fuzzy date to ISO string for ion-datetime
-    const date = this.modalFormData.startedAt;
-    if (date?.year && date?.month && date?.day) {
-      this.startDateISO = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
-    } else {
-      this.startDateISO = new Date().toISOString();
-    }
-    this.showStartDatePicker = true;
-  }
-
-  openEndDatePicker() {
-    // Convert fuzzy date to ISO string for ion-datetime
-    const date = this.modalFormData.completedAt;
-    if (date?.year && date?.month && date?.day) {
-      this.endDateISO = `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
-    } else {
-      this.endDateISO = new Date().toISOString();
-    }
-    this.showEndDatePicker = true;
-  }
-
-  onStartDateChange(event: any) {
-    const isoDate = event.detail.value;
-    if (isoDate) {
-      const date = new Date(isoDate);
-      this.modalFormData.startedAt = {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1, // JavaScript months are 0-indexed
-        day: date.getDate()
-      };
-    }
-  }
-
-  onEndDateChange(event: any) {
-    const isoDate = event.detail.value;
-    if (isoDate) {
-      const date = new Date(isoDate);
-      this.modalFormData.completedAt = {
-        year: date.getFullYear(),
-        month: date.getMonth() + 1, // JavaScript months are 0-indexed
-        day: date.getDate()
-      };
-    }
-  }
-
-  clearStartDate() {
-    this.modalFormData.startedAt = undefined;
-    this.startDateISO = '';
-    this.showStartDatePicker = false;
-  }
-
-  clearEndDate() {
-    this.modalFormData.completedAt = undefined;
-    this.endDateISO = '';
-    this.showEndDatePicker = false;
-  }
-
-  getStartDateLabel(): string {
-    const date = this.modalFormData.startedAt;
-    if (date?.year && date?.month && date?.day) {
-      return `${date.month}/${date.day}/${date.year}`;
-    }
-    return 'Start date';
-  }
-
-  getEndDateLabel(): string {
-    const date = this.modalFormData.completedAt;
-    if (date?.year && date?.month && date?.day) {
-      return `${date.month}/${date.day}/${date.year}`;
-    }
-    return 'End date';
-  }
-
-  hasDateChanged(
-    date1?: { year?: number | null; month?: number | null; day?: number | null },
-    date2?: { year?: number | null; month?: number | null; day?: number | null }
-  ): boolean {
-    // If both are undefined/null, no change
-    if (!date1 && !date2) return false;
-    // If one exists and the other doesn't, there's a change
-    if (!date1 || !date2) return true;
-    // Compare individual components
-    return date1.year !== date2.year ||
-           date1.month !== date2.month ||
-           date1.day !== date2.day;
   }
 }

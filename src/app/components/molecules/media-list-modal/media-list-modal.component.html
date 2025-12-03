@@ -1,0 +1,254 @@
+<ion-modal
+  [isOpen]="isOpen"
+  (didDismiss)="close()"
+  [backdropDismiss]="true"
+  class="detailed-menu-modal">
+  <ng-template>
+    <div class="modal-wrapper" (click)="close()">
+      <ion-card class="modal-card" (click)="$event.stopPropagation()">
+        <ion-card-header>
+          <div class="header-content">
+            <ion-button fill="clear" class="header-btn" (click)="close()">
+              Cancel
+            </ion-button>
+            <ion-button fill="clear" class="header-btn save-btn" (click)="save()">
+              Save
+            </ion-button>
+          </div>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- Quick action buttons as radio inputs -->
+          <div class="quick-actions-grid">
+            <label class="action-radio-btn" [attr.data-status]="'CURRENT'" [class.selected]="modalFormData.status === 'CURRENT'" [title]="mediaInfo?.type === 'ANIME' ? 'Watching' : 'Reading'" (click)="$event.stopPropagation(); setModalStatus('CURRENT')">
+              <ion-icon name="play-circle-outline"></ion-icon>
+            </label>
+            <label class="action-radio-btn" [attr.data-status]="'PLANNING'" [class.selected]="modalFormData.status === 'PLANNING'" [title]="mediaInfo?.type === 'ANIME' ? 'Plan to Watch' : 'Plan to Read'" (click)="$event.stopPropagation(); setModalStatus('PLANNING')">
+              <ion-icon name="time-outline"></ion-icon>
+            </label>
+            <label class="action-radio-btn" [attr.data-status]="'COMPLETED'" [class.selected]="modalFormData.status === 'COMPLETED'" title="Completed" (click)="$event.stopPropagation(); setModalStatus('COMPLETED')">
+              <ion-icon name="checkmark-circle-outline"></ion-icon>
+            </label>
+            <label class="action-radio-btn" [attr.data-status]="'DROPPED'" [class.selected]="modalFormData.status === 'DROPPED'" title="Dropped" (click)="$event.stopPropagation(); setModalStatus('DROPPED')">
+              <ion-icon name="trash-outline"></ion-icon>
+            </label>
+            <label class="action-radio-btn" [attr.data-status]="'PAUSED'" [class.selected]="modalFormData.status === 'PAUSED'" title="On Hold" (click)="$event.stopPropagation(); setModalStatus('PAUSED')">
+              <ion-icon name="pause-circle-outline"></ion-icon>
+            </label>
+            <label class="action-radio-btn" [attr.data-status]="'REPEATING'" [class.selected]="modalFormData.status === 'REPEATING'" [title]="mediaInfo?.type === 'ANIME' ? 'Rewatching' : 'Rereading'" (click)="$event.stopPropagation(); setModalStatus('REPEATING')">
+              <ion-icon name="repeat-outline"></ion-icon>
+            </label>
+          </div>
+
+          <!-- Progress section - conditional based on type -->
+          <div class="option-section">
+            @if (mediaInfo?.type === 'ANIME') {
+              <div class="option-item">
+                <ion-icon name="play-outline"></ion-icon>
+                <span class="option-label">
+                  <input
+                    type="number"
+                    class="progress-input"
+                    [(ngModel)]="modalFormData.progress"
+                    (blur)="validateProgress()"
+                    min="0"
+                    [max]="mediaInfo?.episodes || null"
+                  /> / {{ mediaInfo?.episodes || '?' }} Episodes
+                </span>
+                <div class="counter-controls">
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementProgress()">
+                    <ion-icon slot="icon-only" name="remove"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementProgress()">
+                    <ion-icon slot="icon-only" name="add"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            }
+
+            @if (mediaInfo?.type === 'MANGA') {
+              <div class="option-item">
+                <ion-icon name="book-outline"></ion-icon>
+                <span class="option-label">
+                  <input
+                    type="number"
+                    class="progress-input"
+                    [(ngModel)]="modalFormData.progress"
+                    (blur)="validateProgress()"
+                    min="0"
+                    [max]="mediaInfo?.chapters || null"
+                  /> / {{ mediaInfo?.chapters || '?' }} Chapters
+                </span>
+                <div class="counter-controls">
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementProgress()">
+                    <ion-icon slot="icon-only" name="remove"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementProgress()">
+                    <ion-icon slot="icon-only" name="add"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+
+              <div class="option-item">
+                <ion-icon name="bookmark-outline"></ion-icon>
+                <span class="option-label">
+                  <input
+                    type="number"
+                    class="progress-input"
+                    [(ngModel)]="modalFormData.progressVolumes"
+                    (blur)="validateVolumes()"
+                    min="0"
+                    [max]="mediaInfo?.volumes || null"
+                  /> / {{ mediaInfo?.volumes || '?' }} Volumes
+                </span>
+                <div class="counter-controls">
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementVolumes()">
+                    <ion-icon slot="icon-only" name="remove"></ion-icon>
+                  </ion-button>
+                  <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementVolumes()">
+                    <ion-icon slot="icon-only" name="add"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            }
+
+            <div class="option-item">
+              <ion-icon name="star-outline"></ion-icon>
+              <span class="option-label">{{ modalFormData.score || '—' }}/10</span>
+              <div class="counter-controls">
+                <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementScore()">
+                  <ion-icon slot="icon-only" name="remove"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementScore()">
+                  <ion-icon slot="icon-only" name="add"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Dates and repetitions section -->
+          <div class="option-section">
+            <div class="option-item clickable" (click)="openStartDatePicker()">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span class="option-label">{{ getStartDateLabel() }}</span>
+            </div>
+
+            <div class="option-item clickable" (click)="openEndDatePicker()">
+              <ion-icon name="calendar-clear-outline"></ion-icon>
+              <span class="option-label">{{ getEndDateLabel() }}</span>
+            </div>
+
+            <div class="option-item">
+              <ion-icon name="repeat-outline"></ion-icon>
+              <span class="option-label">{{ modalFormData.repeat || 0 }} Total rewatches</span>
+              <div class="counter-controls">
+                <ion-button fill="clear" size="small" class="counter-btn" (click)="decrementRepeat()">
+                  <ion-icon slot="icon-only" name="remove"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" size="small" class="counter-btn" (click)="incrementRepeat()">
+                  <ion-icon slot="icon-only" name="add"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Toggle options -->
+          <div class="option-section">
+            <div class="option-item toggle-item">
+              <ion-icon name="eye-off-outline"></ion-icon>
+              <span class="option-label">Hide from status lists</span>
+              <ion-toggle slot="end" [(ngModel)]="modalFormData.hiddenFromStatusLists"></ion-toggle>
+            </div>
+
+            <div class="option-item toggle-item">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+              <span class="option-label">Private</span>
+              <ion-toggle slot="end" [(ngModel)]="modalFormData.private"></ion-toggle>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Notes section -->
+          <div class="option-section">
+            <div class="notes-container">
+              <div class="notes-header">
+                <ion-icon name="list-outline"></ion-icon>
+                <span class="option-label">Notes</span>
+              </div>
+              <ion-textarea
+                [(ngModel)]="modalFormData.notes"
+                placeholder="Add your notes here..."
+                rows="4"
+                class="notes-textarea"
+              ></ion-textarea>
+            </div>
+          </div>
+
+          @if (currentEntry?.id) {
+            <div class="divider"></div>
+
+            <!-- Delete button -->
+            <div class="option-section">
+              <ion-button expand="full" fill="clear" color="danger" class="delete-btn" (click)="deleteEntry()">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Delete
+              </ion-button>
+            </div>
+          }
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ng-template>
+</ion-modal>
+
+<!-- Start Date Picker Modal -->
+@if (showStartDatePicker) {
+  <ion-modal
+    [isOpen]="showStartDatePicker"
+    (didDismiss)="showStartDatePicker = false"
+    [backdropDismiss]="true"
+    class="date-picker-modal">
+    <ng-template>
+      <div class="date-picker-wrapper">
+        <div class="date-picker-header">
+          <ion-button fill="clear" (click)="clearStartDate()">Clear</ion-button>
+          <h3>Start Date</h3>
+          <ion-button fill="clear" (click)="showStartDatePicker = false">Done</ion-button>
+        </div>
+        <ion-datetime
+          [(ngModel)]="startDateISO"
+          presentation="date"
+          (ionChange)="onStartDateChange($event)"
+        ></ion-datetime>
+      </div>
+    </ng-template>
+  </ion-modal>
+}
+
+<!-- End Date Picker Modal -->
+@if (showEndDatePicker) {
+  <ion-modal
+    [isOpen]="showEndDatePicker"
+    (didDismiss)="showEndDatePicker = false"
+    [backdropDismiss]="true"
+    class="date-picker-modal">
+    <ng-template>
+      <div class="date-picker-wrapper">
+        <div class="date-picker-header">
+          <ion-button fill="clear" (click)="clearEndDate()">Clear</ion-button>
+          <h3>End Date</h3>
+          <ion-button fill="clear" (click)="showEndDatePicker = false">Done</ion-button>
+        </div>
+        <ion-datetime
+          [(ngModel)]="endDateISO"
+          presentation="date"
+          (ionChange)="onEndDateChange($event)"
+        ></ion-datetime>
+      </div>
+    </ng-template>
+  </ion-modal>
+}

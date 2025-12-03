@@ -18,6 +18,7 @@ export class MediaListItemComponent extends LoadingStateComponent implements OnI
   @Input() isFavourite: boolean | null | undefined = false;
   @Input() role: string | undefined;
   @Input() isAdult: boolean | null | undefined = false;
+  @Input() showProgressBar: boolean = false; // Only true in user media collection
 
   coverImg: string = '';
   imageLoaded: boolean = false;
@@ -104,5 +105,19 @@ export class MediaListItemComponent extends LoadingStateComponent implements OnI
 
   hasProgress(): boolean {
     return !!this.media?.mediaListEntry;
+  }
+
+  getRating(): number | null {
+    return this.media?.averageScore || null;
+  }
+
+  shouldShowProgress(): boolean {
+    // Only show progress if explicitly enabled AND user has this in their collection
+    return this.showProgressBar && !!this.media?.mediaListEntry;
+  }
+
+  shouldShowRating(): boolean {
+    // Show rating when NOT showing progress bar AND rating exists
+    return !this.showProgressBar && this.getRating() !== null;
   }
 }

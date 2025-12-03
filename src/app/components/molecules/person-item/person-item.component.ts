@@ -1,13 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { CollapsibleComponent } from "@components/molecules/collapsible/collapsible.component";
 import { IonCol, IonGrid, IonImg, IonLabel, IonNote, IonRippleEffect, IonRow, IonSkeletonText } from "@ionic/angular/standalone";
 import { toSentenceCase } from 'src/app/helpers/utils';
-
 @Component({
   selector: 'am-person-item',
   templateUrl: './person-item.component.html',
   styleUrls: ['./person-item.component.scss'],
-  imports: [IonNote, IonLabel, IonRow, IonImg, IonGrid, IonCol, CollapsibleComponent, IonSkeletonText, IonRippleEffect],
+  imports: [IonNote, IonLabel, IonRow, IonImg, IonGrid, IonCol, IonSkeletonText, IonRippleEffect],
 })
 export class PersonItemComponent {
   @Input() loading: boolean = false;

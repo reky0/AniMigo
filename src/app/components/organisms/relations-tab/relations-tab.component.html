@@ -24,6 +24,12 @@
                       [isFavourite]="related.node.isFavourite"
                       [mediaStatus]="related.node.mediaListEntry?.status"
                       [isAdult]="related.node.isAdult"
+                      [mediaId]="related.node.id"
+                      [mediaType]="related.node.type"
+                      [episodes]="related.node.episodes"
+                      [chapters]="related.node.chapters"
+                      [volumes]="related.node.volumes"
+                      [mediaListEntry]="related.node.mediaListEntry ?? undefined"
                       (click)="goToDetails(related.node.id, related.node.type, related.node.isAdult)"
                       />
                   </ion-col>
@@ -63,6 +69,12 @@
                       [isFavourite]="recommendation.mediaRecommendation.isFavourite"
                       [mediaStatus]="recommendation.mediaRecommendation.mediaListEntry?.status"
                       [isAdult]="recommendation.mediaRecommendation.isAdult"
+                      [mediaId]="recommendation.mediaRecommendation.id"
+                      [mediaType]="recommendation.mediaRecommendation.type"
+                      [episodes]="recommendation.mediaRecommendation.episodes"
+                      [chapters]="recommendation.mediaRecommendation.chapters"
+                      [volumes]="recommendation.mediaRecommendation.volumes"
+                      [mediaListEntry]="recommendation.mediaRecommendation.mediaListEntry ?? undefined"
                       (click)="goToDetails(recommendation.mediaRecommendation.id, recommendation.mediaRecommendation.type, recommendation.mediaRecommendation.isAdult)"
                       />
                   </ion-col>

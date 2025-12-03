@@ -61,8 +61,29 @@ export const GET_MEDIA_LIST = gql`
         format
         isFavourite
         isAdult
+        episodes
+        chapters
+        volumes
         mediaListEntry {
+          id
           status
+          score
+          progress
+          progressVolumes
+          repeat
+          private
+          hiddenFromStatusLists
+          notes
+          startedAt {
+            year
+            month
+            day
+          }
+          completedAt {
+            year
+            month
+            day
+          }
         }
       }
     }
@@ -591,8 +612,29 @@ export const GET_AIRING_SCHEDULES = gql`
           }
           type
           isAdult
+          episodes
+          chapters
+          volumes
           mediaListEntry {
+            id
             status
+            score
+            progress
+            progressVolumes
+            repeat
+            private
+            hiddenFromStatusLists
+            notes
+            startedAt {
+              year
+              month
+              day
+            }
+            completedAt {
+              year
+              month
+              day
+            }
           }
         }
         episode
@@ -648,6 +690,9 @@ export const SEARCH_MEDIA = gql`
         isAdult
         type
         format
+        episodes
+        chapters
+        volumes
         startDate {
           year
         }

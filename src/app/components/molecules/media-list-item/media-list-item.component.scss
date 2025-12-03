@@ -190,6 +190,27 @@
     }
   }
 
+  .rating-container {
+    margin-top: 8px;
+
+    .rating-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .star-icon {
+      font-size: 14px;
+      color: var(--ion-color-warning);
+    }
+
+    .rating-text {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+      font-weight: 500;
+    }
+  }
+
   .content-middle {
     am-badge-adult {
       margin-left: 8px;

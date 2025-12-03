@@ -477,3 +477,15 @@ ion-modal.modal-rounded {
 .w-full { width: 100%; }
 .h-full { height: 100%; }
 .h-auto { height: auto; }
+
+/* Media List Modal - Status Colors */
+.action-radio-btn.selected ion-icon { color: white !important; }
+.action-radio-btn.selected[data-status="CURRENT"] { background: var(--custom-color-current) !important; }
+.action-radio-btn.selected[data-status="PLANNING"] { background: var(--custom-color-planning) !important; }
+.action-radio-btn.selected[data-status="COMPLETED"] { background: var(--custom-color-completed) !important; }
+.action-radio-btn.selected[data-status="DROPPED"] { background: var(--custom-color-dropped) !important; }
+.action-radio-btn.selected[data-status="PAUSED"] { background: var(--custom-color-paused) !important; }
+.action-radio-btn.selected[data-status="REPEATING"] { background: var(--custom-color-repeating) !important; }
+
+/* Date Picker Modal */
+.date-picker-modal { --height: auto; --width: 90%; --max-width: 400px; --border-radius: 16px; &::part(backdrop) { background: rgba(0,0,0,.4); } .date-picker-wrapper { background: var(--ion-background-color); border-radius: 16px; } .date-picker-header { display: flex; justify-content: space-between; padding: 12px 16px; h3 { margin: 0; font-size: 1rem; } } }

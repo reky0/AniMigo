@@ -61,6 +61,12 @@
               [note]="`Ep ${schedule.episode} airing at ${(schedule.airingAt * 1000) | date:'HH:mm'}`"
               [mediaStatus]="schedule.media.mediaListEntry?.status"
               [isAdult]="schedule.media.isAdult"
+              [mediaId]="schedule.media.id"
+              [mediaType]="schedule.media.type"
+              [episodes]="schedule.media.episodes"
+              [chapters]="schedule.media.chapters"
+              [volumes]="schedule.media.volumes"
+              [mediaListEntry]="schedule.media.mediaListEntry ?? undefined"
               (click)="goToDetails(schedule.media.id, schedule.media.isAdult)"
               />
           </ion-col>

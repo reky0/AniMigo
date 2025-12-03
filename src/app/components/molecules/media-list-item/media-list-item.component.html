@@ -55,12 +55,22 @@
           }
         </ion-col>
       </ion-row>
-      @if (hasProgress()) {
+      @if (shouldShowProgress()) {
         <ion-row class="progress-container ion-no-padding ion-align-items-end content-bottom">
           <ion-col size="12" class="ion-no-padding">
             <div class="progress-wrapper">
               <ion-progress-bar [value]="getProgressPercentage()" class="progress-bar"></ion-progress-bar>
               <ion-note class="progress-text">{{ getProgressText() }}</ion-note>
+            </div>
+          </ion-col>
+        </ion-row>
+      }
+      @if (shouldShowRating()) {
+        <ion-row class="rating-container ion-no-padding ion-align-items-end content-bottom">
+          <ion-col size="12" class="ion-no-padding">
+            <div class="rating-wrapper">
+              <ion-icon name="star" class="star-icon"></ion-icon>
+              <ion-note class="rating-text">{{ getRating() }}%</ion-note>
             </div>
           </ion-col>
         </ion-row>
