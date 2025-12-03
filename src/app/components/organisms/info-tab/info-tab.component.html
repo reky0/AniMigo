@@ -140,28 +140,32 @@
 
       @if (data.tags && data.tags.length > 0) {
         <ion-row>
-          <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
-            <ion-card-title style="margin: 0;">Tags</ion-card-title>
-            @if (hasSpoilerTags) {
-              <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
-                {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
-              </ion-button>
-            }
-          </div>
+          <ion-col size="12" class="ion-no-padding ion-no-margin">
+            <div class="ion-margin-top ion-margin-bottom" style="display: flex; align-items: center; gap: 12px;">
+              <ion-card-title style="margin: 0;">Tags</ion-card-title>
+              @if (hasSpoilerTags) {
+                <ion-button class="toggle-spoilers" color="medium" size="small" fill="outline" (click)="toggleShowSpoilerTags()">
+                  {{ showSpoilerTags ? 'Hide' : 'Show' }} spoilers
+                </ion-button>
+              }
+            </div>
+          </ion-col>
 
-          <am-collapsible [thresholdHeight]="100">
-            <ion-row>
-              @for (tag of data.tags; track $index) {
-                @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
-                  @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
-                    <ion-col size="6" sizeLg="3">
-                      <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
-                    </ion-col>
+          <ion-col size="12" class="ion-no-padding ion-no-margin">
+            <am-collapsible [thresholdHeight]="100">
+              <ion-row>
+                @for (tag of data.tags; track $index) {
+                  @if (!tag.isAdult || (tag.isAdult && showAdultContent)) {
+                    @if (!tag.isMediaSpoiler && !tag.isGeneralSpoiler || ((tag.isMediaSpoiler || tag.isGeneralSpoiler) && showSpoilerTags)) {
+                      <ion-col size="6" sizeLg="3">
+                        <am-info-chip type="text" outline [info]="tag.rank + '%'" [note]="tag.name" [isAdult]="tag.isAdult" [isSpoiler]="tag.isMediaSpoiler || tag.isGeneralSpoiler" />
+                      </ion-col>
+                    }
                   }
                 }
-              }
-            </ion-row>
-          </am-collapsible>
+              </ion-row>
+            </am-collapsible>
+          </ion-col>
         </ion-row>
       }
 

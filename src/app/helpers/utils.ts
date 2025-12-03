@@ -171,6 +171,7 @@ export function getCurrentSeason(): SeasonInfo {
 /**
  * Gets the next anime season and year
  * If currently in Fall, next season is Winter of next year
+ * If currently in Winter (Dec-Feb), next season is Spring of next year (accounting for year transition)
  */
 export function getNextSeason(): SeasonInfo {
   const now = new Date();
@@ -189,7 +190,16 @@ export function getNextSeason(): SeasonInfo {
     };
   }
 
-  // Otherwise, next season is in the same year
+  // If we're in Winter (which spans Dec-Feb across two years)
+  // The next season is Spring, and we need to use the appropriate year
+  if (currentIndex === 0) {
+    return {
+      season: seasonOrder[1], // SPRING
+      year: month === 12 ? year + 1 : year // If December, next spring is next year
+    };
+  }
+
+  // For Spring and Summer, next season is in the same year
   return {
     season: seasonOrder[currentIndex + 1],
     year: year
@@ -219,4 +229,70 @@ export function getUpcomingSeason(): SeasonInfo {
   }
 
   return getNextSeason();
+}
+
+/**
+ * Gets the appropriate year for a given season based on current date
+ * If the season has already passed in the current year, returns next year
+ * 
+ * Example: If we're in December 2025 (Winter):
+ * - WINTER -> 2025 (current, Dec-Feb)
+ * - SPRING -> 2026 (next year, not yet started)
+ * - SUMMER -> 2026 (next year, not yet started)
+ * - FALL -> 2026 (next year, not yet started)
+ * 
+ * Example: If we're in Fall 2025:
+ * - WINTER -> 2025 (upcoming, Dec-Feb)
+ * - SPRING -> 2026 (already passed)
+ * - SUMMER -> 2026 (already passed)
+ * - FALL -> 2025 (current)
+ */
+export function getSeasonYear(targetSeason: AnimeSeason): number {
+  const now = new Date();
+  const month = now.getMonth() + 1;
+  const year = now.getFullYear();
+  const currentSeason = getSeasonFromMonth(month);
+
+  const seasonOrder: AnimeSeason[] = ['WINTER', 'SPRING', 'SUMMER', 'FALL'];
+  const currentIndex = seasonOrder.indexOf(currentSeason);
+  const targetIndex = seasonOrder.indexOf(targetSeason);
+
+  // If target is the current season, return current year
+  if (targetSeason === currentSeason) {
+    return year;
+  }
+
+  // Special handling for Winter since it spans two years (Dec-Feb)
+  if (currentSeason === 'WINTER') {
+    if (month === 12) {
+      // We're in December 2025
+      // Winter 2025 is current (Dec-Feb)
+      // All other seasons (Spring, Summer, Fall) are next year (2026)
+      return targetSeason === 'WINTER' ? year : year + 1;
+    } else {
+      // We're in Jan-Feb 2026
+      // Winter 2026 is current
+      // Spring/Summer are upcoming this year (2026)
+      // Fall has passed, so it's next year (2027)
+      if (targetSeason === 'WINTER') return year;
+      if (targetSeason === 'FALL') return year + 1;
+      return year; // Spring or Summer
+    }
+  }
+
+  // For non-Winter current seasons:
+  // If target comes after current in the season order, it's this year
+  // If target comes before current in the season order, it has passed and is next year
+  // Special case: Winter is always upcoming (same year) when current is Fall
+  if (currentSeason === 'FALL' && targetSeason === 'WINTER') {
+    return year; // Winter is upcoming (Dec-Feb)
+  }
+
+  // If target index is greater than current, it's upcoming this year
+  if (targetIndex > currentIndex) {
+    return year;
+  }
+
+  // If target index is less than current, it has already passed this year
+  return year + 1;
 }

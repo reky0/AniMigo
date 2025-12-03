@@ -465,9 +465,10 @@ export class ExploreTabPage {
   }
 
   navigateToSeason(season: string) {
-    const currentYear = new Date().getFullYear();
+    // Navigate with only the season parameter, let the season-list page
+    // determine the appropriate year based on whether the season has passed
     this.router.navigate(['/explore/season-list'], {
-      queryParams: { season, year: currentYear }
+      queryParams: { season }
     });
   }
 

@@ -29,7 +29,7 @@ import {
     IonToolbar
 } from '@ionic/angular/standalone';
 import { take } from 'rxjs';
-import { AnimeSeason, getCurrentSeason, getPreferredTitle, toSentenceCase } from 'src/app/helpers/utils';
+import { AnimeSeason, getNextSeason, getPreferredTitle, getSeasonYear, toSentenceCase } from 'src/app/helpers/utils';
 import { GET_MEDIA_LIST } from 'src/app/models/aniList/mediaQueries';
 import { SeasonListParams, SeasonalMedia } from 'src/app/models/season-list.interface';
 import { RangePipe } from '../../../helpers/range.pipe';
@@ -123,25 +123,26 @@ export class SeasonListPage implements OnInit {
       this.availableYears.push(year);
     }
 
-    // Get season and year from route params or use current season
+    // Get season and year from route params or use next season
     const params = this.route.snapshot.queryParams as SeasonListParams;
 
-    const currentSeasonInfo = getCurrentSeason();
+    const nextSeasonInfo = getNextSeason();
 
     // Validate and set season
     const seasonParam = params.season?.toUpperCase();
     if (seasonParam && this.isValidSeason(seasonParam)) {
       this.season = seasonParam as AnimeSeason;
+      // If season is specified, determine the appropriate year based on whether it has passed
+      const yearParam = parseInt(params.year || '', 10);
+      if (!isNaN(yearParam) && yearParam >= 1940 && yearParam <= 2100) {
+        this.year = yearParam;
+      } else {
+        // No year specified, so calculate the appropriate year for this season
+        this.year = getSeasonYear(this.season);
+      }
     } else {
-      this.season = currentSeasonInfo.season;
-    }
-
-    // Validate and set year
-    const yearParam = parseInt(params.year || '', 10);
-    if (!isNaN(yearParam) && yearParam >= 1940 && yearParam <= 2100) {
-      this.year = yearParam;
-    } else {
-      this.year = currentSeasonInfo.year;
+      this.season = nextSeasonInfo.season;
+      this.year = nextSeasonInfo.year;
     }
 
     // Set selected filters to match current values
