@@ -234,13 +234,13 @@ export function getUpcomingSeason(): SeasonInfo {
 /**
  * Gets the appropriate year for a given season based on current date
  * If the season has already passed in the current year, returns next year
- * 
+ *
  * Example: If we're in December 2025 (Winter):
  * - WINTER -> 2025 (current, Dec-Feb)
  * - SPRING -> 2026 (next year, not yet started)
  * - SUMMER -> 2026 (next year, not yet started)
  * - FALL -> 2026 (next year, not yet started)
- * 
+ *
  * Example: If we're in Fall 2025:
  * - WINTER -> 2025 (upcoming, Dec-Feb)
  * - SPRING -> 2026 (already passed)
