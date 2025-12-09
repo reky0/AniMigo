@@ -2,13 +2,27 @@
   <ion-header [translucent]="true">
     <ion-toolbar>
       <ion-title>Profile</ion-title>
+      @if (!isAuthenticated) {
+        <ion-buttons slot="end">
+          <ion-button (click)="goToSettings()">
+            <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      }
     </ion-toolbar>
   </ion-header>
 }
 
 <ion-content [fullscreen]="false">
   @if (!isAuthenticated) {
-    <am-login-prompt (loginClick)="login()"></am-login-prompt>
+    <div class="non-auth-container">
+      <div class="settings-button-container">
+        <ion-button fill="clear" (click)="goToSettings()">
+          <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+        </ion-button>
+      </div>
+      <am-login-prompt (loginClick)="login()"></am-login-prompt>
+    </div>
   } @else {
     <!-- Profile Banner -->
     <div class="profile-banner">

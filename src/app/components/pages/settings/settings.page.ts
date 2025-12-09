@@ -56,6 +56,10 @@ export class SettingsPage implements OnInit {
     this.token = this.authService.getToken();
   }
 
+  get isAuthenticated() {
+    return this.authService.isAuthenticated();
+  }
+
   loadUserData() {
     if (!this.authService.isAuthenticated()) {
       return;

@@ -249,6 +249,18 @@
   height: 100px;
 }
 
+.non-auth-container {
+  position: relative;
+  height: 100%;
+}
+
+.settings-button-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+}
+
 ion-modal {
   --border-radius: 20px;
 
@@ -257,5 +269,7 @@ ion-modal {
     width: 100%;
   }
 }
+
+
 
 
