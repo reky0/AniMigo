@@ -39,6 +39,8 @@ export class CatalogItemComponent extends LoadingStateComponent {
   isHovered: boolean = false;
   isFabOpen: boolean = false;
   showListUpdateModal: boolean = false;
+  private longPressTimer: any;
+  private isLongPress: boolean = false;
 
   platformService: PlatformService = inject(PlatformService);
   authService: AuthService = inject(AuthService);
@@ -91,6 +93,47 @@ export class CatalogItemComponent extends LoadingStateComponent {
   onToggleClick(event: Event) {
     event.stopPropagation();
     this.isFabOpen = !this.isFabOpen;
+  }
+
+  onItemTouchStart(event: Event) {
+    // Only handle long press on touch devices
+    if (!this.platformService.isTouchDevice()) return;
+    if (!this.authService.isAuthenticated() || !this.mediaId) return;
+
+    // Start long press timer (500ms)
+    this.isLongPress = false;
+    this.longPressTimer = setTimeout(() => {
+      this.isLongPress = true;
+      // Open media list modal on long press
+      this.openDetailedMenu();
+    }, 500);
+  }
+
+  onItemTouchEnd(event: Event) {
+    // Only handle on touch devices
+    if (!this.platformService.isTouchDevice()) return;
+
+    // Clear the long press timer
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+    }
+
+    // If it was a long press, prevent default click behavior
+    if (this.isLongPress) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.isLongPress = false;
+    }
+  }
+
+  onItemTouchMove(event: Event) {
+    // Cancel long press if user moves finger (likely scrolling)
+    if (this.longPressTimer) {
+      clearTimeout(this.longPressTimer);
+      this.longPressTimer = null;
+      this.isLongPress = false;
+    }
   }
 
   onQuickAction(event: Event, action: 'planning' | 'completed' | 'watching') {

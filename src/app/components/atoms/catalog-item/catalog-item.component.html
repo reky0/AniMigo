@@ -3,7 +3,10 @@
   [title]="title"
   [class.hovered]="isHovered"
   (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()">
+  (mouseleave)="onMouseLeave()"
+  (touchstart)="onItemTouchStart($event)"
+  (touchend)="onItemTouchEnd($event)"
+  (touchmove)="onItemTouchMove($event)">
   <ion-ripple-effect></ion-ripple-effect>
   @if (loading) {
     <ion-row class="img-container">
