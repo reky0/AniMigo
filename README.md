@@ -52,7 +52,6 @@ The interface is designed to be gentle on the eyes while maintaining visual clar
 - **Personal Statistics** - View detailed stats on your anime and manga consumption
 - **Favorites Management** - Curate your favorite anime, manga, characters, and staff
 
-
 ### 🔍 Detailed Information
 
 - **Rich Media Details** - Comprehensive information including synopsis, scores, and rankings
@@ -64,7 +63,6 @@ The interface is designed to be gentle on the eyes while maintaining visual clar
 ### 🌐 Platform Support
 
 - **Progressive Web App (PWA)** - Install directly from your browser with offline capabilities
-- **Android Native App** - Full native experience with deep linking and system integration
 - **Responsive Design** - Optimized for mobile, tablet, and desktop viewing
 
 ### 🔐 Authentication
@@ -309,10 +307,11 @@ Found a bug or have a suggestion? Please [open an issue](https://github.com/reky
 
 ### Upcoming Features
 
+- 📱 **Android Native App** - Full native experience with deep linking and system integration
 - 🌐 **Spanish Translation** - Full app localization
 - 🔔 **Notifications** - Airing episode reminders
 - 🎨 **Theme Customization** - Custom color schemes
-- 📱 **iOS Support** - Native iOS application
+- 🍎 **iOS Support** - Native iOS application
 
 ### Long-term Goals
 
