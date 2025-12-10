@@ -311,12 +311,12 @@ Found a bug or have a suggestion? Please [open an issue](https://github.com/reky
 - 🌐 **Spanish Translation** - Full app localization
 - 🔔 **Notifications** - Airing episode reminders
 - 🎨 **Theme Customization** - Custom color schemes
-- 🍎 **iOS Support** - Native iOS application
 
 ### Long-term Goals
 
 - Social features (activity feed, user interactions)
 - Offline mode enhancements
+- 🍎 **iOS Support** - Native iOS application
 
 ---
 
