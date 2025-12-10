@@ -2,13 +2,6 @@
   <ion-header [translucent]="true">
     <ion-toolbar>
       <ion-title>Profile</ion-title>
-      @if (!isAuthenticated) {
-        <ion-buttons slot="end">
-          <ion-button (click)="goToSettings()">
-            <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      }
     </ion-toolbar>
   </ion-header>
 }
