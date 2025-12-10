@@ -8,13 +8,14 @@ import { AppComponent } from './app/app.component';
 import { provideApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { provideHttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, isDevMode } from '@angular/core';
 import { ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { AuthService } from './app/components/core/services/auth.service';
 
 import { addIcons } from 'ionicons';
 import * as allIcons from 'ionicons/icons';
+import { provideServiceWorker } from '@angular/service-worker';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -55,7 +56,10 @@ bootstrapApplication(AppComponent, {
         link: ApolloLink.from([authLink, anilistLink]),
         cache: new InMemoryCache(),
       }
-    })
+    }), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          })
   ],
 });
 
