@@ -11,3 +11,6 @@
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
+  # This allows manifest.webmanifest and other static files to be served directly
+
